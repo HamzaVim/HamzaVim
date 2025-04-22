@@ -5,15 +5,28 @@
   --foreground: #171717;
 }
 
-@theme inline {
+@theme {
+  /* Colors */
   --black: #111313;
   --white: #e8fcf5;
   --white-green: #cffcec;
   --primary: #324b4b;
   --secondary: #448b76;
+
+  /* Typography */
+  --text-name: clamp(
+    0.875rem,
+    0.6404011461318051rem + 0.9551098376313276vw,
+    1.5rem
+  );
+  --text-h1: clamp(3.125rem, 1.670487106017192rem + 5.921680993314231vw, 7rem);
 }
 
 body {
   background: var(--black);
   font-family: var(--font-montserrat);
+}
+
+h1 {
+  @apply text-(length:--text-h1)/[102%] tracking-[-2%] font-black;
 }
