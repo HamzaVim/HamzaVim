@@ -20,8 +20,19 @@
     1.5rem
   );
   --text-h1: clamp(3.125rem, 1.670487106017192rem + 5.921680993314231vw, 7rem);
+  --text-h2: clamp(
+    1.25rem,
+    1.0810888252148998rem + 0.6876790830945558vw,
+    1.7rem
+  );
+  --text-about: clamp(
+    1.85rem,
+    0.972412607449857rem + 3.5728748806112693vw,
+    4.188rem
+  );
 }
 
+/* Tags */
 body {
   background: var(--black);
   font-family: var(--font-montserrat);
@@ -30,3 +41,9 @@ body {
 h1 {
   @apply text-(length:--text-h1)/[102%] tracking-[-2%] font-black;
 }
+h2 {
+  @apply uppercase font-medium text-(length:--text-h2)/[33.6px] tracking-[25%];
+}
+
+/* Classes & IDs */
+
