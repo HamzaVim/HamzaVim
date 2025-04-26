@@ -2145,6 +2145,7 @@ __metadata:
     next: "npm:15.3.1"
     react: "npm:^19.0.0"
     react-dom: "npm:^19.0.0"
+    split-type: "npm:^0.3.4"
     tailwindcss: "npm:^4"
     typescript: "npm:^5"
   languageName: unknown
@@ -3506,6 +3507,13 @@ __metadata:
   version: 1.2.1
   resolution: "source-map-js@npm:1.2.1"
   checksum: 10c0/7bda1fc4c197e3c6ff17de1b8b2c20e60af81b63a52cb32ec5a5d67a20a7d42651e2cb34ebe93833c5a2a084377e17455854fee3e21e7925c64a51b6a52b0faf
+  languageName: node
+  linkType: hard
+
+"split-type@npm:^0.3.4":
+  version: 0.3.4
+  resolution: "split-type@npm:0.3.4"
+  checksum: 10c0/43cc762363316b8c58b02e97b3dd4c5b4533308bf691c4af0ce947e2dd82a27fc3ee25075c5102b87174ef40aaaae1304d80b1a42f887a24b4d6d0d6bd560181
   languageName: node
   linkType: hard
 

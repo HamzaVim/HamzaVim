@@ -46,4 +46,11 @@ h2 {
 }
 
 /* Classes & IDs */
-
+.about-text {
+  br {
+    @apply hidden 2xl:block;
+  }
+  .ignore-split {
+    @apply inline! text-(--secondary);
+  }
+}
