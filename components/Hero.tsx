@@ -24,7 +24,7 @@ const Hero = ({ masked }: { masked?: boolean }) => {
       </section>
     );
   return (
-    <section className="w-screen h-dvh">
+    <section className="w-screen h-dvh overflow-hidden">
       {/* Container for image */}
       <div className="w-screen h-dvh absolute -z-10">
         {/* Overlay */}
