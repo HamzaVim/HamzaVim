@@ -45,11 +45,11 @@ const About = ({ masked }: { masked?: boolean }) => {
   // Masked About section
   if (masked)
     return (
-      <section className="w-screen h-dvh bg-(--secondary) px-[1.3rem] sm:px-12 md:px-24 lg:px-40 2xl:px-0 overflow-hidden">
-        <div className="w-full h-full text-nowrap flex flex-col items-start 2xl:items-center justify-center gap-7">
-          <div className="text-left text-(--black) flex flex-col 2xl:gap-7 gap-4">
+      <section className="overflow-hidden w-screen sm:px-12 md:px-24 lg:px-40 2xl:px-0 h-dvh bg-secondary px-[1.3rem]">
+        <div className="flex flex-col gap-7 justify-center items-start w-full h-full 2xl:items-center text-nowrap">
+          <div className="flex flex-col gap-4 text-left text-black 2xl:gap-7">
             <h2>about me</h2>
-            <p className="about-text text-(length:--text-about)/[135%] md:leading-[125%] lg:leading-[115%] xl:leading-[102%] tracking-[-0.5%] font-extrabold 2xl:text-nowrap text-wrap">
+            <p className="about-text text-about/[135%] md:leading-[125%] lg:leading-[115%] xl:leading-[102%] tracking-[-0.5%] font-extrabold 2xl:text-nowrap text-wrap">
               Your web developer who <br />
               codes with purpose – crafting fast, <br />
               effective solutions while relentlessly <br />
@@ -61,15 +61,15 @@ const About = ({ masked }: { masked?: boolean }) => {
       </section>
     );
   return (
-    <section className="w-screen h-dvh px-[1.3rem] sm:px-12 md:px-24 lg:px-40 2xl:px-0 overflow-hidden">
-      <div className="w-full h-full text-nowrap flex flex-col items-start 2xl:items-center justify-center gap-7">
-        <div className="text-left text-(--white) flex flex-col 2xl:gap-7 gap-4">
+    <section className="overflow-hidden w-screen sm:px-12 md:px-24 lg:px-40 2xl:px-0 h-dvh px-[1.3rem]">
+      <div className="flex flex-col gap-7 justify-center items-start w-full h-full 2xl:items-center text-nowrap">
+        <div className="flex flex-col gap-4 text-left 2xl:gap-7">
           <h2>about me</h2>
           <p
             ref={(e) => {
               if (e) aboutTextRef.current = e;
             }}
-            className="about-text text-(--white-green) text-(length:--text-about)/[135%] md:leading-[125%] lg:leading-[115%] xl:leading-[102%] tracking-[-0.5%] font-extrabold 2xl:text-nowrap text-wrap"
+            className="about-text text-white-green text-about/[135%] md:leading-[125%] lg:leading-[115%] xl:leading-[102%] tracking-[-0.5%] font-extrabold 2xl:text-nowrap text-wrap"
           >
             I&apos;m a {/* ignore-split class to ignore in split text */}
             <span className="ignore-split">

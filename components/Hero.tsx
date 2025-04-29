@@ -5,10 +5,8 @@ const Hero = ({ masked }: { masked?: boolean }) => {
   if (masked)
     return (
       <section className="w-screen h-dvh">
-        <div className="w-full h-full text-center uppercase text-(--black) text-nowrap flex flex-col items-center justify-center gap-7 select-none pointer-events-none">
-          <p className="font-bold text-xl text-(length:--text-name)">
-            hamza hassen
-          </p>
+        <div className="flex flex-col gap-7 justify-center items-center w-full h-full text-center text-black uppercase pointer-events-none select-none text-nowrap">
+          <p className="text-xl font-bold text-name">hamza hassen</p>
           <h1>
             designing
             <br />
@@ -24,11 +22,11 @@ const Hero = ({ masked }: { masked?: boolean }) => {
       </section>
     );
   return (
-    <section className="w-screen h-dvh overflow-hidden">
+    <section className="overflow-hidden relative w-screen h-dvh">
       {/* Container for image */}
-      <div className="w-screen h-dvh absolute -z-10">
+      <div className="absolute w-screen h-dvh -z-10">
         {/* Overlay */}
-        <div className="w-full h-full bg-linear-to-t from-(--black) from-5% to-(--black)/50 absolute z-10 hidden lg:block" />
+        <div className="hidden absolute z-10 top-[0%] w-full h-full lg:block bg-linear-to-t from-black/55 to-black/25" />
         {/* Mobile */}
         <Image
           src="/images/hero-phone.png"
@@ -43,7 +41,7 @@ const Hero = ({ masked }: { masked?: boolean }) => {
           src="/images/hero-tablet.png"
           alt="hero image"
           fill
-          className="object-cover object-center hidden sm:block lg:hidden"
+          className="hidden object-cover object-center sm:block lg:hidden"
           sizes="100vw"
           quality={100}
         />
@@ -52,19 +50,17 @@ const Hero = ({ masked }: { masked?: boolean }) => {
           src="/images/hero-desktop.png"
           alt="hero image"
           fill
-          className="object-cover object-top-left hidden lg:block"
+          className="hidden object-cover lg:block object-top-left"
           sizes="100vw"
           quality={100}
         />
       </div>
-      <div className="w-full h-full text-center uppercase text-(--white) text-nowrap flex flex-col items-center justify-center gap-7 select-none pointer-events-none">
-        <p className="font-bold text-xl text-(length:--text-name)">
-          hamza hassen
-        </p>
+      <div className="flex flex-col gap-4 justify-center items-center w-full h-full text-center uppercase pointer-events-none select-none lg:gap-7 text-nowrap">
+        <p className="text-xl font-bold text-white text-name">hamza hassen</p>
         <h1>
           creating
           <br />
-          <span className="text-(--secondary)">
+          <span className="text-secondary">
             beautiful
             <br />
             websites

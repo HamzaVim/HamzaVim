@@ -1,17 +1,12 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme {
   /* Colors */
-  --black: #111313;
-  --white: #e8fcf5;
-  --white-green: #cffcec;
-  --primary: #324b4b;
-  --secondary: #448b76;
+  --color-black: #111313;
+  --color-white: #e8fcf5;
+  --color-white-green: #cffcec;
+  --color-primary: #324b4b;
+  --color-secondary: #448b76;
 
   /* Typography */
   --text-name: clamp(
@@ -29,20 +24,19 @@
     1.85rem,
     0.972412607449857rem + 3.5728748806112693vw,
     4.188rem
-  );
+  ); /* text size for paragraph in about section */
 }
 
 /* Tags */
 body {
-  background: var(--black);
-  font-family: var(--font-montserrat);
+  @apply bg-black font-(family-name:--font-montserrat);
 }
 
 h1 {
-  @apply text-(length:--text-h1)/[102%] tracking-[-2%] font-black;
+  @apply text-h1/[102%] tracking-[-2%] text-white font-black;
 }
 h2 {
-  @apply uppercase font-medium text-(length:--text-h2)/[33.6px] tracking-[25%];
+  @apply uppercase font-medium text-h2/[33.6px] text-white tracking-[25%];
 }
 
 /* Classes & IDs */
@@ -51,6 +45,6 @@ h2 {
     @apply hidden 2xl:block;
   }
   .ignore-split {
-    @apply inline! text-(--secondary);
+    @apply inline! text-secondary;
   }
 }
