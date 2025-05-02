@@ -1,6 +1,39 @@
+"use client";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
+import { useRef } from "react";
 
 const Hero = ({ masked }: { masked?: boolean }) => {
+  gsap.registerPlugin(ScrollTrigger);
+
+  // NOTE: States & Refs: ---------------------------------------------------
+
+  const imageContainerRef = useRef<HTMLDivElement>(null);
+  // NOTE: Functions & Animations: ---------------------------------------------------
+
+  // Image animation when scrolling
+  useGSAP(() => {
+    if (imageContainerRef.current) {
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: imageContainerRef.current,
+          start: "top top",
+          end: "bottom top",
+          scrub: true,
+          anticipatePin: 1,
+          fastScrollEnd: true,
+        },
+      });
+      gsap.set(imageContainerRef.current, {
+        top: "0%",
+      });
+      tl.to(imageContainerRef.current, {
+        top: "25%",
+      });
+    }
+  });
   // Masked Hero section
   if (masked)
     return (
@@ -24,7 +57,7 @@ const Hero = ({ masked }: { masked?: boolean }) => {
   return (
     <section className="overflow-hidden relative w-screen h-dvh">
       {/* Container for image */}
-      <div className="absolute w-screen h-dvh -z-10">
+      <div ref={imageContainerRef} className="absolute w-screen h-dvh -z-10">
         {/* Overlay */}
         <div className="hidden absolute z-10 top-[0%] w-full h-full lg:block bg-linear-to-t from-black/55 to-black/25" />
         {/* Mobile */}
