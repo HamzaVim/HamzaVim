@@ -20,11 +20,29 @@
     1.0810888252148998rem + 0.6876790830945558vw,
     1.7rem
   );
+  --text-h3: clamp(3rem, -0.4285714285714284rem + 7.142857142857142vw, 6rem);
+  --text-h3-sm: clamp(
+    1.6rem,
+    -0.07679999999999998rem + 6.826666666666667vw,
+    3.2rem
+  ); /* h3 for small screens */
   --text-about: clamp(
     1.85rem,
     0.972412607449857rem + 3.5728748806112693vw,
     4.188rem
   ); /* text size for paragraph in about section */
+  --text-whyme: clamp(
+    0.875rem,
+    0.7905444126074498rem + 0.3438395415472781vw,
+    1.1rem
+  ); /* text size for paragraph in why me section */
+
+  /* Spacing */
+  --spacing-whyme: clamp(
+    30rem,
+    15rem + 31.25vw,
+    43.125rem
+  ); /* max width of the list body 'paragraph' */
 }
 
 /* Tags */
@@ -37,6 +55,9 @@ h1 {
 }
 h2 {
   @apply uppercase font-medium text-h2/[33.6px] text-white tracking-[25%];
+}
+h3 {
+  @apply text-h3-sm md:text-h3 leading-[100%] tracking-[-0.5%] font-black uppercase text-nowrap;
 }
 
 /* Classes & IDs */
