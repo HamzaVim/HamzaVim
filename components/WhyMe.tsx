@@ -1,4 +1,8 @@
 "use client";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useRef } from "react";
 
 const ListItem = ({
   title, // Original title
@@ -9,11 +13,34 @@ const ListItem = ({
   maskedTitle?: string;
   body: string;
 }) => {
+  gsap.registerPlugin(ScrollTrigger);
+
   // NOTE: States & Refs: ---------------------------------------------------
 
+  // Ref: li
+  const liRef = useRef<HTMLLIElement>(null);
+
+  // Ref: highlighted text
+  const highlightedTextRef = useRef<HTMLHeadingElement>(null);
+
   // NOTE: Functions & Animations: ---------------------------------------------------
+  useGSAP(() => {
+    if (!liRef.current || !highlightedTextRef.current) return;
+    gsap.to(highlightedTextRef.current, {
+      scrollTrigger: {
+        trigger: highlightedTextRef.current,
+        start: "top 94%",
+        end: "top 50%",
+        scrub: true,
+      },
+      width: "100%",
+    });
+  });
   return (
-    <li className="overflow-hidden relative py-10 pl-4 w-full border-t sm:py-7 sm:pl-10 md:pl-20 xl:pl-24 2xl:pl-36 last:border-b h-fit border-t-white/15 last:border-b-white/15">
+    <li
+      ref={liRef}
+      className="overflow-hidden relative py-10 pl-4 w-full border-t sm:py-7 sm:pl-10 md:pl-20 xl:pl-24 2xl:pl-36 last:border-b h-fit border-t-white/15 last:border-b-white/15"
+    >
       <div className="relative font-black text-white uppercase select-none w-fit h-fit text-nowrap">
         <span className="opacity-20 text-h3-sm/[100%] md:text-h3/[100%] tracking-[-0.5%]">
           {title}
@@ -21,6 +48,7 @@ const ListItem = ({
 
         {/* Highlighted text */}
         <h3
+          ref={highlightedTextRef}
           style={{ width: "0%" }}
           className="overflow-hidden absolute top-0 left-0 h-full whitespace-nowrap"
         >
