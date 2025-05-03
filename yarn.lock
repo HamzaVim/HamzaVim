@@ -2122,10 +2122,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"gsap@npm:^3.12.7":
-  version: 3.12.7
-  resolution: "gsap@npm:3.12.7"
-  checksum: 10c0/48691602da4c0aaa61a8fe7426e5e2f873e9edb4b7e732b90928c815a47dd1e94d05174bd6f04e73a11184cb0df8c0d2b98d58cd1cbd2df01e33769f6aa8ff11
+"gsap@npm:^3.13.0":
+  version: 3.13.0
+  resolution: "gsap@npm:3.13.0"
+  checksum: 10c0/a42dd2e02467a4abe96409aaf6cd0e5d697c72e05ec13c18c2271330493983aa63cc717c9dd0740fda2f884d0f56c7b98fc18b13500f0c1da94864985840da7c
   languageName: node
   linkType: hard
 
@@ -2141,11 +2141,10 @@ __metadata:
     "@types/react-dom": "npm:^19"
     eslint: "npm:^9"
     eslint-config-next: "npm:15.3.1"
-    gsap: "npm:^3.12.7"
+    gsap: "npm:^3.13.0"
     next: "npm:15.3.1"
     react: "npm:^19.0.0"
     react-dom: "npm:^19.0.0"
-    split-type: "npm:^0.3.4"
     tailwindcss: "npm:^4"
     typescript: "npm:^5"
   languageName: unknown
@@ -3507,13 +3506,6 @@ __metadata:
   version: 1.2.1
   resolution: "source-map-js@npm:1.2.1"
   checksum: 10c0/7bda1fc4c197e3c6ff17de1b8b2c20e60af81b63a52cb32ec5a5d67a20a7d42651e2cb34ebe93833c5a2a084377e17455854fee3e21e7925c64a51b6a52b0faf
-  languageName: node
-  linkType: hard
-
-"split-type@npm:^0.3.4":
-  version: 0.3.4
-  resolution: "split-type@npm:0.3.4"
-  checksum: 10c0/43cc762363316b8c58b02e97b3dd4c5b4533308bf691c4af0ce947e2dd82a27fc3ee25075c5102b87174ef40aaaae1304d80b1a42f887a24b4d6d0d6bd560181
   languageName: node
   linkType: hard
 
