@@ -2145,6 +2145,8 @@ __metadata:
     next: "npm:15.3.1"
     react: "npm:^19.0.0"
     react-dom: "npm:^19.0.0"
+    react-hook-form: "npm:^7.56.2"
+    react-icons: "npm:^5.5.0"
     tailwindcss: "npm:^4"
     typescript: "npm:^5"
   languageName: unknown
@@ -3132,6 +3134,24 @@ __metadata:
   peerDependencies:
     react: ^19.1.0
   checksum: 10c0/3e26e89bb6c67c9a6aa86cb888c7a7f8258f2e347a6d2a15299c17eb16e04c19194e3452bc3255bd34000a61e45e2cb51e46292392340432f133e5a5d2dfb5fc
+  languageName: node
+  linkType: hard
+
+"react-hook-form@npm:^7.56.2":
+  version: 7.56.2
+  resolution: "react-hook-form@npm:7.56.2"
+  peerDependencies:
+    react: ^16.8.0 || ^17 || ^18 || ^19
+  checksum: 10c0/9eeca7525c5c0b1356670e7cc77687298c7280a31c99bca396596124371467c310cad22f2c10efd9c75b4570d07740ee1c6ad481d59c1b725c7600767f0a35af
+  languageName: node
+  linkType: hard
+
+"react-icons@npm:^5.5.0":
+  version: 5.5.0
+  resolution: "react-icons@npm:5.5.0"
+  peerDependencies:
+    react: "*"
+  checksum: 10c0/a24309bfc993c19cbcbfc928157e53a137851822779977b9588f6dd41ffc4d11ebc98b447f4039b0d309a858f0a42980f6bfb4477fb19f9f2d1bc2e190fcf79c
   languageName: node
   linkType: hard
 
