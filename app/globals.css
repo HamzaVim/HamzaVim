@@ -9,6 +9,8 @@
   --color-secondary: #448b76;
 
   /* Typography */
+  --font-montserrat: "Montserrat", "Montserrat Fallback";
+  --font-limelight: "Limelight", "Limelight Fallback";
   --text-name: clamp(
     0.875rem,
     0.6404011461318051rem + 0.9551098376313276vw,
@@ -47,11 +49,11 @@
 
 /* Tags */
 body {
-  @apply bg-black font-(family-name:--font-montserrat);
+  @apply bg-black font-montserrat;
 }
 
 h1 {
-  @apply text-h1/[102%] tracking-[-2%] text-white font-black;
+  @apply text-h1/[102%] tracking-[-2%] w-full text-white font-black;
 }
 h2 {
   @apply uppercase font-medium text-h2/[33.6px] text-white tracking-[25%];
@@ -59,6 +61,7 @@ h2 {
 h3 {
   @apply text-h3-sm md:text-h3 leading-[100%] tracking-[-0.5%] font-black uppercase text-nowrap;
 }
+
 rect {
   @apply origin-center;
 }

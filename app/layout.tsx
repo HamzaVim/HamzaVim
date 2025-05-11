@@ -4,12 +4,12 @@ import "./globals.css";
 
 // NOTE: Fonts: -----------------------------------------------------------------
 const montserratFont = Montserrat({
-  variable: "--font-montserrat",
+  variable: "--montserrat",
   weight: ["400", "500", "700", "900"],
 });
 
 const limelightFont = Limelight({
-  variable: "--font-limelight",
+  variable: "--limelight",
   weight: "400",
 });
 
@@ -28,7 +28,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${montserratFont.className} ${limelightFont.variable} antialiased`}
+        className={`${montserratFont.variable} ${limelightFont.variable} antialiased`}
       >
         {children}
       </body>
