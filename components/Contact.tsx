@@ -13,16 +13,20 @@ type FormValues = {
 const Contact = () => {
   // NOTE: States & Refs -------------------------------------------------------
 
-  const { register } = useForm<FormValues>({
+  const { register, handleSubmit } = useForm<FormValues>({
     defaultValues: { userName: "", email: "", message: "" },
   });
 
   // NOTE: Fuctions & Animations -------------------------------------------------------
 
+  const submitForm = () => {
+    console.log("Submitted");
+  };
+
   return (
     <section
       id="contact"
-      className="flex flex-col gap-12 justify-center items-start w-screen text-center px-[1.3rem] min-h-dvh"
+      className="flex flex-col gap-12 justify-center items-start w-screen text-center sm:px-12 md:px-24 lg:px-40 px-[1.3rem] min-h-dvh"
     >
       <div className="flex flex-col gap-4 items-start">
         <h2>Contact</h2>
@@ -31,7 +35,7 @@ const Contact = () => {
           make it happen
         </p>
       </div>
-      <form>
+      <form onSubmit={handleSubmit(submitForm)} noValidate>
         <div id="initial-state-corners" className="absolute">
           <div
             id="corners"
@@ -40,10 +44,10 @@ const Contact = () => {
             }}
             className="absolute top-0 left-0 w-full h-full -z-50"
           >
-            <div className="absolute -top-0.5 -left-0.5 w-5 h-5 border-t-2 border-l-2 border-(--input-color)" />
-            <div className="absolute -top-0.5 -right-0.5 w-5 h-5 border-t-2 border-r-2 border-(--input-color)" />
-            <div className="absolute -bottom-0.5 -left-0.5 w-5 h-5 border-b-2 border-l-2 border-(--input-color)" />
-            <div className="absolute -right-0.5 -bottom-0.5 w-5 h-5 border-r-2 border-b-2 border-(--input-color)" />
+            <div className="absolute -top-0.5 -left-0.5 w-5 h-5 border-t-2 border-l-2 border-(--corner-color)" />
+            <div className="absolute -top-0.5 -right-0.5 w-5 h-5 border-t-2 border-r-2 border-(--corner-color)" />
+            <div className="absolute -bottom-0.5 -left-0.5 w-5 h-5 border-b-2 border-l-2 border-(--corner-color)" />
+            <div className="absolute -right-0.5 -bottom-0.5 w-5 h-5 border-r-2 border-b-2 border-(--corner-color)" />
           </div>
         </div>
         <div>
@@ -100,17 +104,25 @@ const Contact = () => {
         </div>
         <button
           type="submit"
-          className="relative py-7 w-full text-3xl font-black uppercase text-white/70 font-limelight"
+          className="relative py-7 w-full text-3xl font-black tracking-[1%] uppercase cursor-pointer md:text-4xl text-white/70 font-limelight"
         >
           send
         </button>
       </form>
       <footer className="flex flex-col gap-12 w-full">
-        <div className="flex justify-between px-3">
-          <SiUpwork className="sm-icon" />
-          <SiGithub className="sm-icon" />
-          <FaTelegramPlane className="sm-icon" />
-          <MdMail className="sm-icon" />
+        <div className="flex justify-between px-3 sm-container sm:px-6">
+          <a href="" className="group">
+            <SiUpwork className="sm-icon" />
+          </a>
+          <a href="" className="group">
+            <SiGithub className="sm-icon" />
+          </a>
+          <a href="" className="group">
+            <FaTelegramPlane className="sm-icon" />
+          </a>
+          <a href="" className="group">
+            <MdMail className="sm-icon" />
+          </a>
         </div>
         <div className="contact-info">
           <a href="https://www.instagram.com/hamzasxh/">
