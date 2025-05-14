@@ -66,7 +66,7 @@ const About = ({ masked }: { masked?: boolean }) => {
           scrollTrigger: {
             trigger: text.lines,
             start: "top 95%",
-            end: "top 32%",
+            end: "top 25%",
             scrub: true,
             anticipatePin: 1,
             fastScrollEnd: true,
