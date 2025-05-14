@@ -128,7 +128,7 @@ rect {
     .contact-info {
       @apply text-sm w-fit font-bold tracking-[1%] flex flex-col gap-4;
       a {
-        @apply flex w-fit text-left flex-col px-5 py-2.5 gap-2 relative;
+        @apply flex w-fit min-w-58 text-left flex-col px-6 py-4 gap-2 relative;
         &:nth-child(2) {
           @apply w-full;
         }
@@ -137,6 +137,19 @@ rect {
         }
         p {
           @apply text-white/75;
+        }
+
+        .masked-info {
+          @apply w-full bg-white-green absolute px-6 py-4 top-0 left-0 flex flex-col gap-2;
+          h5 {
+            @apply text-black;
+          }
+          p {
+            @apply text-black/85;
+          }
+          svg {
+            @apply absolute top-0 left-0 w-full h-full -z-10;
+          }
         }
       }
     }

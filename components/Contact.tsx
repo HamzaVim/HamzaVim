@@ -1,4 +1,6 @@
 "use client";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap/all";
 import { useForm } from "react-hook-form";
 import { FaTelegramPlane, FaUser } from "react-icons/fa";
 import { MdEmail, MdMail, MdOutlineMessage } from "react-icons/md";
@@ -22,6 +24,70 @@ const Contact = () => {
   const submitForm = () => {
     console.log("Submitted");
   };
+
+  // Animation for the masked info
+  useGSAP(() => {
+    // Array of masked info classes
+    const maskedInfo = gsap.utils.toArray(".masked-info") as HTMLDivElement[];
+
+    // handle mouse enter & animation
+    const handleMouseEnter_MaskedInfo = (rect: HTMLElement) => {
+      gsap.to(rect, {
+        overwrite: "auto",
+        scaleY: 1,
+        ease: "power2.out",
+        duration: 0.4,
+      });
+    };
+
+    // handle mouse leave & animation
+    const handleMouseLeave_MaskedInfo = (rect: HTMLElement) => {
+      gsap.to(rect, {
+        overwrite: "auto",
+        scaleY: 0,
+        ease: "power2.out",
+        duration: 0.4,
+      });
+    };
+
+    // Loop through each element
+    maskedInfo.forEach((item) => {
+      // Get the rect and set initial scale
+      const rect = item.children[2].children[0].children[0] as HTMLElement;
+      gsap.set(rect, {
+        scaleY: 0,
+      });
+
+      const itemParent = item.parentElement as HTMLElement;
+
+      // Add Events ------------------------------
+      item.addEventListener("mouseenter", () =>
+        handleMouseEnter_MaskedInfo(rect),
+      );
+      item.addEventListener("mouseleave", () =>
+        handleMouseLeave_MaskedInfo(rect),
+      );
+      itemParent.addEventListener("focusin", () =>
+        handleMouseEnter_MaskedInfo(rect),
+      );
+      itemParent.addEventListener("focusout", () =>
+        handleMouseLeave_MaskedInfo(rect),
+      );
+    });
+
+    // Cleanup
+    return () => {
+      maskedInfo.forEach((item) => {
+        const rect = item.children[2].children[0].children[0] as HTMLElement;
+        item.removeEventListener("mouseenter", () =>
+          handleMouseEnter_MaskedInfo(rect),
+        );
+        item.removeEventListener("mouseleave", () =>
+          handleMouseLeave_MaskedInfo(rect),
+        );
+      });
+    };
+  });
 
   return (
     <section
@@ -128,10 +194,28 @@ const Contact = () => {
           <a href="https://www.instagram.com/hamzasxh/">
             <h5>Instagram</h5>
             <p>hamzasxh@gmail.com</p>
+            <div className="masked-info mask-[url(#mask-1)]">
+              <h5>I’ll read it—100%!</h5>
+              <p>hamzasxh@gmail.com</p>
+              <svg>
+                <mask id="mask-1">
+                  <rect x="0" y="0" width="100%" height="100%" fill="white" />
+                </mask>
+              </svg>
+            </div>
           </a>
           <a href="https://t.me/HamzaVim">
             <h5>Telegram</h5>
             <p>@HamzaVim</p>
+            <div className="masked-info mask-[url(#mask-2)]">
+              <h5>80% chance I’ll respond</h5>
+              <p>@HamzaVim</p>
+              <svg>
+                <mask id="mask-2">
+                  <rect x="0" y="0" width="100%" height="100%" fill="white" />
+                </mask>
+              </svg>
+            </div>
           </a>
         </div>
       </footer>
