@@ -18,9 +18,15 @@ const Contact = () => {
 
   // NOTE: States & Refs -------------------------------------------------------
 
-  const { register, handleSubmit, getValues } = useForm<FormValues>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    getValues,
+  } = useForm<FormValues>({
     defaultValues: { userName: "", email: "", message: "" },
   });
+  const { userName, email, message } = errors;
 
   // Ref for each label & button
   const labelBtnRefs = useRef<(HTMLLabelElement | HTMLButtonElement)[]>([]);
@@ -30,6 +36,8 @@ const Contact = () => {
   const flipState = useRef<Flip.FlipState | null>(null);
 
   const inputFocusedRef = useRef<HTMLInputElement>(null); // For accurate logging
+
+  const errorsKeys = useRef<string[]>([]);
 
   // NOTE: Fuctions & Animations -------------------------------------------------------
 
@@ -110,6 +118,10 @@ const Contact = () => {
         // Adding the corners
         e.appendChild(cornersRef.current as HTMLDivElement);
 
+        let hasError = false;
+        if (e instanceof HTMLLabelElement)
+          hasError = errorsKeys.current.includes(e.htmlFor);
+
         // Check if the parent is initial-state-corners
         if (checkParent === "initial-state-corners") {
           Flip.from(flipState.current, {
@@ -125,6 +137,10 @@ const Contact = () => {
             overwrite: true,
             duration: 0.3,
             ease: "power2.out",
+          });
+
+          gsap.to(cornersRef.current, {
+            "--corner-color": hasError ? "#ff2056" : "#e8fcf5",
           });
 
           labelBtnRefs.current.forEach((item) => {
@@ -296,7 +312,7 @@ const Contact = () => {
         );
       };
     },
-    { dependencies: [labelBtnRefs] },
+    { dependencies: [labelBtnRefs, errorsKeys] },
   );
 
   // Animation for the masked info
@@ -362,6 +378,49 @@ const Contact = () => {
       });
     };
   });
+
+  // Checking for errors and changing their color
+  useGSAP(
+    () => {
+      if (!cornersRef.current) return;
+
+      // Add `errors` keys to the `errorsKeys` array, if it doesn't exist that means there is no error
+      const keysOfErrors: string[] = [];
+      for (const keys in errors) {
+        keysOfErrors.push(keys);
+      }
+      errorsKeys.current = keysOfErrors;
+
+      const cornersColor = (hasError: boolean) => {
+        gsap.to(cornersRef.current, {
+          "--corner-color": hasError ? "#ff2056" : "#e8fcf5",
+        });
+      };
+
+      labelBtnRefs.current.forEach((labelBtn) => {
+        if (labelBtn instanceof HTMLButtonElement || !labelBtn) return;
+
+        if (errorsKeys.current.includes(labelBtn.htmlFor)) {
+          gsap.to(labelBtn, {
+            "--input-color": "#ff2056",
+          });
+
+          if (inputFocusedRef.current === labelBtn.children[1]) {
+            cornersColor(true);
+          }
+        } else {
+          gsap.to(labelBtn, {
+            "--input-color": "#e8fcf5",
+          });
+
+          if (inputFocusedRef.current === labelBtn.children[1]) {
+            cornersColor(false);
+          }
+        }
+      });
+    },
+    { dependencies: [userName, email, message] },
+  );
 
   return (
     <section
