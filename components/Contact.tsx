@@ -1,12 +1,15 @@
 "use client";
 import { useGSAP } from "@gsap/react";
 import gsap, { Flip } from "gsap/all";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaTelegramPlane, FaUser } from "react-icons/fa";
+import { ImNotification } from "react-icons/im";
 import { MdEmail, MdMail, MdOutlineMessage } from "react-icons/md";
-import { SiUpwork, SiGithub } from "react-icons/si";
+import { RiLoader4Line } from "react-icons/ri";
+import { SiUpwork, SiGithub, SiNorton } from "react-icons/si";
 
+// Type for form values
 type FormValues = {
   userName: string;
   email: string;
@@ -18,13 +21,20 @@ const Contact = () => {
 
   // NOTE: States & Refs -------------------------------------------------------
 
+  // useForm hook
   const {
     register,
     handleSubmit,
     formState: { errors },
     getValues,
+    reset,
+    setError,
   } = useForm<FormValues>({
-    defaultValues: { userName: "", email: "", message: "" },
+    defaultValues: {
+      userName: "",
+      email: "",
+      message: "",
+    },
   });
   const { userName, email, message } = errors;
 
@@ -35,14 +45,131 @@ const Contact = () => {
   const cornersRef = useRef<HTMLDivElement>(null);
   const flipState = useRef<Flip.FlipState | null>(null);
 
-  const inputFocusedRef = useRef<HTMLInputElement>(null); // For accurate logging
+  // Ref: input focused
+  const inputFocusedRef = useRef<HTMLInputElement>(null);
 
-  const errorsKeys = useRef<string[]>([]);
+  // Ref: form error Keys
+  const errorKeys = useRef<string[]>([]);
+
+  // State: server result
+  const [serverResult, setServerResult] = useState<{
+    success: boolean | null;
+    error: boolean | null;
+    message: string | null;
+  }>({
+    success: null,
+    error: null,
+    message: null,
+  });
+
+  // Ref/State: submitting
+  const submittingRef = useRef(false);
+  const [submitting, setSubmitting] = useState(false);
+
+  // Ref: success/fail animation
+  const successFailAnimation = useRef<GSAPTimeline>(null);
 
   // NOTE: Fuctions & Animations -------------------------------------------------------
 
-  const submitForm = () => {
-    console.log("Submitted");
+  // Animation for Success/fail message
+  useGSAP(() => {
+    successFailAnimation.current = gsap
+      .timeline({ paused: true })
+      .fromTo(
+        ".server-message",
+        {
+          y: "-150%",
+          x: "-50%",
+          display: "flex",
+        },
+        {
+          y: "0%",
+          duration: 1,
+          onStart: () => {
+            // Setting submittingRef to false
+            submittingRef.current = false;
+            setSubmitting(false);
+          },
+        },
+      )
+      .fromTo(
+        ".line",
+        {
+          width: "100%",
+        },
+        {
+          width: "0%",
+          duration: 6,
+          ease: "none",
+        },
+      )
+      .to(".server-message", {
+        y: "-150%",
+        duration: 1,
+        delay: 0.3,
+        onComplete: () => {
+          // Resetting server result
+          setServerResult({
+            success: null,
+            error: null,
+            message: null,
+          });
+        },
+      });
+  });
+
+  const submitForm = async (data: FormValues) => {
+    if (!successFailAnimation.current) return;
+
+    // Setting submittingRef to true
+    setSubmitting(true);
+    submittingRef.current = true;
+
+    const res = await fetch("/api/contact", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+    const body = await res.json();
+
+    // If the status is not 200
+    if (res.status !== 200) {
+      // If the status is 500 (server error)
+      if (res.status === 500) {
+        setServerResult({
+          success: false,
+          error: true,
+          message: body.message,
+        });
+        successFailAnimation.current.restart();
+        return;
+
+        // input is not valid
+      } else {
+        setServerResult({
+          success: false,
+          error: true,
+          message: body.message,
+        });
+        successFailAnimation.current.restart();
+
+        // To highlight the input error
+        setError(body.errorName, {
+          message: body.message,
+        });
+        return;
+      }
+
+      // If the status is 200
+    } else {
+      setServerResult({
+        success: true,
+        error: false,
+        message: body.message,
+      });
+      successFailAnimation.current.restart();
+      // Reset the input fields
+      reset();
+    }
   };
 
   // Animation for corners & button
@@ -109,7 +236,7 @@ const Contact = () => {
 
       // Animating the corners and label & button
       const labelBtnAnimation = (e: HTMLLabelElement | HTMLButtonElement) => {
-        if (!cornersRef.current) return;
+        if (!cornersRef.current || submittingRef.current) return;
 
         // Getting the corners and get the flip state from it
         flipState.current = Flip.getState(cornersRef.current);
@@ -120,7 +247,7 @@ const Contact = () => {
 
         let hasError = false;
         if (e instanceof HTMLLabelElement)
-          hasError = errorsKeys.current.includes(e.htmlFor);
+          hasError = errorKeys.current.includes(e.htmlFor);
 
         // Check if the parent is initial-state-corners
         if (checkParent === "initial-state-corners") {
@@ -131,6 +258,7 @@ const Contact = () => {
           });
 
           inputOpacityForLabel(e, "lighter");
+          if (submittingRef.current) return;
           btnAnimation(e, "open");
         } else {
           Flip.from(flipState.current, {
@@ -183,6 +311,7 @@ const Contact = () => {
         // Changing the opacity
         labelBtnRefs.current.forEach((item) => {
           inputOpacityForLabel(item, "darker");
+          if (submittingRef.current) return;
           btnAnimation(item, "close");
         });
 
@@ -312,7 +441,7 @@ const Contact = () => {
         );
       };
     },
-    { dependencies: [labelBtnRefs, errorsKeys] },
+    { dependencies: [labelBtnRefs, errorKeys] },
   );
 
   // Animation for the masked info
@@ -384,12 +513,12 @@ const Contact = () => {
     () => {
       if (!cornersRef.current) return;
 
-      // Add `errors` keys to the `errorsKeys` array, if it doesn't exist that means there is no error
+      // Add `errors` keys to the `errorKeys` array, if it doesn't exist that means there is no error
       const keysOfErrors: string[] = [];
       for (const keys in errors) {
         keysOfErrors.push(keys);
       }
-      errorsKeys.current = keysOfErrors;
+      errorKeys.current = keysOfErrors;
 
       const cornersColor = (hasError: boolean) => {
         gsap.to(cornersRef.current, {
@@ -400,7 +529,7 @@ const Contact = () => {
       labelBtnRefs.current.forEach((labelBtn) => {
         if (labelBtn instanceof HTMLButtonElement || !labelBtn) return;
 
-        if (errorsKeys.current.includes(labelBtn.htmlFor)) {
+        if (errorKeys.current.includes(labelBtn.htmlFor)) {
           gsap.to(labelBtn, {
             "--input-color": "#ff2056",
           });
@@ -422,11 +551,46 @@ const Contact = () => {
     { dependencies: [userName, email, message] },
   );
 
+  // Animation: when submittingRef for btn
+  useGSAP(
+    () => {
+      // Extracting the button
+      const btn = labelBtnRefs.current.find(
+        (btn) => btn instanceof HTMLButtonElement,
+      );
+
+      // If the btn isn't null
+      if (!btn) return;
+
+      // Get rect from btn
+      const rect = btn.children[0].children[1].children[0]
+        .children[0] as HTMLElement;
+
+      gsap.to(rect, {
+        overwrite: "auto",
+        scaleY: submitting ? 1 : 0,
+        ease: "power2.out",
+        duration: 0.4,
+      });
+    },
+    { dependencies: [submitting] },
+  );
+
   return (
     <section
       id="contact"
       className="flex flex-col gap-12 justify-center items-start w-screen text-center sm:px-12 md:px-24 lg:px-40 px-[1.3rem] min-h-dvh"
     >
+      {/* Response message from the api */}
+      <div className="server-message">
+        {serverResult.error && <ImNotification />}
+        {serverResult.success && <SiNorton />}
+        <p className={serverResult.error ? "error" : "success"}>
+          {serverResult.message}
+        </p>
+        <div className={`line ${serverResult.error ? "error" : "success"}`} />
+      </div>
+
       <div className="flex flex-col gap-4 items-start">
         <h2>Contact</h2>
         <p>
@@ -472,6 +636,7 @@ const Contact = () => {
                   message: "Only letters are allowed.",
                 },
               })}
+              disabled={submitting}
             />
           </label>
         </div>
@@ -493,6 +658,7 @@ const Contact = () => {
                   message: "Invalid email address",
                 },
               })}
+              disabled={submitting}
             />
           </label>
         </div>
@@ -514,6 +680,7 @@ const Contact = () => {
                   message: "Message must be at least 10 characters",
                 },
               })}
+              disabled={submitting}
             />
           </label>
         </div>
@@ -522,10 +689,15 @@ const Contact = () => {
             labelBtnRefs.current.push(e!);
           }}
           type="submit"
+          disabled={submitting || serverResult.message !== null}
         >
           send
           <div className="masked-btn mask-[url(#mask-btn)]">
-            <span>send</span>
+            {submitting ? (
+              <RiLoader4Line className="loading" />
+            ) : (
+              <span>send</span>
+            )}
             <svg>
               <mask id="mask-btn">
                 <rect x="0" y="0" width="100%" height="100%" fill="white" />

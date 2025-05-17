@@ -86,6 +86,28 @@ rect {
   }
 }
 #contact {
+  .server-message {
+    @apply p-7 absolute gap-2 hidden items-center w-fit min-w-88 justify-center top-0 left-1/2 bg-white-green overflow-hidden rounded-b-sm;
+
+    svg {
+      @apply size-6;
+    }
+
+    p {
+      @apply text-black uppercase text-lg w-fit leading-4 tracking-[1%] font-black;
+    }
+    .line {
+      @apply w-full h-1.5 left-0 bg-black absolute bottom-0;
+
+      &.error {
+        @apply bg-rose-500;
+      }
+
+      &.success {
+        @apply bg-emerald-500;
+      }
+    }
+  }
   p {
     @apply text-sm md:text-base leading-4 tracking-[1%] text-white font-bold text-left;
   }
@@ -125,6 +147,9 @@ rect {
     .masked-btn {
       @apply absolute top-0 left-0 w-full h-full py-7 bg-white-green text-black;
 
+      .loading {
+        @apply size-16 animate-spin fill-black absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2;
+      }
       svg {
         @apply absolute top-0 left-0 w-full h-full -z-10;
       }
