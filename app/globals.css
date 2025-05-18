@@ -17,7 +17,7 @@
 
   /* Typography */
   --font-montserrat: "Montserrat", "Montserrat Fallback";
-  --font-limelight: "Limelight", "Limelight Fallback";
+  --font-fira-code: "Fira Code", monospace;
   --text-name: clamp(
     0.875rem,
     0.6404011461318051rem + 0.9551098376313276vw,
@@ -139,7 +139,7 @@ rect {
     }
   }
   button {
-    @apply relative py-7 w-full text-3xl font-black tracking-[1%] uppercase cursor-pointer md:text-4xl text-white/70 font-limelight;
+    @apply relative py-7 w-full text-3xl font-bold tracking-[1%] uppercase cursor-pointer md:text-4xl text-white/70 font-fira-code;
 
     &:focus {
       @apply outline-none;

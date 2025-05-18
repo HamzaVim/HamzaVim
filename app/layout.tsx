@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Montserrat, Limelight } from "next/font/google";
+import { Montserrat, Fira_Code } from "next/font/google";
 import "./globals.css";
 
 // NOTE: Fonts: -----------------------------------------------------------------
@@ -8,9 +8,9 @@ const montserratFont = Montserrat({
   weight: ["400", "500", "700", "900"],
 });
 
-const limelightFont = Limelight({
-  variable: "--limelight",
-  weight: "400",
+const firaCodeFont = Fira_Code({
+  variable: "--fira-code",
+  weight: ["600", "700"],
 });
 
 // NOTE: Layout: -----------------------------------------------------------------
@@ -28,7 +28,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${montserratFont.variable} ${limelightFont.variable} antialiased`}
+        className={`${montserratFont.variable} ${firaCodeFont.variable} antialiased`}
       >
         {children}
       </body>
