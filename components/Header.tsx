@@ -25,6 +25,8 @@ const Header = () => {
   // NOTE: Fuctions & Animations -------------------------------------------------------
 
   useGSAP(() => {
+    // Right side --------------------------------------------------------------
+
     // Get all links
     const allLinks = gsap.utils.toArray(
       ".right a",
@@ -39,9 +41,89 @@ const Header = () => {
       link.addEventListener("click", handleClick);
     });
 
+    // Left side --------------------------------------------------------------
+    const leftSideLinks = gsap.utils.toArray(
+      ".left a",
+    ) as unknown as HTMLAnchorElement[];
+
+    // Function to handle the mouse move
+    // Animation: The icon is tracking the mouse
+    const handleMouseMoveLeftSide = (ev: MouseEvent) => {
+      // Get the link
+      const link = ev.target as HTMLAnchorElement;
+
+      // Check if the link has the logo ------------------------------------------
+      if (link.children[0].classList[0] === "logo" && link.parentElement) {
+        // Get the offsets
+        const offsetLeft = link.parentElement.offsetLeft;
+        const offsetTop = link.parentElement.offsetTop + link.offsetTop * -1;
+
+        // Get the icon svg element
+        const logo = link.children[0] as SVGSVGElement;
+
+        // Get the coordinates
+        const x = ev.clientX - offsetLeft - link.offsetWidth / 2;
+        const y = ev.clientY - offsetTop;
+
+        gsap.to(logo, {
+          x,
+          y,
+        });
+        return;
+      }
+      // else: social media icons ------------------------------------------------
+      if (!link.parentElement?.parentElement?.parentElement) return;
+
+      // Get the offsets
+      const offsetLeft =
+        link.parentElement.parentElement.parentElement.offsetLeft;
+      const offsetTop =
+        link.parentElement.parentElement.parentElement.offsetTop +
+        link.offsetTop;
+
+      // Get the icon svg element
+      const smIcon = link.children[0] as SVGSVGElement;
+
+      // Get the coordinates
+      const x = ev.clientX - offsetLeft - link.offsetWidth / 2;
+      const y = ev.clientY - offsetTop - link.offsetHeight / 2;
+
+      gsap.to(smIcon, {
+        x,
+        y,
+      });
+    };
+
+    // Function to handle the mouse leave
+    // Animation: The icon is back to the original position
+    const handleMouseLeaveLeftSide = (ev: MouseEvent) => {
+      // Get the link
+      const link = ev.target as HTMLAnchorElement;
+
+      // Get the icon svg element
+      const icon = link.children[0] as SVGSVGElement;
+
+      gsap.to(icon, {
+        x: 0,
+        y: 0,
+      });
+    };
+
+    leftSideLinks.forEach((link) => {
+      link.addEventListener("mousemove", handleMouseMoveLeftSide);
+      link.addEventListener("mouseleave", handleMouseLeaveLeftSide);
+    });
+
     return () => {
+      // Right side --------------------------------------------------------------
       allLinks.forEach((link) => {
         link.removeEventListener("click", handleClick);
+      });
+
+      // Left side --------------------------------------------------------------
+      leftSideLinks.forEach((link) => {
+        link.removeEventListener("mousemove", handleMouseMoveLeftSide);
+        link.removeEventListener("mouseleave", handleMouseLeaveLeftSide);
       });
     };
   });
@@ -54,22 +136,22 @@ const Header = () => {
         </Link>
         <ul>
           <li>
-            <a href="">
+            <a href="https://www.example.com">
               <SiUpwork className="sm-icon" />
             </a>
           </li>
           <li>
-            <a href="">
+            <a href="https://www.example.com">
               <SiGithub className="sm-icon" />
             </a>
           </li>
           <li>
-            <a href="">
+            <a href="https://www.example.com">
               <FaTelegramPlane className="sm-icon" />
             </a>
           </li>
           <li>
-            <a href="">
+            <a href="https://www.example.com">
               <MdMail className="sm-icon" />
             </a>
           </li>
