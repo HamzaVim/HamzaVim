@@ -84,7 +84,7 @@ const About = ({ masked }: { masked?: boolean }) => {
   // Masked About section
   if (masked)
     return (
-      <section className="overflow-hidden w-screen sm:px-12 md:px-24 lg:px-40 2xl:px-0 h-dvh bg-secondary px-[1.3rem]">
+      <section className="overflow-hidden w-screen sm:px-12 md:px-24 lg:px-40 2xl:px-0 h-dvh bg-primary px-[1.3rem]">
         <div className="flex flex-col gap-7 justify-center items-start w-full h-full 2xl:items-center text-nowrap">
           <div className="flex flex-col gap-4 text-left text-black 2xl:gap-7">
             <h2>about me</h2>

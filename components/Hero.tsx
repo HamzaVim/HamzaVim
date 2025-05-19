@@ -89,11 +89,13 @@ const Hero = ({ masked }: { masked?: boolean }) => {
         />
       </div>
       <div className="flex flex-col gap-4 justify-center items-center w-full h-full text-center uppercase pointer-events-none select-none lg:gap-7 text-nowrap">
-        <p className="text-xl font-bold text-white text-name">hamza hassen</p>
+        <p className="text-xl font-bold text-white text-name font-fira-code tracking-[25%]">
+          hamza hassen
+        </p>
         <h1>
           creating
           <br />
-          <span className="text-secondary">
+          <span className="text-primary">
             beautiful
             <br />
             websites

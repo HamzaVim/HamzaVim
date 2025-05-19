@@ -138,12 +138,12 @@ const ListItem = ({
           maskImage: `url(#mask-${title.split(" ").join("-").toLowerCase()})`,
           maskMode: "alpha",
         }}
-        className="flex absolute top-0 right-0 items-center px-4 w-full h-full text-black sm:px-10 md:pl-20 lg:py-7 xl:pl-24 2xl:pl-36 bg-secondary"
+        className="flex absolute top-0 right-0 items-center px-4 w-full h-full text-black bg-white sm:px-10 md:pl-20 lg:py-7 xl:pl-24 2xl:pl-36"
       >
         <h3 className="hidden md:block">{maskedTitle ?? title}</h3>
         <p
           dangerouslySetInnerHTML={{ __html: body }}
-          className="flex right-0 items-center w-full h-full font-bold md:absolute md:top-1/2 md:pr-10 md:pl-7 md:-translate-y-1/2 xl:pr-20 bg-secondary text-whyme md:max-w-whyme xl:text-nowrap"
+          className="flex right-0 items-center w-full h-full font-bold bg-white md:absolute md:top-1/2 md:pr-10 md:pl-7 md:-translate-y-1/2 xl:pr-20 text-whyme md:max-w-whyme xl:text-nowrap"
         />
 
         {/* This svg to show the text that are masked */}
@@ -159,7 +159,7 @@ const ListItem = ({
               y="0%"
               height="100%"
               width="100vw"
-              className="fill-secondary"
+              className="fill-primary"
             />
           </mask>
         </svg>

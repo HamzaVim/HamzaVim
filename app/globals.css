@@ -10,10 +10,8 @@
 @theme {
   /* Colors */
   --color-black: #111313;
-  --color-white: #e8fcf5;
-  --color-white-green: #cffcec;
-  --color-primary: #324b4b;
-  --color-secondary: #448b76;
+  --color-white: #cffcec;
+  --color-primary: #448b76;
 
   /* Typography */
   --font-montserrat: "Montserrat", "Montserrat Fallback";
@@ -63,7 +61,7 @@ h1 {
   @apply text-h1/[102%] tracking-[-2%] w-full text-white font-black;
 }
 h2 {
-  @apply uppercase font-medium text-h2/[33.6px] text-white tracking-[25%];
+  @apply uppercase font-fira-code font-medium text-h2/[33.6px] text-white tracking-[25%];
 }
 h3 {
   @apply text-h3-sm md:text-h3 leading-[100%] tracking-[-0.5%] font-black uppercase text-nowrap;
@@ -81,13 +79,13 @@ rect {
       @apply overflow-hidden inline-block h-full;
     }
     strong {
-      @apply text-secondary;
+      @apply text-primary;
     }
   }
 }
 #contact {
   .server-message {
-    @apply p-7 absolute gap-2 hidden items-center w-fit min-w-88 justify-center top-0 left-1/2 bg-white-green overflow-hidden rounded-b-sm;
+    @apply p-7 absolute gap-2 hidden items-center w-fit min-w-88 justify-center top-0 left-1/2 bg-white overflow-hidden rounded-b-sm;
 
     svg {
       @apply size-6;
@@ -145,7 +143,7 @@ rect {
       @apply outline-none;
     }
     .masked-btn {
-      @apply absolute top-0 left-0 w-full h-full py-7 bg-white-green text-black;
+      @apply absolute top-0 left-0 w-full h-full py-7 bg-white text-black;
 
       .loading {
         @apply size-16 animate-spin fill-black absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2;
@@ -184,7 +182,7 @@ rect {
         }
 
         .masked-info {
-          @apply w-full bg-white-green absolute px-6 py-4 top-0 left-0 flex flex-col gap-2;
+          @apply w-full bg-white absolute px-6 py-4 top-0 left-0 flex flex-col gap-2;
           h5 {
             @apply text-black;
           }
