@@ -3,7 +3,6 @@
 :root {
   --input-color: #e8fcf5;
   --input-opacity: 50%;
-  --links-opacity: 60%;
   --corner-color: #e8fcf5;
 }
 
@@ -55,6 +54,90 @@
 /* Tags */
 body {
   @apply bg-black font-montserrat;
+}
+
+header {
+  @apply flex fixed top-0 left-0 justify-between w-full px-2.5 sm:px-5 xl:px-10 h-full z-100 pointer-events-none py-5 sm:py-7 xl:py-16;
+
+  .left,
+  .right {
+    @apply pointer-events-auto relative w-fit;
+  }
+
+  .left {
+    @apply flex flex-col justify-between items-center pl-3 lg:pl-0;
+
+    .logo {
+      @apply w-7 h-auto fill-white stroke-primary;
+    }
+
+    ul {
+      @apply lg:flex hidden flex-col mb-4;
+
+      li {
+        @apply rounded-full;
+      }
+      a {
+        @apply p-5 block;
+
+        .sm-icon {
+          @apply size-7 fill-white;
+        }
+      }
+    }
+  }
+
+  .right {
+    @apply flex flex-col lg:justify-start justify-start lg:text-xl text-base md:text-lg font-semibold font-fira-code uppercase tracking-[3%];
+
+    ul {
+      @apply flex flex-col gap-1 items-end;
+
+      li {
+        @apply w-fit;
+        a {
+          @apply lg:px-5 lg:py-2 px-3 py-1 block text-white/75;
+
+          .text-block {
+            @apply overflow-hidden relative block;
+
+            span {
+              @apply block;
+            }
+            span:nth-child(2) {
+              @apply text-white absolute top-[100%] left-0;
+            }
+          }
+        }
+      }
+    }
+
+    .sound-btn {
+      @apply absolute left-19 md:left-21 lg:left-25 w-fit overflow-hidden [writing-mode:sideways-lr] mb-7 bottom-0 text-sm md:text-lg text-white/50 hover:text-white duration-200 font-semibold font-fira-code uppercase tracking-[3%] cursor-pointer;
+
+      .on-off {
+        @apply inline-block relative;
+
+        span:nth-child(1) {
+          @apply text-white;
+        }
+        span:nth-child(2) {
+          @apply text-white/50 absolute top-0 -translate-x-full;
+        }
+      }
+    }
+  }
+
+  .bg-shadow {
+    @apply absolute flex flex-col justify-between top-0 lg:hidden left-0 w-full h-full -z-50;
+
+    .top {
+      @apply h-1/5 sm:h-1/4 w-full bg-gradient-to-b from-black via-black/70 from-5% to-black/0;
+    }
+    .bottom {
+      @apply h-1/5 sm:h-1/4 w-full bg-gradient-to-t from-black via-black/70 from-5% to-black/0;
+    }
+  }
 }
 
 h1 {

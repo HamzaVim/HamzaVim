@@ -59,7 +59,7 @@ const Hero = ({ masked }: { masked?: boolean }) => {
       {/* Container for image */}
       <div ref={imageContainerRef} className="absolute w-screen h-dvh -z-10">
         {/* Overlay */}
-        <div className="hidden absolute z-10 top-[0%] w-full h-full lg:block bg-linear-to-t from-black/55 to-black/25" />
+        <div className="hidden absolute z-10 top-[0%] w-full h-full lg:block bg-linear-to-b from-black/60 to-black/25" />
         {/* Mobile */}
         <Image
           src="/images/hero-phone.png"
