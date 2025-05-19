@@ -1,10 +1,11 @@
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap/all";
 import { FaTelegramPlane } from "react-icons/fa";
-import { MdMail } from "react-icons/md";
+import { MdFingerprint, MdMail } from "react-icons/md";
 import { SiUpwork, SiGithub } from "react-icons/si";
 import Logo from "./Logo";
 import Link from "next/link";
+import Image from "next/image";
 
 // Link item
 const LinkItem = ({ href, text }: { href: string; text: string }) => {
@@ -74,6 +75,12 @@ const Header = () => {
           </li>
         </ul>
       </div>
+      <button className="press">
+        <div className="press-img">
+          <Image src="/images/press.png" fill alt="press image" />
+        </div>
+        <MdFingerprint className="finger-print" />
+      </button>
       <div className="right">
         <ul className="">
           <li>
