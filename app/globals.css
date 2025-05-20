@@ -131,16 +131,16 @@ header {
     }
 
     .sound-btn {
-      @apply absolute left-19 md:left-21 lg:left-25 w-fit overflow-hidden [writing-mode:sideways-lr] mb-7 bottom-0 text-sm md:text-lg text-white/50 hover:text-white duration-200 font-semibold font-fira-code uppercase tracking-[3%] cursor-pointer;
+      @apply absolute left-19 md:left-21 lg:left-25 overflow-hidden flex text-left [writing-mode:sideways-lr] mb-7 bottom-0 text-sm md:text-lg md:w-7 w-[calc(var(--spacing)*4.7)] text-white/50 hover:text-white duration-200 font-semibold font-fira-code uppercase tracking-[3%] cursor-pointer;
 
       .on-off {
-        @apply inline-block relative;
+        @apply flex-col flex relative -ml-[0.07rem] md:ml-0;
 
-        span:nth-child(1) {
-          @apply text-white;
+        .off {
+          @apply text-white/50;
         }
-        span:nth-child(2) {
-          @apply text-white/50 absolute top-0 -translate-x-full;
+        .on {
+          @apply text-white;
         }
       }
     }

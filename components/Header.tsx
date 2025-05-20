@@ -6,6 +6,51 @@ import { SiUpwork, SiGithub } from "react-icons/si";
 import Logo from "./Logo";
 import Link from "next/link";
 import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
+
+const useSound = () => {
+  // Ref: audio
+  const soundRef = useRef<HTMLAudioElement>(null);
+
+  // TODO: When the page loads, the audio loop will play automatically instead of using play and pause buttons.
+  // When the sound button is clicked to turn off the audio, the volume will be reduced to 0 without pausing it.
+  // The same process applies for turning the audio back on.
+  // const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    soundRef.current = new Audio("/audios/idea 22.mp3");
+    soundRef.current.loop = true;
+    soundRef.current.volume = 0.2;
+  }, []);
+
+  const playSound = () => {
+    if (!soundRef.current) return;
+    soundRef.current.play();
+    // intervalRef.current = setInterval(() => {
+    //   if (!soundRef.current) return;
+    //   soundRef.current.volume += 0.01;
+    //   if (soundRef.current.volume === 0.2) {
+    //     clearInterval(intervalRef.current);
+    //   }
+    // }, 10);
+  };
+
+  const pauseSound = () => {
+    if (!soundRef.current) return;
+    // setInterval(() => {
+    //   if (!soundRef.current) return;
+    //   soundRef.current.volume -= 0.01;
+    //   if (soundRef.current.volume == 0) {
+    //     return;
+    //   }
+    // }, 10);
+    soundRef.current.pause();
+  };
+  return {
+    playSound,
+    pauseSound,
+  };
+};
 
 // Link item
 const LinkItem = ({ href, text }: { href: string; text: string }) => {
@@ -21,6 +66,13 @@ const LinkItem = ({ href, text }: { href: string; text: string }) => {
 
 const Header = () => {
   // NOTE: States & Refs -------------------------------------------------------
+
+  const { playSound, pauseSound } = useSound();
+  // Ref: sound button
+  const soundBtnRef = useRef<HTMLButtonElement>(null);
+  const [soundState, setSoundState] = useState(false);
+
+  const tlSoundBtn = useRef<gsap.core.Timeline>(null);
 
   // NOTE: Fuctions & Animations -------------------------------------------------------
 
@@ -128,6 +180,39 @@ const Header = () => {
     };
   });
 
+  // Sound button animation
+  // Creating a timeline
+  useGSAP(() => {
+    if (!soundBtnRef.current) return;
+
+    const onOffBlock = soundBtnRef.current.children[0];
+
+    tlSoundBtn.current = gsap
+      .timeline({
+        paused: true,
+      })
+      .to(onOffBlock, {
+        x: "-100%",
+        onComplete: () => {
+          if (!soundBtnRef.current) return;
+          const onOrOff = onOffBlock.children[0];
+          onOffBlock.removeChild(onOrOff);
+          onOffBlock.appendChild(onOrOff);
+        },
+      })
+      .set(onOffBlock, { x: "0%" });
+  });
+  // If soundState Changed: Play the animation above
+  useEffect(() => {
+    if (!tlSoundBtn.current) return;
+    tlSoundBtn.current.restart();
+
+    if (soundState) {
+      playSound();
+    } else {
+      pauseSound();
+    }
+  }, [soundState, playSound, pauseSound]);
   return (
     <header>
       <div className="left">
@@ -164,7 +249,7 @@ const Header = () => {
         <MdFingerprint className="finger-print" />
       </button>
       <div className="right">
-        <ul className="">
+        <ul>
           <li>
             <LinkItem href="#about" text="about" />
           </li>
@@ -178,11 +263,18 @@ const Header = () => {
             <LinkItem href="#resume" text="resume" />
           </li>
         </ul>
-        <button className="sound-btn">
-          sound{" "}
+        <button
+          onClick={() => {
+            if (tlSoundBtn.current && !tlSoundBtn.current.isActive())
+              setSoundState(!soundState);
+          }}
+          ref={soundBtnRef}
+          className="sound-btn"
+        >
+          sound&nbsp;
           <span className="on-off">
-            <span>on</span>
-            <span>off</span>
+            <span className="on">on</span>
+            <span className="off">off</span>
           </span>
         </button>
       </div>
