@@ -209,7 +209,7 @@ const Contact = () => {
           empty.includes(target.htmlFor)
         ) {
           gsap.to(target, {
-            "--input-opacity": opacity === "lighter" ? "100%" : "70%",
+            "--input-opacity": opacity === "lighter" ? "100%" : "35%",
           });
         }
         return;
@@ -450,7 +450,7 @@ const Contact = () => {
     const maskedInfo = gsap.utils.toArray(".masked-info") as HTMLDivElement[];
 
     // handle mouse enter & animation
-    const handleMouseEnter_MaskedInfo = (rect: HTMLElement) => {
+    const handleMouseEnterOrFocus_MaskedInfo = (rect: HTMLElement) => {
       gsap.to(rect, {
         overwrite: "auto",
         scaleY: 1,
@@ -460,7 +460,7 @@ const Contact = () => {
     };
 
     // handle mouse leave & animation
-    const handleMouseLeave_MaskedInfo = (rect: HTMLElement) => {
+    const handleMouseLeaveOrFocusOut_MaskedInfo = (rect: HTMLElement) => {
       gsap.to(rect, {
         overwrite: "auto",
         scaleY: 0,
@@ -468,6 +468,9 @@ const Contact = () => {
         duration: 0.4,
       });
     };
+
+    // Store cleanup functions
+    const cleanups: (() => void)[] = [];
 
     // Loop through each element
     maskedInfo.forEach((item) => {
@@ -477,34 +480,31 @@ const Contact = () => {
         scaleY: 0,
       });
 
-      const itemParent = item.parentElement as HTMLElement;
+      // Handle events
+      const handleEnter = () => handleMouseEnterOrFocus_MaskedInfo(rect);
+      const handleLeave = () => handleMouseLeaveOrFocusOut_MaskedInfo(rect);
+
+      const itemParent = item.parentElement as HTMLAnchorElement;
 
       // Add Events ------------------------------
-      item.addEventListener("mouseenter", () =>
-        handleMouseEnter_MaskedInfo(rect),
-      );
-      item.addEventListener("mouseleave", () =>
-        handleMouseLeave_MaskedInfo(rect),
-      );
-      itemParent.addEventListener("focusin", () =>
-        handleMouseEnter_MaskedInfo(rect),
-      );
-      itemParent.addEventListener("focusout", () =>
-        handleMouseLeave_MaskedInfo(rect),
-      );
+      itemParent.addEventListener("mouseenter", handleEnter);
+      itemParent.addEventListener("mouseleave", handleLeave);
+      itemParent.addEventListener("touchstart", handleEnter);
+      itemParent.addEventListener("focusin", handleEnter);
+      itemParent.addEventListener("focusout", handleLeave);
+
+      cleanups.push(() => {
+        itemParent.removeEventListener("mouseenter", handleEnter);
+        itemParent.removeEventListener("mouseleave", handleLeave);
+        itemParent.removeEventListener("touchstart", handleEnter);
+        itemParent.removeEventListener("focusin", handleEnter);
+        itemParent.removeEventListener("focusout", handleLeave);
+      });
     });
 
     // Cleanup
     return () => {
-      maskedInfo.forEach((item) => {
-        const rect = item.children[2].children[0].children[0] as HTMLElement;
-        item.removeEventListener("mouseenter", () =>
-          handleMouseEnter_MaskedInfo(rect),
-        );
-        item.removeEventListener("mouseleave", () =>
-          handleMouseLeave_MaskedInfo(rect),
-        );
-      });
+      cleanups.forEach((cleanup) => cleanup());
     };
   });
 
@@ -577,10 +577,7 @@ const Contact = () => {
   );
 
   return (
-    <section
-      id="contact"
-      className="flex flex-col gap-12 justify-center items-start w-screen text-center sm:px-12 md:px-24 lg:px-40 px-[1.3rem] min-h-dvh"
-    >
+    <section id="contact">
       {/* Response message from the api */}
       <div className="server-message">
         {serverResult.error && <ImNotification />}
@@ -591,30 +588,28 @@ const Contact = () => {
         <div className={`line ${serverResult.error ? "error" : "success"}`} />
       </div>
 
-      <div className="flex flex-col gap-4 items-start">
+      <div className="header-container">
         <h2>Contact</h2>
         <p>
-          Want a website that stands out? <br className="sm:hidden" /> Let’s
-          make it happen
+          Want a website that stands out? <br /> Let’s make it happen
         </p>
       </div>
       <form onSubmit={handleSubmit(submitForm)} noValidate>
-        <div id="initial-state-corners" className="absolute">
+        <div id="initial-state-corners">
           <div
             ref={cornersRef}
             id="corners"
             style={{
               display: "none",
             }}
-            className="absolute top-0 left-0 w-full h-full -z-50"
           >
-            <div className="absolute -top-1.5 -left-1.5 w-5 h-5 border-t-2 border-l-2 border-(--corner-color)" />
-            <div className="absolute -top-1.5 -right-1.5 w-5 h-5 border-t-2 border-r-2 border-(--corner-color)" />
-            <div className="absolute -bottom-1.5 -left-1.5 w-5 h-5 border-b-2 border-l-2 border-(--corner-color)" />
-            <div className="absolute -right-1.5 -bottom-1.5 w-5 h-5 border-r-2 border-b-2 border-(--corner-color)" />
+            <div className="corner" />
+            <div className="corner" />
+            <div className="corner" />
+            <div className="corner" />
           </div>
         </div>
-        <div>
+        <div className="input-container">
           <label
             ref={(e) => {
               labelBtnRefs.current.push(e!);
@@ -640,7 +635,7 @@ const Contact = () => {
             />
           </label>
         </div>
-        <div>
+        <div className="input-container">
           <label
             ref={(e) => {
               labelBtnRefs.current.push(e!);
@@ -662,7 +657,7 @@ const Contact = () => {
             />
           </label>
         </div>
-        <div>
+        <div className="input-container">
           <label
             ref={(e) => {
               labelBtnRefs.current.push(e!);
@@ -706,8 +701,8 @@ const Contact = () => {
           </div>
         </button>
       </form>
-      <footer className="flex flex-col gap-12 w-full">
-        <div className="flex justify-between px-3 sm-container sm:px-6">
+      <footer>
+        <div className="sm-container">
           <a href="" className="group">
             <SiUpwork className="sm-icon" />
           </a>
@@ -725,6 +720,7 @@ const Contact = () => {
           <a href="https://www.instagram.com/hamzasxh/">
             <h5>Instagram</h5>
             <p>hamzasxh@gmail.com</p>
+
             <div className="masked-info mask-[url(#mask-1)]">
               <h5>I’ll read it—100%!</h5>
               <p>hamzasxh@gmail.com</p>
@@ -738,6 +734,7 @@ const Contact = () => {
           <a href="https://t.me/HamzaVim">
             <h5>Telegram</h5>
             <p>@HamzaVim</p>
+
             <div className="masked-info mask-[url(#mask-2)]">
               <h5>80% chance I’ll respond</h5>
               <p>@HamzaVim</p>

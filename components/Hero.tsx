@@ -55,17 +55,17 @@ const Hero = ({ masked }: { masked?: boolean }) => {
       </section>
     );
   return (
-    <section className="overflow-hidden relative w-screen h-dvh">
+    <section id="hero">
       {/* Container for image */}
-      <div ref={imageContainerRef} className="absolute w-screen h-dvh -z-10">
+      <div ref={imageContainerRef} className="img-container">
         {/* Overlay */}
-        <div className="hidden absolute z-10 top-[0%] w-full h-full lg:block bg-linear-to-b from-black/60 to-black/25" />
+        <div className="img-shadow" />
         {/* Mobile */}
         <Image
           src="/images/hero-phone.png"
           alt="hero image"
           fill
-          className="object-cover sm:hidden"
+          className="hero-img-mobile"
           sizes="100vw"
           quality={100}
         />
@@ -74,7 +74,7 @@ const Hero = ({ masked }: { masked?: boolean }) => {
           src="/images/hero-tablet.png"
           alt="hero image"
           fill
-          className="hidden object-cover object-center sm:block lg:hidden"
+          className="hero-img-tablet"
           sizes="100vw"
           quality={100}
         />
@@ -83,28 +83,28 @@ const Hero = ({ masked }: { masked?: boolean }) => {
           src="/images/hero-desktop.png"
           alt="hero image"
           fill
-          className="hidden object-cover lg:block object-top-left"
+          className="hero-img-desktop"
           sizes="100vw"
           quality={100}
         />
       </div>
-      <div className="flex flex-col gap-4 justify-center items-center w-full h-full text-center uppercase pointer-events-none select-none lg:gap-7 text-nowrap">
-        <p className="text-xl font-bold text-white text-name font-fira-code tracking-[25%]">
-          hamza hassen
-        </p>
-        <h1>
-          creating
-          <br />
-          <span className="text-primary">
-            beautiful
+      <div className="hero-text-container">
+        <div className="text-container">
+          <p className="my-name">hamza hassen</p>
+          <h1>
+            creating
             <br />
-            websites
-          </span>
-          <br />
-          that reflect
-          <br />
-          your vision
-        </h1>
+            <span className="text-primary">
+              beautiful
+              <br />
+              websites
+            </span>
+            <br />
+            that reflect
+            <br />
+            your vision
+          </h1>
+        </div>
       </div>
     </section>
   );

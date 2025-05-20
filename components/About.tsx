@@ -100,26 +100,20 @@ const About = ({ masked }: { masked?: boolean }) => {
       </section>
     );
   return (
-    <section className="overflow-hidden w-screen sm:px-12 md:px-24 lg:px-40 2xl:px-0 h-dvh px-[1.3rem]">
-      <div className="flex flex-col justify-center items-start w-full h-full 2xl:items-center text-nowrap">
-        <div className="flex flex-col gap-4 text-left 2xl:gap-7">
+    <section id="about">
+      <div className="about-container">
+        <div>
           <h2>about me</h2>
-          <div className="relative w-full">
+          <div className="text-container">
             {/* Overlay */}
-            <p
-              ref={aboutTextOverlayRef}
-              className="about-text max-w-[80rem] text-white text-about/[135%] md:leading-[125%] lg:leading-[115%] xl:leading-[102%] tracking-[-0.5%] font-extrabold text-wrap"
-            >
+            <p ref={aboutTextOverlayRef}>
               I&apos;m a <strong>skilled</strong> <strong>web</strong>{" "}
               <strong>developer</strong> that creates powerful digital
               solutions. Every obstacle overcome and every line of code created
               is a step closer to perfection.
             </p>
             {/* Text */}
-            <p
-              ref={aboutTextRef}
-              className="about-text absolute top-0 max-w-[80rem] text-white text-about/[135%] md:leading-[125%] lg:leading-[115%] xl:leading-[102%] tracking-[-0.5%] font-extrabold text-wrap"
-            >
+            <p ref={aboutTextRef}>
               I&apos;m a <strong>skilled</strong> <strong>web</strong>{" "}
               <strong>developer</strong> that creates powerful digital
               solutions. Every obstacle overcome and every line of code created

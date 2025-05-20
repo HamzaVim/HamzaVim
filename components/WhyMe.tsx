@@ -107,27 +107,18 @@ const ListItem = ({
   );
 
   return (
-    <li
-      ref={liRef}
-      className="overflow-hidden relative py-10 pl-4 w-full border-t sm:py-7 sm:pl-10 md:pl-20 xl:pl-24 2xl:pl-36 last:border-b h-fit border-t-white/15 last:border-b-white/15"
-    >
-      <div className="relative font-black text-white uppercase select-none w-fit h-fit text-nowrap">
-        <span className="opacity-20 text-h3-sm/[100%] md:text-h3/[100%] tracking-[-0.5%]">
-          {title}
-        </span>
+    <li ref={liRef}>
+      <div className="text-container">
+        <span>{title}</span>
 
         {/* The div is for the hover */}
         <div
-          className="absolute top-0 left-0 z-20 w-full h-full bg-red"
+          className="hover-effect-container"
           onMouseEnter={() => setHovered(true)}
           onMouseLeave={() => setHovered(false)}
         />
         {/* Highlighted text */}
-        <h3
-          ref={highlightedTextRef}
-          style={{ width: "0%" }}
-          className="overflow-hidden absolute top-0 left-0 h-full whitespace-nowrap"
-        >
+        <h3 ref={highlightedTextRef} style={{ width: "0%" }}>
           {title}
         </h3>
       </div>
@@ -138,29 +129,15 @@ const ListItem = ({
           maskImage: `url(#mask-${title.split(" ").join("-").toLowerCase()})`,
           maskMode: "alpha",
         }}
-        className="flex absolute top-0 right-0 items-center px-4 w-full h-full text-black bg-white sm:px-10 md:pl-20 lg:py-7 xl:pl-24 2xl:pl-36"
+        className="text-container-masked"
       >
-        <h3 className="hidden md:block">{maskedTitle ?? title}</h3>
-        <p
-          dangerouslySetInnerHTML={{ __html: body }}
-          className="flex right-0 items-center w-full h-full font-bold bg-white md:absolute md:top-1/2 md:pr-10 md:pl-7 md:-translate-y-1/2 xl:pr-20 text-whyme md:max-w-whyme xl:text-nowrap"
-        />
+        <h3>{maskedTitle ?? title}</h3>
+        <p dangerouslySetInnerHTML={{ __html: body }} />
 
         {/* This svg to show the text that are masked */}
-        <svg
-          fill="none"
-          ref={svgRef}
-          xmlns="http://www.w3.org/2000/svg"
-          className="flex absolute top-0 left-0 flex-row w-full h-full"
-        >
+        <svg fill="none" ref={svgRef} xmlns="http://www.w3.org/2000/svg">
           <mask id={`mask-${title.split(" ").join("-").toLowerCase()}`}>
-            <rect
-              x="0%"
-              y="0%"
-              height="100%"
-              width="100vw"
-              className="fill-primary"
-            />
+            <rect x="0%" y="0%" height="100%" width="100vw" />
           </mask>
         </svg>
       </div>
@@ -169,8 +146,8 @@ const ListItem = ({
 };
 const WhyMe = () => {
   return (
-    <section className="overflow-hidden relative w-screen h-dvh">
-      <h2 className="py-7 text-center 2xl:py-14">why me</h2>
+    <section id="why-me">
+      <h2>why me</h2>
       <ul>
         <ListItem
           title="Custom Solutions"
