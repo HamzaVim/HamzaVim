@@ -8,6 +8,77 @@ import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
+// TODO: When click to resume, another 2 divs (or the same but not hiding the header): black page and white page, both with logo.
+// Hide all the sections and show only the resume section.
+// The animation ends and reveals the resume page and changes the link state to 'resume'.
+// After creating the projects component, it will do the same.
+
+// TODO: Loading page: black with logo and loading progress bar; when finished, click the start button.
+// 2 divs: black page and white page, both with logo.
+// When the user clicks the start button, the black page goes and reveals the white page, and it will go in 0.5s.
+// Music will play in the background when the start button is clicked.
+// State for complete loading page, Hero page 'text' appears.
+
+// TODO: create context global provider for link state.
+// Use 'scrollTo' from GSAP, except resume.
+// Use 'scrollTrigger' from GSAP to change the state of the link; scroll to the about section, and the state changes to 'about'
+// 'rect' animate when the link state changed.
+
+// Link item
+const LinkItem = ({ href, text }: { href: string; text: string }) => {
+  const linkRef = useRef<HTMLAnchorElement>(null);
+  useGSAP(() => {
+    if (!linkRef.current) return;
+
+    const rect = linkRef.current.lastElementChild?.lastElementChild?.children[0]
+      .children[0] as HTMLElement;
+
+    linkRef.current.addEventListener("mouseenter", (ev) => {
+      const target = ev.target as HTMLAnchorElement;
+      const textBlock = target.children[0] as HTMLSpanElement;
+
+      gsap.to(textBlock.children, {
+        y: "-100%",
+        duration: 0.3,
+      });
+    });
+
+    linkRef.current.addEventListener("mouseleave", (ev) => {
+      const target = ev.target as HTMLAnchorElement;
+      const textBlock = target.children[0] as HTMLSpanElement;
+
+      gsap.to(textBlock.children, {
+        y: "0%",
+        duration: 0.3,
+      });
+    });
+
+    gsap.set(rect, {
+      scaleY: 0,
+    });
+  });
+  return (
+    <a ref={linkRef} href={href} className="relative">
+      <span className="text-block">
+        <span>{text}</span>
+        <span>{text}</span>
+      </span>
+
+      <div
+        className={`masked-link w-full h-full absolute top-0 left-0 lg:px-5 lg:py-2 px-3 py-1 text-black bg-white`}
+        style={{ maskImage: `url(#mask-${text})` }}
+      >
+        <span>{text}</span>
+        <svg className="absolute top-0 left-0 w-full h-full">
+          <mask id={`mask-${text}`}>
+            <rect x="0" y="0" width="100%" height="100%" fill="white" />
+          </mask>
+        </svg>
+      </div>
+    </a>
+  );
+};
+
 const useSound = () => {
   // Ref: audio
   const soundRef = useRef<HTMLAudioElement>(null);
@@ -50,18 +121,6 @@ const useSound = () => {
     playSound,
     pauseSound,
   };
-};
-
-// Link item
-const LinkItem = ({ href, text }: { href: string; text: string }) => {
-  return (
-    <a href={href}>
-      <span className="text-block">
-        <span>{text}</span>
-        <span>{text}</span>
-      </span>
-    </a>
-  );
 };
 
 const Header = () => {
