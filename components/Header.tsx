@@ -1,5 +1,5 @@
 import { useGSAP } from "@gsap/react";
-import gsap from "gsap/all";
+import gsap, { ScrollToPlugin } from "gsap/all";
 import { FaTelegramPlane } from "react-icons/fa";
 import { MdFingerprint, MdMail } from "react-icons/md";
 import { SiUpwork, SiGithub } from "react-icons/si";
@@ -7,6 +7,9 @@ import Logo from "./Logo";
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { useGlobal } from "@/context/GlobalContext";
+
+// TODO: Maybe changing the links' style.
 
 // TODO: When click to resume, another 2 divs (or the same but not hiding the header): black page and white page, both with logo.
 // Hide all the sections and show only the resume section.
@@ -20,13 +23,24 @@ import { useEffect, useRef, useState } from "react";
 // State for complete loading page, Hero page 'text' appears.
 
 // TODO: create context global provider for link state. ✅
-// Use 'scrollTo' from GSAP, except resume.
+// Use 'scrollTo' from GSAP, except resume. ✅
 // Use 'scrollTrigger' from GSAP to change the state of the link; scroll to the about section, and the state changes to 'about'
 // 'rect' animate when the link state changed.
 
 // Link item
 const LinkItem = ({ href, text }: { href: string; text: string }) => {
+  gsap.registerPlugin(ScrollToPlugin);
+
+  // NOTE: States & Refs: ---------------------------------------------------
+
+  // Ref: link
   const linkRef = useRef<HTMLAnchorElement>(null);
+
+  const { linkState, setLinkState } = useGlobal();
+
+  // NOTE: Functions & Animations: ---------------------------------------------------
+
+  // Animation for the link: Hover & click
   useGSAP(() => {
     if (!linkRef.current) return;
 
@@ -34,28 +48,53 @@ const LinkItem = ({ href, text }: { href: string; text: string }) => {
       .children[0] as HTMLElement;
 
     // Events handlers: -------------------------------------------------
-    // handle mouse enter
+
+    // Handle mouse enter
+    // Animation: Text block goes up
     const handleMouseEnter = (ev: MouseEvent) => {
-      // getting the target and getting the text block from it
+      // Getting the target and getting the text block from it
       const target = ev.target as HTMLAnchorElement;
       const textBlock = target.children[0] as HTMLSpanElement;
 
-      // animating the text
+      // Animating the text
       gsap.to(textBlock.children, {
         y: "-100%",
         duration: 0.3,
       });
     };
-    // handle mouse leave
+
+    // Handle mouse leave
+    // Animation: Text block goes down
     const handleMouseLeave = (ev: MouseEvent) => {
-      // getting the target and getting the text block from it
+      // Getting the target and getting the text block from it
       const target = ev.target as HTMLAnchorElement;
       const textBlock = target.children[0] as HTMLSpanElement;
 
-      // animating the text
+      // Animating the text
       gsap.to(textBlock.children, {
         y: "0%",
         duration: 0.3,
+      });
+    };
+
+    // Handle mouse click
+    // Animation: Scroll to the section
+    const handleClick = (ev: MouseEvent) => {
+      // getting the target and getting the href
+      const target = ev.target as HTMLAnchorElement;
+      const href = target.href.split("#")[1];
+
+      // Until the resume and projects sections are created
+      if (href === "resume" || href === "projects") return;
+
+      // Animation
+      gsap.to(window, {
+        scrollTo: `#${href}`,
+        duration: 1,
+        onStart: () => {
+          // changing the link state
+          setLinkState(href);
+        },
       });
     };
     // : -----------------------------------------------------------------
@@ -63,6 +102,7 @@ const LinkItem = ({ href, text }: { href: string; text: string }) => {
     // add event listeners
     linkRef.current.addEventListener("mouseenter", handleMouseEnter);
     linkRef.current.addEventListener("mouseleave", handleMouseLeave);
+    linkRef.current.addEventListener("click", handleClick);
 
     // set initial state
     gsap.set(rect, {
@@ -72,8 +112,28 @@ const LinkItem = ({ href, text }: { href: string; text: string }) => {
     return () => {
       linkRef.current?.removeEventListener("mouseenter", handleMouseEnter);
       linkRef.current?.removeEventListener("mouseleave", handleMouseLeave);
+      linkRef.current?.removeEventListener("click", handleClick);
     };
   });
+
+  // Animation when the link state changed
+  useGSAP(
+    () => {
+      if (!linkRef.current) return;
+
+      const rect = linkRef.current.lastElementChild?.lastElementChild
+        ?.children[0].children[0] as HTMLElement;
+
+      gsap.to(rect, {
+        overwrite: "auto",
+        scaleY: linkState === text ? 1 : 0,
+        ease: "power2.out",
+        duration: 0.4,
+      });
+    },
+    { dependencies: [linkState] },
+  );
+
   return (
     <a ref={linkRef} href={href} className="relative">
       <span className="text-block">
