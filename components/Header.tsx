@@ -303,7 +303,13 @@ const Header = () => {
       </div>
       <button className="press">
         <div className="press-img">
-          <Image src="/images/press.png" fill alt="press image" />
+          <Image
+            src="/images/press.png"
+            fill
+            sizes="100%"
+            quality={100}
+            alt="press image"
+          />
         </div>
         <MdFingerprint className="finger-print" />
       </button>

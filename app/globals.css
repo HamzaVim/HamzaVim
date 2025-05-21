@@ -98,7 +98,7 @@ header {
     @apply h-fit w-fit mb-10 md:mb-11.5 lg:hidden absolute bottom-0 left-1/2 -translate-x-1/2 z-100;
 
     .press-img {
-      @apply size-20 sm:size-24 md:size-26 animate-spin;
+      @apply size-20 sm:size-24 md:size-26 relative animate-spin;
     }
 
     .finger-print {
