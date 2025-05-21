@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Montserrat, Fira_Code } from "next/font/google";
 import "./globals.css";
+import { GlobalProvider } from "@/context/GlobalContext";
 
 // NOTE: Fonts: -----------------------------------------------------------------
 const montserratFont = Montserrat({
@@ -30,7 +31,7 @@ export default function RootLayout({
       <body
         className={`${montserratFont.variable} ${firaCodeFont.variable} antialiased`}
       >
-        {children}
+        <GlobalProvider>{children}</GlobalProvider>
       </body>
     </html>
   );

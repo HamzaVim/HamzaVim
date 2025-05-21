@@ -19,7 +19,7 @@ import { useEffect, useRef, useState } from "react";
 // Music will play in the background when the start button is clicked.
 // State for complete loading page, Hero page 'text' appears.
 
-// TODO: create context global provider for link state.
+// TODO: create context global provider for link state. ✅
 // Use 'scrollTo' from GSAP, except resume.
 // Use 'scrollTrigger' from GSAP to change the state of the link; scroll to the about section, and the state changes to 'about'
 // 'rect' animate when the link state changed.
