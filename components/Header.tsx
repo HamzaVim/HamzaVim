@@ -33,29 +33,46 @@ const LinkItem = ({ href, text }: { href: string; text: string }) => {
     const rect = linkRef.current.lastElementChild?.lastElementChild?.children[0]
       .children[0] as HTMLElement;
 
-    linkRef.current.addEventListener("mouseenter", (ev) => {
+    // Events handlers: -------------------------------------------------
+    // handle mouse enter
+    const handleMouseEnter = (ev: MouseEvent) => {
+      // getting the target and getting the text block from it
       const target = ev.target as HTMLAnchorElement;
       const textBlock = target.children[0] as HTMLSpanElement;
 
+      // animating the text
       gsap.to(textBlock.children, {
         y: "-100%",
         duration: 0.3,
       });
-    });
-
-    linkRef.current.addEventListener("mouseleave", (ev) => {
+    };
+    // handle mouse leave
+    const handleMouseLeave = (ev: MouseEvent) => {
+      // getting the target and getting the text block from it
       const target = ev.target as HTMLAnchorElement;
       const textBlock = target.children[0] as HTMLSpanElement;
 
+      // animating the text
       gsap.to(textBlock.children, {
         y: "0%",
         duration: 0.3,
       });
-    });
+    };
+    // : -----------------------------------------------------------------
 
+    // add event listeners
+    linkRef.current.addEventListener("mouseenter", handleMouseEnter);
+    linkRef.current.addEventListener("mouseleave", handleMouseLeave);
+
+    // set initial state
     gsap.set(rect, {
       scaleY: 0,
     });
+
+    return () => {
+      linkRef.current?.removeEventListener("mouseenter", handleMouseEnter);
+      linkRef.current?.removeEventListener("mouseleave", handleMouseLeave);
+    };
   });
   return (
     <a ref={linkRef} href={href} className="relative">
