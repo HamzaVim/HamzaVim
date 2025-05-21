@@ -182,7 +182,7 @@ button {
 /* Classes & IDs */
 
 /* NOTE: Hero: ------------------------------------------------------------------------------------------------- */
-#hero {
+#home {
   @apply overflow-hidden relative w-screen h-dvh;
 
   .img-container {

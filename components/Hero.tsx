@@ -55,7 +55,7 @@ const Hero = ({ masked }: { masked?: boolean }) => {
       </section>
     );
   return (
-    <section id="hero">
+    <section id="home">
       {/* Container for image */}
       <div ref={imageContainerRef} className="img-container">
         {/* Overlay */}
