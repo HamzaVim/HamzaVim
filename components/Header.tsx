@@ -141,12 +141,9 @@ const LinkItem = ({ href, text }: { href: string; text: string }) => {
         <span>{text}</span>
       </span>
 
-      <div
-        className={`masked-link w-full h-full absolute top-0 left-0 lg:px-5 lg:py-2 px-3 py-1 text-black bg-white`}
-        style={{ maskImage: `url(#mask-${text})` }}
-      >
+      <div className="masked-link" style={{ maskImage: `url(#mask-${text})` }}>
         <span>{text}</span>
-        <svg className="absolute top-0 left-0 w-full h-full">
+        <svg>
           <mask id={`mask-${text}`}>
             <rect x="0" y="0" width="100%" height="100%" fill="white" />
           </mask>
