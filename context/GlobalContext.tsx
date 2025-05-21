@@ -4,10 +4,13 @@ import { createContext, useContext, useState } from "react";
 interface GlobalContextType {
   linkState: string;
   setLinkState: React.Dispatch<React.SetStateAction<string>>;
+  loading: boolean;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  initialLoading: boolean;
+  setInitialLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
-
 // Create the context
-const GlobalContext = createContext<GlobalContextType | null>(null);
+const GlobalContext = createContext<GlobalContextType>({} as GlobalContextType);
 
 // Create a provider component
 export const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
@@ -34,4 +37,5 @@ export const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
 };
 
 // Create a hook to use the context
-export const useGlobal = () => useContext(GlobalContext);
+export const useGlobal: () => GlobalContextType = () =>
+  useContext(GlobalContext);
