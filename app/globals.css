@@ -54,6 +54,12 @@
   --animate-spin: spin 7s linear infinite;
 }
 
+@utility short-screen {
+  @media (min-height: 869px) {
+    @apply pt-0 min-h-dvh flex flex-col justify-center items-center;
+  }
+}
+
 /* Tags */
 body {
   @apply bg-black font-montserrat;
@@ -158,6 +164,14 @@ header {
   }
 }
 
+section:not(:first-child) {
+  @apply pt-34 sm:pt-45 lg:pt-35 short-screen;
+
+  &:last-child {
+    @apply mb-55 sm:mb-50 lg:mb-14;
+  }
+}
+
 h1 {
   @apply text-h1/[102%] tracking-[-2%] w-full text-white font-black;
 }
@@ -220,7 +234,7 @@ button {
 
 /* NOTE: About: ------------------------------------------------------------------------------------------------- */
 #about {
-  @apply overflow-hidden w-screen sm:px-12 md:px-24 lg:px-40 2xl:px-0 h-dvh px-[1.3rem];
+  @apply overflow-hidden w-screen sm:px-12 md:px-24 lg:px-40 2xl:px-0 h-fit px-[1.3rem];
 
   .about-container {
     @apply flex flex-col justify-center items-start w-full h-full 2xl:items-center text-nowrap;
@@ -255,12 +269,14 @@ button {
 
 /* NOTE: Why Me: ------------------------------------------------------------------------------------------------- */
 #why-me {
-  @apply overflow-hidden relative w-screen h-dvh;
+  @apply overflow-hidden relative w-screen h-fit;
 
   h2 {
     @apply py-7 text-center 2xl:py-14;
   }
   ul {
+    @apply w-full;
+
     li {
       @apply overflow-hidden relative py-10 pl-4 w-full border-t sm:py-7 sm:pl-10 md:pl-20 xl:pl-24 2xl:pl-36 last:border-b h-fit border-t-white/15 last:border-b-white/15;
 
@@ -305,7 +321,7 @@ button {
 
 /* NOTE: Contact: ------------------------------------------------------------------------------------------------- */
 #contact {
-  @apply flex flex-col gap-12 justify-center items-start w-screen text-center sm:px-12 md:px-24 lg:px-40 px-[1.3rem] lg:min-h-dvh mb-55 lg:mb-0;
+  @apply flex flex-col gap-12 justify-center items-start w-screen text-center sm:px-12 md:px-24 lg:px-40 px-[1.3rem] h-fit;
 
   .server-message {
     @apply p-7 absolute gap-2 hidden items-center w-fit min-w-88 justify-center top-0 left-1/2 bg-white overflow-hidden rounded-b-sm;
