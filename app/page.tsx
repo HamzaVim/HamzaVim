@@ -4,8 +4,148 @@ import Hero from "@/components/Hero";
 import WhyMe from "@/components/WhyMe";
 import Contact from "@/components/Contact";
 import Header from "@/components/Header";
+import Logo from "@/components/Logo";
+import gsap from "gsap/all";
+import { useGSAP } from "@gsap/react";
+import { useEffect, useRef, useState } from "react";
+import { useGlobal } from "@/context/GlobalContext";
 
 export default function Page() {
+  // NOTE: States & Refs -------------------------------------------------------
+
+  const { loading, setLoading, initialLoading, setInitialLoading } =
+    useGlobal();
+
+  // Status: Digit animation (counter)
+  const digitContainerRef = useRef<HTMLDivElement>(null);
+  const digit1Ref = useRef<HTMLDivElement>(null);
+  const digit2Ref = useRef<HTMLDivElement>(null);
+  const digit3Ref = useRef<HTMLDivElement>(null);
+  const [digitRepeat, setDigitRepeat] = useState(0);
+
+  // NOTE: Functions & Animations ---------------------------------------------------
+
+  // Making all the focusable elements not focusable until the site is loaded
+  useGSAP(
+    () => {
+      // If the site is not loaded
+      if (!initialLoading) {
+        gsap.set(
+          "body>*:not(div) button, body>*:not(div) a, body>*:not(div) input",
+          {
+            tabIndex: -1,
+          },
+        );
+        return;
+      }
+
+      // If the site is loaded
+      gsap.set(
+        "body>*:not(div) button, body>*:not(div) a, body>*:not(div) input",
+        {
+          tabIndex: 0,
+        },
+      );
+    },
+    { dependencies: [initialLoading] },
+  );
+
+  // Initial digit animation: Setting the refs
+  useGSAP(() => {
+    digitContainerRef.current = gsap.utils.toArray(
+      ".digit-container",
+    )[0] as HTMLDivElement;
+    digit1Ref.current = digitContainerRef.current.children[0] as HTMLDivElement;
+    digit2Ref.current = digitContainerRef.current.children[1] as HTMLDivElement;
+    digit3Ref.current = digitContainerRef.current.children[2] as HTMLDivElement;
+  });
+
+  // Counter: Digit animation
+  useGSAP(
+    () => {
+      // Repeat 8 times
+      if (digitRepeat === 9) return;
+
+      // Before the counter starts, animate the container of the digits to the top
+      if (digitRepeat === 0) {
+        gsap.to(digitContainerRef.current, {
+          translateY: "0%",
+          duration: 0.5,
+        });
+      }
+
+      // NOTE: If the `digitRepeat` is 0 and the `loading` is true, it means the site is in loading state
+      // So delay the animation by 1 seconds or 0 if the site is not in loading state (loaded)
+      // And the duration is 1.1 if the site is in loading state, 0.1 if the site is not in loading state
+
+      // Animate the third digit
+      gsap
+        .timeline({
+          delay: digitRepeat == 0 && loading ? 1 : 0,
+        })
+        .to(digit3Ref.current, {
+          overwrite: true,
+          yPercent: -91,
+          duration: loading ? 1.1 : 0.1,
+          ease: "none",
+        })
+        .set(digit3Ref.current, {
+          yPercent: 0,
+        });
+
+      // Animate the second digit
+      gsap
+        .timeline({
+          delay: digitRepeat == 0 && loading ? 1 : 0,
+        })
+        .set(digit2Ref.current, {
+          yPercent: -digitRepeat * 10.111111111,
+        })
+        .to(digit2Ref.current, {
+          overwrite: true,
+          yPercent: -(digitRepeat + 1) * 10.111111111,
+          duration: loading ? 1.1 : 0.1,
+          ease: "none",
+          onComplete: () => {
+            setDigitRepeat((prev) => prev + 1);
+          },
+        });
+
+      // Animate the first digit: If the `digitRepeat` is 8, 0 === 1, then 8 === 9, which means the counter is 90.
+      if (digitRepeat !== 8) return;
+      gsap.timeline().to(digit1Ref.current, {
+        overwrite: true,
+        yPercent: -50,
+        duration: loading ? 1.1 : 0.1,
+        ease: "none",
+      });
+    },
+    { dependencies: [digitRepeat, loading] },
+  );
+
+  // Check if the page is loaded
+  useEffect(() => {
+    // create a timeout variable
+    let timeout: NodeJS.Timeout;
+
+    // A function to handle the load event
+    const handleLoad = () => {
+      // Set the timeout to 3 seconds and set the loading state to false
+      timeout = setTimeout(() => {
+        setLoading(false);
+      }, 3000);
+    };
+
+    // Add the load event listener
+    window.addEventListener("load", handleLoad);
+
+    // Clean up the event listener & timeout
+    return () => {
+      window.removeEventListener("load", handleLoad);
+      clearTimeout(timeout);
+    };
+  }, []);
+
   return (
     <>
       <Header />
@@ -15,6 +155,52 @@ export default function Page() {
         <WhyMe />
         <Contact />
       </main>
+
+      {/* Loading page */}
+      <div className="loading-page">
+        <div className="black-screen">
+          <div className="center-overlay">
+            <div className="counter">
+              <div className="digit-container">
+                <div className="digit-1">
+                  <div>0</div>
+                  <div>1</div>
+                </div>
+                <div className="digit-2">
+                  <div>0</div>
+                  <div>1</div>
+                  <div>2</div>
+                  <div>3</div>
+                  <div>4</div>
+                  <div>5</div>
+                  <div>6</div>
+                  <div>7</div>
+                  <div>8</div>
+                  <div>9</div>
+                  <div>0</div>
+                </div>
+                <div className="digit-3">
+                  <div>0</div>
+                  <div>1</div>
+                  <div>2</div>
+                  <div>3</div>
+                  <div>4</div>
+                  <div>5</div>
+                  <div>6</div>
+                  <div>7</div>
+                  <div>8</div>
+                  <div>9</div>
+                  <div>0</div>
+                </div>
+                <span>%</span>
+              </div>
+            </div>
+            <div className="logo-container">
+              <Logo className="logo" />
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   );
 }

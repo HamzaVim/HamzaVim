@@ -62,7 +62,7 @@
 
 /* Tags */
 body {
-  @apply bg-black font-montserrat;
+  @apply bg-black font-montserrat overflow-hidden;
 }
 
 header {
@@ -482,3 +482,35 @@ button {
   }
 }
 /* "Web dev on a mission: code, grow, dominate." */
+
+.loading-page {
+  @apply fixed top-0 left-0 w-full h-full z-100000;
+
+  .black-screen {
+    @apply relative w-full h-full bg-black z-100;
+
+    .center-overlay {
+      @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-fit h-fit;
+
+      .counter {
+        @apply absolute z-100 -top-16 left-[56%] uppercase font-fira-code font-medium text-sm text-white tracking-[25%] h-5 overflow-hidden -translate-x-1/2;
+
+        .digit-container {
+          @apply flex items-start;
+          transform: translateY(10%);
+
+          & > div {
+            @apply inline-block;
+          }
+        }
+      }
+
+      .logo-container {
+        @apply flex relative flex-col items-center z-100;
+        .logo {
+          @apply fill-white stroke-primary size-14;
+        }
+      }
+    }
+  }
+}
