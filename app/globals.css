@@ -509,6 +509,15 @@ button {
         @apply flex relative flex-col items-center z-100;
         .logo {
           @apply fill-white stroke-primary size-14;
+
+      .loading-circle {
+        /* Initial progress value*/
+        --progress: "0%";
+        background: conic-gradient(#cffcec var(--progress), #111313 0%);
+
+        @apply flex absolute top-1/2 left-1/2 z-10 justify-center items-center rounded-full -translate-x-1/2 -translate-y-1/2 size-56 lg:size-66;
+        .black-circle {
+          @apply bg-black rounded-full size-55.5 lg:size-65.5;
         }
       }
     }

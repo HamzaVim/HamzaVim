@@ -13,6 +13,9 @@ import { useGlobal } from "@/context/GlobalContext";
 export default function Page() {
   // NOTE: States & Refs -------------------------------------------------------
 
+  // Status: Loading animation
+  const [loadingAnimation, setLoadingAnimation] = useState(true);
+
   const { loading, setLoading, initialLoading, setInitialLoading } =
     useGlobal();
 
@@ -146,6 +149,26 @@ export default function Page() {
     };
   }, []);
 
+  // Loading animation
+  useGSAP(
+    () => {
+      const loadingCircle = gsap.utils.toArray(
+        ".loading-circle",
+      )[0] as HTMLElement;
+
+      gsap.timeline().to(loadingCircle, {
+        overwrite: true,
+        delay: loading ? 1 : 0,
+        "--progress": "100%",
+        duration: loading ? 10 : 0.7,
+        ease: "none",
+        onComplete: () => {
+          setLoadingAnimation(false);
+        },
+      });
+    },
+    { dependencies: [loading] },
+  );
   return (
     <>
       <Header />
@@ -197,6 +220,9 @@ export default function Page() {
             </div>
             <div className="logo-container">
               <Logo className="logo" />
+            </div>
+            <div className="loading-circle">
+              <div className="black-circle" />
             </div>
           </div>
         </div>
