@@ -493,7 +493,7 @@ button {
       @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-fit h-fit;
 
       .counter {
-        @apply absolute z-100 -top-16 left-[56%] uppercase font-fira-code font-medium text-sm text-white tracking-[25%] h-5 overflow-hidden -translate-x-1/2;
+        @apply absolute z-100 -top-16 lg:-top-20 left-[56%] lg:left-[53%] uppercase font-fira-code font-medium text-sm lg:text-base text-white tracking-[25%] h-5 overflow-hidden -translate-x-1/2;
 
         .digit-container {
           @apply flex items-start;
@@ -507,8 +507,11 @@ button {
 
       .logo-container {
         @apply flex relative flex-col items-center z-100;
+
         .logo {
-          @apply fill-white stroke-primary size-14;
+          @apply fill-white stroke-primary size-14 lg:size-16;
+        }
+      }
 
       .loading-circle {
         /* Initial progress value*/
