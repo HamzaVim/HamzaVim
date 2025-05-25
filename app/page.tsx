@@ -26,6 +26,9 @@ export default function Page() {
   const digit3Ref = useRef<HTMLDivElement>(null);
   const [digitRepeat, setDigitRepeat] = useState(0);
 
+  // GSAP: ContextSafe for functions outside useGSAP
+  const { contextSafe } = useGSAP();
+
   // NOTE: Functions & Animations ---------------------------------------------------
 
   // Making all the focusable elements not focusable until the site is loaded
@@ -49,6 +52,10 @@ export default function Page() {
           tabIndex: 0,
         },
       );
+      // Set the overflow to auto
+      gsap.set("body", {
+        overflow: "auto",
+      });
     },
     { dependencies: [initialLoading] },
   );
@@ -180,6 +187,118 @@ export default function Page() {
     },
     { dependencies: [loading] },
   );
+  // After finishing loading
+  useGSAP(
+    () => {
+      if (loading || loadingAnimation || !digitContainerRef.current) return;
+
+      // Get the loading circle
+      const loadingCircle = gsap.utils.toArray(
+        ".loading-circle",
+      )[0] as HTMLElement;
+
+      // Animate the loading circle
+      gsap
+        .timeline()
+        .set(loadingCircle, {
+          "--progress": "0%",
+          background: "conic-gradient(#111313 var(--progress), #cffcec 0%)",
+        })
+        .to(loadingCircle, {
+          "--progress": "100%",
+          duration: 1,
+          ease: "none",
+        })
+        // Animate the digit container
+        .to(digitContainerRef.current, {
+          yPercent: -10,
+          duration: 0.5,
+        })
+        // Animate the start button
+        .set("#start-btn", {
+          position: "relative",
+        })
+        .set("#mask-load-btn rect", {
+          scaleY: 0,
+        })
+        .from("#start-btn", {
+          height: 0,
+          marginTop: 0,
+        })
+        .set("#start-btn", {
+          visibility: "visible",
+        })
+        .to("#mask-load-btn rect", {
+          scaleY: 1,
+        });
+    },
+    { dependencies: [loading, loadingAnimation] },
+  );
+
+  // Animate when the start button is clicked
+  const handleStartBtn = contextSafe(() => {
+    gsap
+      .timeline()
+      // Animate the start button corners
+      .set("#start-btn .corners-container", {
+        display: "none",
+      })
+      // Animate the start button
+      .to("#mask-load-btn rect", {
+        scaleY: 0,
+      })
+      .to("#start-btn", {
+        height: 0,
+        marginTop: 0,
+      })
+      .set("#start-btn", {
+        visibility: "hidden",
+      })
+      // Animate the loading screen
+      .to("#mask-load-black-screen rect:nth-child(1)", {
+        attr: {
+          y: "-55%",
+        },
+        duration: 0.5,
+      })
+      .to(
+        "#mask-load-black-screen rect:nth-child(2)",
+        {
+          attr: {
+            y: "105%",
+          },
+          duration: 0.5,
+        },
+        "<",
+      )
+      .to(
+        "#mask-load-white-screen rect:nth-child(1)",
+        {
+          attr: {
+            y: "-55%",
+          },
+          duration: 0.5,
+        },
+        "-=50%",
+      )
+      .to(
+        "#mask-load-white-screen rect:nth-child(2)",
+        {
+          attr: {
+            y: "105%",
+          },
+          duration: 0.5,
+        },
+        "<",
+      )
+      .set("#loading-screen", {
+        display: "none",
+        onComplete: () => {
+          setInitialLoading(true);
+        },
+      });
+  });
+
   return (
     <>
       <Header />
@@ -231,11 +350,53 @@ export default function Page() {
             </div>
             <div className="logo-container">
               <Logo className="logo" />
+              <button id="start-btn" onClick={handleStartBtn} className="group">
+                <div className="corners-container">
+                  <div className="corner" />
+                  <div className="corner" />
+                  <div className="corner" />
+                  <div className="corner" />
+                </div>
+                <div className="masked-btn">
+                  <span>start</span>
+                  <svg>
+                    <mask id="mask-load-btn">
+                      <rect
+                        x="0"
+                        y="0"
+                        width="100%"
+                        height="100%"
+                        fill="white"
+                      />
+                    </mask>
+                  </svg>
+                </div>
+              </button>
             </div>
             <div className="loading-circle">
               <div className="black-circle" />
             </div>
           </div>
+
+          {/* Mask */}
+          <svg className="absolute top-0 left-0 w-full h-full -z-10">
+            <mask id="mask-load-black-screen">
+              <rect x="0" y="0%" width="100%" height="51%" fill="white" />
+              <rect x="0" y="50%" width="100%" height="51%" fill="white" />
+            </mask>
+          </svg>
+        </div>
+
+        <div id="white-screen">
+          <Logo className="logo" />
+
+          {/* Mask */}
+          <svg>
+            <mask id="mask-load-white-screen">
+              <rect x="0" y="0%" width="100%" height="51%" fill="white" />
+              <rect x="0" y="50%" width="100%" height="51%" fill="white" />
+            </mask>
+          </svg>
         </div>
       </div>
     </>

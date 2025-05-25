@@ -16,16 +16,16 @@ import { useGlobal } from "@/context/GlobalContext";
 // The animation ends and reveals the resume page and changes the link state to 'resume'.
 // After creating the projects component, it will do the same.
 
-// TODO: Loading page: black with logo and loading progress bar; when finished, click the start button.
-// 2 divs: black page and white page, both with logo.
-// When the user clicks the start button, the black page goes and reveals the white page, and it will go in 0.5s.
+// TODO: Loading page: black with logo and loading progress bar; when finished, click the start button. ✅
+// 2 divs: black page and white page, both with logo. ✅
+// When the user clicks the start button, the black page goes and reveals the white page, and it will go in 0.5s. ✅
 // Music will play in the background when the start button is clicked.
 // State for complete loading page, Hero page 'text' appears.
 
 // TODO: create context global provider for link state. ✅
 // Use 'scrollTo' from GSAP, except resume. ✅
 // Use 'scrollTrigger' from GSAP to change the state of the link; scroll to the about section, and the state changes to 'about'
-// 'rect' animate when the link state changed.
+// 'rect' animate when the link state changed. ✅
 
 // Link item
 const LinkItem = ({ href, text }: { href: string; text: string }) => {
