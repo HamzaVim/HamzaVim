@@ -68,17 +68,19 @@ const About = ({ masked }: { masked?: boolean }) => {
             start: "top 95%",
             end: "top 25%",
             scrub: true,
-            anticipatePin: 1,
             fastScrollEnd: true,
           },
           width: 0,
           stagger: 0.5,
           ease: "none",
+          willChange: "width", // Hint to browser for optimization
         });
 
         return split;
       },
     });
+
+    ScrollTrigger.normalizeScroll(true); // Helps with touch devices
   }, []);
 
   // Masked About section
