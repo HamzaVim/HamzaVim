@@ -190,9 +190,9 @@ export default function Page() {
         <Contact />
       </main>
 
-      {/* Loading page */}
-      <div className="loading-page">
-        <div className="black-screen">
+      {/* Loading screen */}
+      <div id="loading-screen">
+        <div id="black-screen">
           <div className="center-overlay">
             <div className="counter">
               <div className="digit-container">

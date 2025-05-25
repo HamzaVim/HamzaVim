@@ -483,11 +483,15 @@ button {
 }
 /* "Web dev on a mission: code, grow, dominate." */
 
-.loading-page {
+#loading-screen {
   @apply fixed top-0 left-0 w-full h-full z-100000;
 
-  .black-screen {
-    @apply relative w-full h-full bg-black z-100;
+  .logo {
+    @apply size-14 lg:size-16;
+  }
+
+  #black-screen {
+    @apply relative w-full h-full bg-black z-100 mask-[url(#mask-load-black-screen)];
 
     .center-overlay {
       @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-fit h-fit;
@@ -509,16 +513,17 @@ button {
         @apply flex relative flex-col items-center z-100;
 
         .logo {
-          @apply fill-white stroke-primary size-14 lg:size-16;
+          @apply fill-white stroke-primary;
         }
       }
 
       .loading-circle {
+        @apply flex absolute top-1/2 left-1/2 z-10 justify-center items-center rounded-full -translate-x-1/2 -translate-y-1/2 size-56 lg:size-66;
+
         /* Initial progress value*/
         --progress: "0%";
         background: conic-gradient(#cffcec var(--progress), #111313 0%);
 
-        @apply flex absolute top-1/2 left-1/2 z-10 justify-center items-center rounded-full -translate-x-1/2 -translate-y-1/2 size-56 lg:size-66;
         .black-circle {
           @apply bg-black rounded-full size-55.5 lg:size-65.5;
         }
