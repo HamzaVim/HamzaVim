@@ -7,7 +7,7 @@ import Header from "@/components/Header";
 import Logo from "@/components/Logo";
 import gsap from "gsap/all";
 import { useGSAP } from "@gsap/react";
-import { useEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { useGlobal } from "@/context/GlobalContext";
 
 export default function Page() {
@@ -93,7 +93,7 @@ export default function Page() {
           ease: "none",
         })
         .set(digit3Ref.current, {
-          yPercent: 0,
+          yPercent: digitRepeat !== 8 ? 0 : -91,
         });
 
       // Animate the second digit
@@ -127,7 +127,7 @@ export default function Page() {
   );
 
   // Check if the page is loaded
-  useEffect(() => {
+  useLayoutEffect(() => {
     // create a timeout variable
     let timeout: NodeJS.Timeout;
 
@@ -145,8 +145,13 @@ export default function Page() {
       }, 3000);
     };
 
-    // Add the load event listener
-    window.addEventListener("load", handleLoad);
+    // Check if the page is already loaded
+    if (document.readyState === "complete") {
+      setLoading(false);
+    } else {
+      // Add the load event listener
+      window.addEventListener("load", handleLoad);
+    }
 
     // Clean up the event listener & timeout
     return () => {
