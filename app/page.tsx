@@ -133,6 +133,12 @@ export default function Page() {
 
     // A function to handle the load event
     const handleLoad = () => {
+      // Check if the counter is finished; `loadingAnimation` is false
+      if (!loadingAnimation) {
+        setLoading(false);
+        return;
+      }
+
       // Set the timeout to 3 seconds and set the loading state to false
       timeout = setTimeout(() => {
         setLoading(false);
