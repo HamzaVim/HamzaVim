@@ -172,9 +172,9 @@ const Header = () => {
   useGSAP(() => {
     // Right side --------------------------------------------------------------
 
-    // Get all links
+    // Get all links that are connected to this site.
     const allLinks = gsap.utils.toArray(
-      ".right a",
+      ".right a, .left a[href='#home']",
     ) as unknown as HTMLAnchorElement[];
 
     const handleClick = (ev: MouseEvent) => {
@@ -321,7 +321,7 @@ const Header = () => {
   return (
     <header>
       <div className="left">
-        <Link href="/">
+        <Link href="#home">
           <Logo className="logo" />
         </Link>
         <ul>

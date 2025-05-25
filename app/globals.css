@@ -76,7 +76,7 @@ header {
   .left {
     @apply flex flex-col justify-between items-center pl-3 lg:pl-0;
 
-    a[href="/"] {
+    a[href="#home"] {
       @apply lg:p-5 lg:-mt-[1.2rem];
 
       .logo {
