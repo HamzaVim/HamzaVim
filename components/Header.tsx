@@ -1,3 +1,4 @@
+"use client";
 import { useGSAP } from "@gsap/react";
 import gsap, { ScrollToPlugin } from "gsap/all";
 import { FaTelegramPlane } from "react-icons/fa";
