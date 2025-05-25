@@ -20,12 +20,12 @@ import { useGlobal } from "@/context/GlobalContext";
 // TODO: Loading page: black with logo and loading progress bar; when finished, click the start button. ✅
 // 2 divs: black page and white page, both with logo. ✅
 // When the user clicks the start button, the black page goes and reveals the white page, and it will go in 0.5s. ✅
-// Music will play in the background when the start button is clicked.
+// Music will play in the background when the start button is clicked. ✅
 // State for complete loading page, Hero page 'text' appears.
 
 // TODO: create context global provider for link state. ✅
 // Use 'scrollTo' from GSAP, except resume. ✅
-// Use 'scrollTrigger' from GSAP to change the state of the link; scroll to the about section, and the state changes to 'about'
+// Use 'scrollTrigger' from GSAP to change the state of the link; scroll to the about section, and the state changes to 'about' ✅
 // 'rect' animate when the link state changed. ✅
 
 // Link item
@@ -158,55 +158,106 @@ const useSound = () => {
   // Ref: audio
   const soundRef = useRef<HTMLAudioElement>(null);
 
-  // TODO: When the page loads, the audio loop will play automatically instead of using play and pause buttons.
-  // When the sound button is clicked to turn off the audio, the volume will be reduced to 0 without pausing it.
-  // The same process applies for turning the audio back on.
-  // const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const intervalRef = useRef<NodeJS.Timeout>(null);
 
   useEffect(() => {
     soundRef.current = new Audio("/audios/idea 22.mp3");
     soundRef.current.loop = true;
     soundRef.current.volume = 0.2;
+
+    // Cleanup
+    return () => {
+      if (intervalRef.current !== null) {
+        clearInterval(intervalRef.current);
+      }
+
+      if (soundRef.current) {
+        soundRef.current.pause();
+        soundRef.current.currentTime = 0;
+        soundRef.current = null;
+      }
+    };
   }, []);
 
   const playSound = () => {
     if (!soundRef.current) return;
     soundRef.current.play();
-    // intervalRef.current = setInterval(() => {
-    //   if (!soundRef.current) return;
-    //   soundRef.current.volume += 0.01;
-    //   if (soundRef.current.volume === 0.2) {
-    //     clearInterval(intervalRef.current);
-    //   }
-    // }, 10);
   };
 
-  const pauseSound = () => {
+  const decreaseVolume = () => {
     if (!soundRef.current) return;
-    // setInterval(() => {
-    //   if (!soundRef.current) return;
-    //   soundRef.current.volume -= 0.01;
-    //   if (soundRef.current.volume == 0) {
-    //     return;
-    //   }
-    // }, 10);
-    soundRef.current.pause();
+
+    // If the interval is not null, clear it
+    if (intervalRef.current !== null) {
+      clearInterval(intervalRef.current);
+    }
+
+    // Create an interval
+    intervalRef.current = setInterval(() => {
+      if (!soundRef.current) return;
+
+      // Getting the current volume
+      const currentVolume = soundRef.current.volume;
+
+      // If the volume is 0.0, clear the interval
+      if (soundRef.current.volume == 0.0) {
+        if (intervalRef.current !== null) {
+          clearInterval(intervalRef.current);
+        }
+
+        // Ealse decrease the volume
+      } else {
+        soundRef.current.volume = Math.max(currentVolume - 0.01, 0.0);
+      }
+    }, 50);
   };
+
+  const increaseVolume = () => {
+    if (!soundRef.current) return;
+
+    // If the interval is not null, clear it
+    if (intervalRef.current !== null) {
+      clearInterval(intervalRef.current);
+    }
+
+    // Create an interval
+    intervalRef.current = setInterval(() => {
+      if (!soundRef.current) return;
+
+      // Getting the current volume
+      const currentVolume = soundRef.current.volume;
+
+      // If the volume is 0.2, clear the interval
+      if (soundRef.current.volume == 0.2) {
+        if (intervalRef.current !== null) {
+          clearInterval(intervalRef.current);
+        }
+
+        // Ealse increase the volume
+      } else {
+        soundRef.current.volume = Math.min(currentVolume + 0.01, 0.2);
+      }
+    }, 50);
+  };
+
   return {
     playSound,
-    pauseSound,
+    decreaseVolume,
+    increaseVolume,
   };
 };
 
 const Header = () => {
   // NOTE: States & Refs -------------------------------------------------------
 
-  const { playSound, pauseSound } = useSound();
+  const { playSound, decreaseVolume, increaseVolume } = useSound();
   // Ref: sound button
   const soundBtnRef = useRef<HTMLButtonElement>(null);
-  const [soundState, setSoundState] = useState(false);
+  const [soundState, setSoundState] = useState(true);
 
   const tlSoundBtn = useRef<gsap.core.Timeline>(null);
+
+  const { initialLoading } = useGlobal();
 
   // NOTE: Fuctions & Animations -------------------------------------------------------
 
@@ -316,37 +367,49 @@ const Header = () => {
 
   // Sound button animation
   // Creating a timeline
-  useGSAP(() => {
-    if (!soundBtnRef.current) return;
+  useGSAP(
+    () => {
+      if (!soundBtnRef.current) return;
 
-    const onOffBlock = soundBtnRef.current.children[0];
+      const onOffBlock = soundBtnRef.current.children[0];
 
-    tlSoundBtn.current = gsap
-      .timeline({
-        paused: true,
-      })
-      .to(onOffBlock, {
-        x: "-100%",
-        onComplete: () => {
-          if (!soundBtnRef.current) return;
-          const onOrOff = onOffBlock.children[0];
-          onOffBlock.removeChild(onOrOff);
-          onOffBlock.appendChild(onOrOff);
-        },
-      })
-      .set(onOffBlock, { x: "0%" });
-  });
-  // If soundState Changed: Play the animation above
+      tlSoundBtn.current = gsap
+        .timeline({
+          paused: initialLoading ? false : true,
+        })
+        .to(onOffBlock, {
+          x: "-100%",
+          onStart: () => {
+            if (soundState) {
+              increaseVolume();
+            } else {
+              decreaseVolume();
+            }
+          },
+          onComplete: () => {
+            if (!soundBtnRef.current) return;
+            const onOrOff = onOffBlock.children[0];
+            onOffBlock.removeChild(onOrOff);
+            onOffBlock.appendChild(onOrOff);
+          },
+        })
+        .set(onOffBlock, { x: "0%" });
+    },
+    { dependencies: [soundState] },
+  );
+
+  // If the site is loaded
   useEffect(() => {
     if (!tlSoundBtn.current) return;
-    tlSoundBtn.current.restart();
-
-    if (soundState) {
+    if (initialLoading) {
       playSound();
-    } else {
-      pauseSound();
     }
-  }, [soundState, playSound, pauseSound]);
+    return () => {
+      if (!tlSoundBtn.current) return;
+      tlSoundBtn.current.kill();
+    };
+  }, [initialLoading]);
+
   return (
     <header>
       <div className="left">
