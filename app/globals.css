@@ -171,7 +171,7 @@ header {
   }
 }
 
-section:not(:first-child) {
+section:not(:first-child, [id="projects"]) {
   @apply pt-34 sm:pt-45 lg:pt-35 short-screen;
 
   &:last-child {
@@ -571,6 +571,50 @@ button {
 
     .logo {
       @apply fill-black stroke-primary;
+    }
+  }
+}
+#projects {
+  @apply w-screen sm:px-12 md:px-24 lg:px-40 min-h-dvh px-[1.3rem] pt-45;
+
+  .projects-pinned {
+    @apply flex flex-col justify-between items-center w-full h-full lg:pb-14 pb-55 sm:pb-50 xl:pb-23;
+
+    h2 {
+      @apply w-full;
+    }
+
+    .projects-container {
+      @apply flex relative flex-col w-full max-w-[1030px] aspect-video h-fit mt-18 xl:mt-22;
+      #project-title {
+        @apply font-bold tracking-[1%] uppercase w-fit text-base sm:text-lg md:text-2xl absolute top-0 -translate-y-[110%] text-white font-fira-code;
+      }
+
+      .projects-list {
+        @apply flex relative flex-row-reverse w-full h-full;
+
+        a {
+          @apply absolute block w-full aspect-video;
+
+          clip-path: "polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)";
+          opacity: 0;
+          scale: 1.25;
+          visibility: "hidden";
+        }
+        img {
+          @apply object-cover w-full;
+
+          filter: contrast(2) brightness(10) blur(5px);
+        }
+
+        .progress-bar {
+          @apply overflow-hidden w-1 h-full z-100 bg-white/5;
+          #progress {
+            @apply w-1 bg-white;
+            height: "0%";
+          }
+        }
+      }
     }
   }
 }

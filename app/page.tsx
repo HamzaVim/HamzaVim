@@ -4,6 +4,7 @@ import About from "@/components/About";
 import WhyMe from "@/components/WhyMe";
 import Contact from "@/components/Contact";
 import LoadingScreen from "@/components/LoadingScreen";
+import Projects from "@/components/Projects";
 
 export default function Page() {
   return (
@@ -13,6 +14,7 @@ export default function Page() {
         <Hero />
         <About />
         <WhyMe />
+        <Projects />
         <Contact />
       </main>
 
