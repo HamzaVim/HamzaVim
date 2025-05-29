@@ -575,7 +575,7 @@ button {
   }
 }
 #projects {
-  @apply w-screen sm:px-12 md:px-24 lg:px-40 min-h-dvh px-[1.3rem] pt-45;
+  @apply w-screen sm:px-12 md:px-24 lg:px-40 min-h-dvh overflow-x-hidden px-[1.3rem] pt-45;
 
   .projects-pinned {
     @apply flex flex-col justify-between items-center w-full h-full lg:pb-14 pb-55 sm:pb-50 xl:pb-23;
