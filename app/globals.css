@@ -596,15 +596,19 @@ button {
         a {
           @apply absolute block w-full aspect-video;
 
-          clip-path: "polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)";
-          opacity: 0;
-          scale: 1.25;
-          visibility: "hidden";
-        }
-        img {
-          @apply object-cover w-full;
+          img {
+            @apply object-cover w-full;
+          }
 
-          filter: contrast(2) brightness(10) blur(5px);
+          &:not(:first-child) {
+            clip-path: "polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)";
+            opacity: 0;
+            scale: 1.25;
+            visibility: hidden;
+            img {
+              filter: contrast(2) brightness(10) blur(5px);
+            }
+          }
         }
 
         .progress-bar {

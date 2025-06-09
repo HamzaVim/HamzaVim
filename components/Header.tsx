@@ -38,7 +38,8 @@ const LinkItem = ({ href, text }: { href: string; text: string }) => {
   // Ref: link
   const linkRef = useRef<HTMLAnchorElement>(null);
 
-  const { linkState, setLinkState } = useGlobal();
+  const { linkState, setLinkState, linkStateRef, setLoading, pageChangedRef } =
+    useGlobal();
 
   // NOTE: Functions & Animations: ---------------------------------------------------
 
@@ -79,15 +80,53 @@ const LinkItem = ({ href, text }: { href: string; text: string }) => {
       });
     };
 
-    // Handle mouse click
-    // Animation: Scroll to the section
+    // Animation: Handle mouse click
     const handleClick = (ev: MouseEvent) => {
       // getting the target and getting the href
       const target = ev.target as HTMLAnchorElement;
       const href = target.href.split("#")[1];
 
-      // Until the resume and projects sections are created
-      if (href === "resume" || href === "projects") return;
+      // To enter the projects or resume.
+      // If the href is 'resume' or 'projects'
+      if (href === "resume" || href === "projects") {
+        if (href === "resume") return; // TODO: Remove it after building the resume page
+        // If the link state is already the same
+        if (linkStateRef.current === href) return;
+
+        // changing the link state and set the loading state to true
+        setLinkState(href);
+        linkStateRef.current = href;
+        setLoading(true);
+        return;
+      }
+
+      // To exit the projects or resume
+      // If the `pageChangedRef` true, it means that the page is changed to projects or resume
+      if (pageChangedRef.current) {
+        setLoading(true);
+
+        // After 1 second
+        gsap.delayedCall(1, () => {
+          // Setting the `pageChanged` and `loading` to fasle
+          pageChangedRef.current = false;
+          setLoading(false);
+        });
+
+        // Animate after 1 second delay
+        gsap.delayedCall(1, () => {
+          gsap.to(window, {
+            scrollTo: `#${href}`,
+            duration: 1,
+            onStart: () => {
+              // changing the link state
+              setLinkState(href);
+              linkStateRef.current = href;
+            },
+          });
+        });
+
+        return;
+      }
 
       // Animation
       gsap.to(window, {
@@ -96,6 +135,7 @@ const LinkItem = ({ href, text }: { href: string; text: string }) => {
         onStart: () => {
           // changing the link state
           setLinkState(href);
+          linkStateRef.current = href;
         },
       });
     };
@@ -165,7 +205,13 @@ const Header = () => {
 
   const tlSoundBtn = useRef<gsap.core.Timeline>(null);
 
-  const { initialLoading } = useGlobal();
+  const {
+    initialLoading,
+    setLinkState,
+    linkStateRef,
+    pageChangedRef,
+    setLoading,
+  } = useGlobal();
 
   // NOTE: Fuctions & Animations -------------------------------------------------------
 
@@ -180,6 +226,49 @@ const Header = () => {
     const handleClick = (ev: MouseEvent) => {
       // Disable click on links
       ev.preventDefault();
+
+      // getting the target and getting the href from it
+      const target = ev.target as HTMLAnchorElement;
+      const href = target.href.split("#")[1];
+
+      // If the href is home
+      if (href === "home") {
+        if (pageChangedRef.current) {
+          setLoading(true);
+
+          // After 1 second
+          gsap.delayedCall(1, () => {
+            // Setting the `pageChanged` and `loading` to fasle
+            pageChangedRef.current = false;
+            setLoading(false);
+          });
+
+          // Animate after 1 second delay
+          gsap.delayedCall(1, () => {
+            gsap.to(window, {
+              scrollTo: `#${href}`,
+              duration: 1,
+              onStart: () => {
+                // changing the link state
+                setLinkState(href);
+                linkStateRef.current = href;
+              },
+            });
+          });
+
+          return;
+        }
+
+        gsap.to(window, {
+          scrollTo: `#${href}`,
+          duration: 1,
+          onStart: () => {
+            // changing the link state
+            setLinkState(href);
+            linkStateRef.current = href;
+          },
+        });
+      }
     };
 
     allLinks.forEach((link) => {
@@ -365,10 +454,10 @@ const Header = () => {
             <LinkItem href="#about" text="about" />
           </li>
           <li>
-            <LinkItem href="#projects" text="projects" />
+            <LinkItem href="#contact" text="contact" />
           </li>
           <li>
-            <LinkItem href="#contact" text="contact" />
+            <LinkItem href="#projects" text="projects" />
           </li>
           <li>
             <LinkItem href="#resume" text="resume" />

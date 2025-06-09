@@ -2,18 +2,33 @@
 import { useGSAP } from "@gsap/react";
 import gsap, { ScrollTrigger, SplitText } from "gsap/all";
 import projectsData from "../db/projects.json";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import Image from "next/image";
+import { useGlobal } from "@/context/GlobalContext";
 
 const Projects = () => {
   gsap.registerPlugin(ScrollTrigger, SplitText);
 
+  // NOTE: States & Refs: ---------------------------------------------------
+
+  // Set the projects
   const projects = projectsData;
 
-  const { contextSafe } = useGSAP();
-
+  // Ref: Projects elements
   const projectContainerRef = useRef<HTMLAnchorElement[]>([]);
 
+  const { setLoading } = useGlobal();
+
+  // Ref: Img elements & images loaded
+  const imagesRef = useRef<HTMLImageElement[]>([]);
+  const imagesLoadedRef = useRef<number[]>([]);
+
+  // GSAP: ContextSafe for functions outside useGSAP
+  const { contextSafe } = useGSAP();
+
+  // NOTE: Functions & Animations: ---------------------------------------------------
+
+  // Animation: Pinned container
   useGSAP(() => {
     if (!projectContainerRef.current) return;
 
@@ -130,6 +145,7 @@ const Projects = () => {
         visibility: "hidden",
       },
       {
+        overwrite: true, // To avoid conflicts
         scale: 1,
         clipPath: "polygon(0% 100%, 100% 100%, 100% 0%, 0% 0%)",
         opacity: 1,
@@ -161,10 +177,10 @@ const Projects = () => {
         duration: 1,
         ease: "power2.inOut",
       });
+
       gsap.to(project, {
         visibility: "hidden",
         delay: 1,
-        ease: "power2.inOut",
       });
     },
   );
@@ -177,6 +193,12 @@ const Projects = () => {
         clipPath: "polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)",
         duration: 1,
         ease: "power2.inOut",
+      });
+
+      // Hide the image project
+      gsap.to(project, {
+        visibility: "hidden",
+        delay: 1,
       });
 
       gsap.to(project.children[0], {
@@ -228,18 +250,59 @@ const Projects = () => {
     });
   });
 
-  // Animate the first project (initial)
-  useGSAP(() => {
-    animateProjectEntery(projectContainerRef.current[0]);
-    gsap.delayedCall(0.5, () => updateProjectTitle(0));
-  });
+  // Check if the images are loaded
+  useEffect(() => {
+    if (!imagesRef.current) return;
+
+    // Get the images
+    const images = imagesRef.current;
+
+    // Function: Check if the images are loaded
+    const checkComplete = () => {
+      if (imagesLoadedRef.current.length !== projects.length) return;
+
+      // Set loading to false
+      setLoading(false);
+    };
+
+    // Function: Handle the load event
+    const handleLoad = (ev: Event) => {
+      const image = ev.target as HTMLImageElement;
+
+      // If the image is already loaded, skip
+      if (imagesLoadedRef.current.includes(imagesRef.current.indexOf(image)))
+        return;
+
+      imagesLoadedRef.current.push(imagesRef.current.indexOf(image));
+      checkComplete();
+    };
+
+    // Loop over images
+    images.forEach((image) => {
+      // If the image is loaded
+      if (image.complete) {
+        imagesLoadedRef.current.push(imagesRef.current.indexOf(image));
+        checkComplete();
+        return;
+      }
+
+      // Else add an event listener `load`
+      image.addEventListener("load", handleLoad);
+    });
+
+    return () => {
+      images.forEach((image) => {
+        image.removeEventListener("load", handleLoad);
+      });
+    };
+  }, []);
 
   return (
     <section id="projects">
       <div className="projects-pinned">
         <h2>projects</h2>
         <div className="projects-container">
-          <p id="project-title"></p>
+          <p id="project-title">{projects[0].title}</p>
           <div className="projects-list">
             {projects.map((project, index) => {
               return (
@@ -258,6 +321,10 @@ const Projects = () => {
                   }}
                 >
                   <Image
+                    ref={(el) => {
+                      if (!el || imagesRef.current.includes(el)) return;
+                      imagesRef.current.push(el!);
+                    }}
                     src={project.images[0]}
                     alt={project.title}
                     fill

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Montserrat, Fira_Code } from "next/font/google";
 import "./globals.css";
 import { GlobalProvider } from "@/context/GlobalContext";
+import LoadingScreen from "@/components/LoadingScreen";
 
 // NOTE: Fonts: -----------------------------------------------------------------
 const montserratFont = Montserrat({
@@ -31,7 +32,11 @@ export default function RootLayout({
       <body
         className={`${montserratFont.variable} ${firaCodeFont.variable} antialiased`}
       >
-        <GlobalProvider>{children}</GlobalProvider>
+        <GlobalProvider>
+          {/* Loading screen */}
+          <LoadingScreen />
+          {children}
+        </GlobalProvider>
       </body>
     </html>
   );

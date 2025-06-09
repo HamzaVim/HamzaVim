@@ -11,8 +11,14 @@ const LoadingScreen = () => {
   // Status: Loading animation
   const [loadingAnimation, setLoadingAnimation] = useState(true);
 
-  const { loading, setLoading, initialLoading, setInitialLoading } =
-    useGlobal();
+  const {
+    loading,
+    setLoading,
+    initialLoading,
+    setInitialLoading,
+    pageChangedRef,
+    setPageChanged,
+  } = useGlobal();
 
   // Status: Digit animation (counter)
   const digitContainerRef = useRef<HTMLDivElement>(null);
@@ -165,6 +171,8 @@ const LoadingScreen = () => {
   // Loading animation
   useGSAP(
     () => {
+      if (initialLoading) return; // Skip if the site is in initial loading state
+
       const loadingCircle = gsap.utils.toArray(
         ".loading-circle",
       )[0] as HTMLElement;
@@ -204,10 +212,16 @@ const LoadingScreen = () => {
           duration: 1,
           ease: "none",
         })
+        .set(loadingCircle, {
+          display: "none",
+        })
         // Animate the digit container
         .to(digitContainerRef.current, {
           yPercent: -10,
           duration: 0.5,
+        })
+        .set(digitContainerRef.current, {
+          display: "none",
         })
         // Animate the start button
         .set("#start-btn", {
@@ -288,11 +302,123 @@ const LoadingScreen = () => {
       )
       .set("#loading-screen", {
         display: "none",
+        zIndex: 99, // Set the z-index to 99 behind the header to reuse loading animation
         onComplete: () => {
           setInitialLoading(true);
         },
       });
   });
+
+  // Animating: When the page changes to projects/resume
+  useGSAP(
+    () => {
+      if (!initialLoading) return;
+
+      if (loading) {
+        gsap
+          .timeline()
+          // Set the overflow to hidden and display the loading screen
+          .set("body", {
+            overflow: "hidden",
+          })
+          .set("#loading-screen", {
+            display: "block",
+          })
+          // Animate the loading screen
+          .to("#mask-load-white-screen rect:nth-child(1)", {
+            attr: {
+              y: "0%",
+            },
+            duration: 0.5,
+          })
+          .to(
+            "#mask-load-white-screen rect:nth-child(2)",
+            {
+              attr: {
+                y: "50%",
+              },
+              duration: 0.5,
+            },
+            "<",
+          )
+          // Animate the loading screen
+          .to(
+            "#mask-load-black-screen rect:nth-child(1)",
+            {
+              attr: {
+                y: "0%",
+              },
+              duration: 0.5,
+            },
+            "-=50%",
+          )
+          .to(
+            "#mask-load-black-screen rect:nth-child(2)",
+            {
+              attr: {
+                y: "50%",
+              },
+              duration: 0.5,
+              onComplete: () => {
+                // Toggle the pageChanged state
+                pageChangedRef.current = !pageChangedRef.current;
+                setPageChanged(pageChangedRef.current);
+              },
+            },
+            "<",
+          );
+      } else {
+        gsap
+          .timeline()
+          // Animate the loading screen
+          .to("#mask-load-black-screen rect:nth-child(1)", {
+            attr: {
+              y: "-55%",
+            },
+            duration: 0.5,
+          })
+          .to(
+            "#mask-load-black-screen rect:nth-child(2)",
+            {
+              attr: {
+                y: "105%",
+              },
+              duration: 0.5,
+            },
+            "<",
+          )
+          .to(
+            "#mask-load-white-screen rect:nth-child(1)",
+            {
+              attr: {
+                y: "-55%",
+              },
+              duration: 0.5,
+            },
+            "-=50%",
+          )
+          .to(
+            "#mask-load-white-screen rect:nth-child(2)",
+            {
+              attr: {
+                y: "105%",
+              },
+              duration: 0.5,
+            },
+            "<",
+          )
+          // Set the overflow to auto and set the loading screen to none
+          .set("body", {
+            overflow: "auto",
+          })
+          .set("#loading-screen", {
+            display: "none",
+          });
+      }
+    },
+    { dependencies: [loading] },
+  );
+
   return (
     <div id="loading-screen">
       <div id="black-screen">
