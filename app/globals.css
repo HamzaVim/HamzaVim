@@ -120,7 +120,7 @@ header {
       li {
         @apply w-fit;
         a {
-          @apply lg:px-5 lg:py-2 px-3 py-1 block text-white/65;
+          @apply lg:px-5 lg:py-2 px-3 py-1 block text-white/65 backdrop-blur-[2px];
 
           .text-block {
             @apply overflow-hidden relative block pointer-events-none;
