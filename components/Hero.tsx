@@ -5,6 +5,28 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import { useRef } from "react";
 
+// Masked version
+const HeroMasked = () => (
+  <div className="home">
+    <div className="hero-text-container">
+      <div className="text-container">
+        <p className="my-name">hamza hassen</p>
+        <h1>
+          designing
+          <br />
+          stunning
+          <br />
+          websites in
+          <br />
+          any style
+          <br />
+          you imagine
+        </h1>
+      </div>
+    </div>
+  </div>
+);
+
 const Hero = ({ masked }: { masked?: boolean }) => {
   gsap.registerPlugin(ScrollTrigger);
 
@@ -34,26 +56,10 @@ const Hero = ({ masked }: { masked?: boolean }) => {
       });
     }
   });
+
   // Masked Hero section
-  if (masked)
-    return (
-      <section className="w-screen h-dvh">
-        <div className="flex flex-col gap-7 justify-center items-center w-full h-full text-center text-black uppercase pointer-events-none select-none text-nowrap">
-          <p className="text-xl font-bold text-name">hamza hassen</p>
-          <h1>
-            designing
-            <br />
-            stunning
-            <br />
-            websites in
-            <br />
-            any style
-            <br />
-            you imagine
-          </h1>
-        </div>
-      </section>
-    );
+  if (masked) return <HeroMasked />;
+
   return (
     <section id="home">
       {/* Container for image */}

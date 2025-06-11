@@ -33,6 +33,9 @@ export default function Page() {
             <About />
             <WhyMe />
             <Contact />
+            <div className="masked">
+              <Hero masked />
+            </div>
           </>
         ) : linkState === "projects" ? (
           <>
