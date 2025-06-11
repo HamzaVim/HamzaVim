@@ -3,7 +3,28 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
+
+// Masked version
+const AboutMasked = ({
+  aboutTextRef,
+}: {
+  aboutTextRef: React.RefObject<HTMLParagraphElement | null>;
+}) => (
+  <div className="about">
+    <div className="about-container">
+      <div className="about-text-container">
+        <h2>about me</h2>
+        <div className="text-container">
+          <p ref={aboutTextRef}>
+            Your web developer who codes with purpose – crafting fast, effective
+            solutions while relentlessly pursuing excellence for your business.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+);
 
 const About = ({ masked }: { masked?: boolean }) => {
   gsap.registerPlugin([ScrollTrigger, SplitText]);
@@ -20,6 +41,31 @@ const About = ({ masked }: { masked?: boolean }) => {
 
   // Text reveal animation
   useGSAP(() => {
+    if (masked) {
+      // Split text
+      SplitText.create(aboutTextRef.current, {
+        type: "lines,words",
+        tag: "span",
+        linesClass: "line",
+        wordsClass: "word",
+        autoSplit: true,
+        onSplit: (text) => {
+          // Set initial style for every line
+          const split = gsap.set(text.lines, {
+            overflow: "hidden",
+            display: "block",
+            textWrap: "nowrap",
+            height: (i, line) => {
+              return line.offsetHeight - 3;
+            },
+          });
+          return split;
+        },
+      });
+
+      return;
+    }
+
     // Split overlay text
     SplitText.create(aboutTextOverlayRef.current, {
       type: "lines,words",
@@ -83,28 +129,29 @@ const About = ({ masked }: { masked?: boolean }) => {
     ScrollTrigger.normalizeScroll(true); // Helps with touch devices
   }, []);
 
+  // Set about text height for the masked section, because the masked text is shorter
+  useEffect(() => {
+    const aboutTextHeight = gsap.utils.toArray(
+      ".about-text-container",
+    ) as HTMLDivElement[];
+
+    const setAboutTextHeight = () => {
+      gsap.set(aboutTextHeight[1], {
+        height: aboutTextHeight[0].offsetHeight,
+        width: aboutTextHeight[0].offsetWidth,
+      });
+    };
+
+    setAboutTextHeight();
+  }, []);
+
   // Masked About section
-  if (masked)
-    return (
-      <section className="overflow-hidden w-screen sm:px-12 md:px-24 lg:px-40 2xl:px-0 h-dvh bg-primary px-[1.3rem]">
-        <div className="flex flex-col gap-7 justify-center items-start w-full h-full 2xl:items-center text-nowrap">
-          <div className="flex flex-col gap-4 text-left text-black 2xl:gap-7">
-            <h2>about me</h2>
-            <p className="about-text text-about/[135%] md:leading-[125%] lg:leading-[115%] xl:leading-[102%] tracking-[-0.5%] font-extrabold 2xl:text-nowrap text-wrap">
-              Your web developer who <br />
-              codes with purpose – crafting fast, <br />
-              effective solutions while relentlessly <br />
-              pursuing excellence for your <br />
-              business.
-            </p>
-          </div>
-        </div>
-      </section>
-    );
+  if (masked) return <AboutMasked aboutTextRef={aboutTextRef} />;
+
   return (
     <section id="about">
       <div className="about-container">
-        <div>
+        <div className="about-text-container">
           <h2>about me</h2>
           <div className="text-container">
             {/* Overlay */}

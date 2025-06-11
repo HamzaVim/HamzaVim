@@ -269,7 +269,8 @@ button {
 }
 
 /* NOTE: About: ------------------------------------------------------------------------------------------------- */
-#about {
+#about,
+.about {
   @apply overflow-hidden w-screen sm:px-12 md:px-24 lg:px-40 2xl:px-0 h-fit px-[1.3rem];
 
   .about-container {
@@ -291,11 +292,12 @@ button {
             }
           }
 
-          &:nth-child(1) {
+          &:nth-child(1),
+          &:nth-child(2) {
             @apply max-w-[80rem] text-white text-about/[135%] md:leading-[125%] lg:leading-[115%] xl:leading-[102%] tracking-[-0.5%] font-extrabold text-wrap;
           }
           &:nth-child(2) {
-            @apply absolute top-0 max-w-[80rem] text-white text-about/[135%] md:leading-[125%] lg:leading-[115%] xl:leading-[102%] tracking-[-0.5%] font-extrabold text-wrap;
+            @apply absolute top-0;
           }
         }
       }
@@ -304,7 +306,8 @@ button {
 }
 
 /* NOTE: Why Me: ------------------------------------------------------------------------------------------------- */
-#why-me {
+#why-me,
+.why-me {
   @apply overflow-hidden relative w-screen h-fit;
 
   h2 {
