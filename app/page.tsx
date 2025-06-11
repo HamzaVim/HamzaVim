@@ -8,11 +8,12 @@ import Projects from "@/components/Projects";
 import gsap, { ScrollSmoother, ScrollTrigger } from "gsap/all";
 import { useGSAP } from "@gsap/react";
 import { useGlobal } from "@/context/GlobalContext";
+import Resume from "@/components/Resume";
 
 export default function Page() {
   gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
-  const { pageChanged, linkState } = useGlobal();
+  const { pageChangedRef, linkState } = useGlobal();
 
   useGSAP(() => {
     ScrollSmoother.create({
@@ -25,7 +26,7 @@ export default function Page() {
     <>
       <Header />
       <main>
-        {!pageChanged ? (
+        {!pageChangedRef.current ? (
           <>
             {/* Home */}
             <Hero />
@@ -38,7 +39,9 @@ export default function Page() {
             {/* Projects */}
             <Projects />
           </>
-        ) : null}
+        ) : (
+          <Resume />
+        )}
       </main>
     </>
   );

@@ -11,14 +11,8 @@ const LoadingScreen = () => {
   // Status: Loading animation
   const [loadingAnimation, setLoadingAnimation] = useState(true);
 
-  const {
-    loading,
-    setLoading,
-    initialLoading,
-    setInitialLoading,
-    pageChangedRef,
-    setPageChanged,
-  } = useGlobal();
+  const { loading, setLoading, initialLoading, setInitialLoading } =
+    useGlobal();
 
   // Status: Digit animation (counter)
   const digitContainerRef = useRef<HTMLDivElement>(null);
@@ -359,11 +353,6 @@ const LoadingScreen = () => {
                 y: "50%",
               },
               duration: 0.5,
-              onComplete: () => {
-                // Toggle the pageChanged state
-                pageChangedRef.current = !pageChangedRef.current;
-                setPageChanged(pageChangedRef.current);
-              },
             },
             "<",
           );

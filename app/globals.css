@@ -70,14 +70,14 @@ header {
 
   .left,
   .right {
-    @apply pointer-events-auto relative w-fit h-full;
+    @apply pointer-events-none relative w-fit h-full;
   }
 
   .left {
     @apply flex flex-col justify-between items-center pl-3 lg:pl-0;
 
     a[href="#home"] {
-      @apply lg:p-5 lg:-mt-[1.2rem];
+      @apply lg:p-5 lg:-mt-[1.2rem] pointer-events-auto;
 
       .logo {
         @apply w-7 h-auto fill-white stroke-primary pointer-events-none;
@@ -91,7 +91,7 @@ header {
         @apply rounded-full;
       }
       a {
-        @apply p-5 block;
+        @apply p-5 block pointer-events-auto;
 
         .sm-icon {
           @apply size-7 fill-white pointer-events-none;
@@ -101,7 +101,7 @@ header {
   }
 
   .press {
-    @apply h-fit w-fit mb-10 md:mb-11.5 lg:hidden absolute bottom-0 left-1/2 -translate-x-1/2 z-100;
+    @apply h-fit w-fit mb-10 md:mb-11.5 pointer-events-auto lg:hidden absolute bottom-0 left-1/2 -translate-x-1/2 z-100;
 
     .press-img {
       @apply size-20 sm:size-24 md:size-26 relative animate-spin;
@@ -120,7 +120,7 @@ header {
       li {
         @apply w-fit;
         a {
-          @apply lg:px-5 lg:py-2 px-3 py-1 block text-white/65 backdrop-blur-[2px];
+          @apply lg:px-5 lg:py-2 px-3 py-1 block text-white/65 pointer-events-auto backdrop-blur-[3px];
 
           .text-block {
             @apply overflow-hidden relative block pointer-events-none;
@@ -144,7 +144,7 @@ header {
     }
 
     .sound-btn {
-      @apply absolute left-19 md:left-21 lg:left-25 overflow-hidden flex text-left [writing-mode:sideways-lr] mb-7 bottom-0 text-sm md:text-lg md:w-7 w-[calc(var(--spacing)*4.7)] text-white/50 hover:text-white duration-200 font-semibold font-fira-code uppercase tracking-[3%] cursor-pointer;
+      @apply absolute left-19 md:left-21 lg:left-25 overflow-hidden flex text-left pointer-events-auto [writing-mode:sideways-lr] mb-7 bottom-0 text-sm md:text-lg md:w-7 w-[calc(var(--spacing)*4.7)] text-white/50 hover:text-white duration-200 font-semibold font-fira-code uppercase tracking-[3%] cursor-pointer;
 
       .on-off {
         @apply flex-col flex relative -ml-[0.07rem] md:ml-0;
@@ -171,11 +171,18 @@ header {
   }
 }
 
-section:not(:first-child, [id="projects"]) {
-  @apply pt-34 sm:pt-45 lg:pt-35 short-screen;
+section {
+  &:not(:first-child, [id="projects"], [id="resume"]) {
+    @apply pt-34 sm:pt-45 lg:pt-35 short-screen;
 
-  &:last-child {
-    @apply mb-55 sm:mb-50 lg:mb-14;
+    &:last-child {
+      @apply pb-55 sm:pb-50 lg:pb-14;
+    }
+  }
+
+  &[id="projects"],
+  &[id="resume"] {
+    @apply pt-34 sm:pt-45 lg:pt-35 short-screen;
   }
 }
 
@@ -617,6 +624,72 @@ button {
             @apply w-1 bg-white;
             height: "0%";
           }
+        }
+      }
+    }
+  }
+}
+
+#resume {
+  @apply text-white pb-55 sm:pb-50 lg:pb-14 xl:items-start select-none sm:px-12 md:px-24 lg:px-40 h-fit px-[1.3rem];
+
+  .image-resuem-container {
+    @apply relative mx-auto mb-14 h-fit w-fit;
+
+    .image-container {
+      @apply overflow-hidden relative;
+
+      .image-holder {
+        @apply size-50 sm:size-60 md:size-70;
+      }
+
+      #image-overlay {
+        @apply absolute top-0 left-0 z-10 w-full h-full bg-white;
+      }
+    }
+
+    a {
+      @apply flex absolute right-0 bottom-0 z-10 justify-center items-center bg-white rounded-full translate-x-1/2 translate-y-1/2 cursor-pointer size-12;
+
+      svg {
+        @apply size-10 fill-black;
+      }
+    }
+  }
+
+  .resume-container {
+    @apply flex flex-col sm:gap-12 gap-8;
+
+    & > div {
+      @apply flex flex-col gap-4 xl:w-[70%];
+
+      h4 {
+        @apply font-bold tracking-[1%] uppercase w-fit text-center text-2xl text-white after:content-[""] after:translate-y-0.5 after:w-full after:block after:h-0.5 after:bg-primary py-1.5 font-fira-code;
+      }
+      ul {
+        @apply flex flex-col gap-2 pl-[1.1rem];
+      }
+
+      p,
+      li {
+        @apply list-disc text-sm md:text-base leading-6 tracking-[1%] text-white font-medium text-left;
+      }
+
+      &.work-experience {
+        .work-title {
+          @apply font-bold;
+        }
+      }
+    }
+
+    & > div:last-child {
+      @apply flex flex-row gap-12;
+
+      & > div {
+        @apply flex flex-col gap-4;
+
+        ul {
+          @apply gap-0.5;
         }
       }
     }

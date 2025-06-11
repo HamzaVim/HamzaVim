@@ -35,6 +35,7 @@ export default function RootLayout({
         <GlobalProvider>
           {/* Loading screen */}
           <LoadingScreen />
+
           {children}
         </GlobalProvider>
       </body>

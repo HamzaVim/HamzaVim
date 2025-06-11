@@ -9,8 +9,6 @@ interface GlobalContextType {
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   initialLoading: boolean;
   setInitialLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  pageChanged: boolean;
-  setPageChanged: React.Dispatch<React.SetStateAction<boolean>>;
   pageChangedRef: React.RefObject<boolean>;
 }
 // Create the context
@@ -29,7 +27,6 @@ export const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
   const [initialLoading, setInitialLoading] = useState(false);
 
   // State: If the page is changed to projects or resume
-  const [pageChanged, setPageChanged] = useState(false);
   const pageChangedRef = useRef(false);
 
   const value = {
@@ -41,8 +38,6 @@ export const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
     initialLoading,
     setInitialLoading,
     pageChangedRef,
-    pageChanged,
-    setPageChanged,
   };
   return (
     <GlobalContext.Provider value={value}>{children}</GlobalContext.Provider>

@@ -88,15 +88,17 @@ const LinkItem = ({ href, text }: { href: string; text: string }) => {
 
       // To enter the projects or resume.
       // If the href is 'resume' or 'projects'
-      if (href === "resume" || href === "projects") {
-        if (href === "resume") return; // TODO: Remove it after building the resume page
+      if (["resume", "projects"].includes(href)) {
         // If the link state is already the same
         if (linkStateRef.current === href) return;
 
-        // changing the link state and set the loading state to true
-        setLinkState(href);
-        linkStateRef.current = href;
         setLoading(true);
+        // changing the link state to `href` and `pageChangedRef` to true
+        gsap.delayedCall(1, () => {
+          setLinkState(href);
+          linkStateRef.current = href;
+          pageChangedRef.current = true;
+        });
         return;
       }
 
@@ -107,7 +109,7 @@ const LinkItem = ({ href, text }: { href: string; text: string }) => {
 
         // After 1 second
         gsap.delayedCall(1, () => {
-          // Setting the `pageChanged` and `loading` to fasle
+          // Setting the `pageChangedRef` and `loading` to fasle
           pageChangedRef.current = false;
           setLoading(false);
         });
@@ -238,7 +240,7 @@ const Header = () => {
 
           // After 1 second
           gsap.delayedCall(1, () => {
-            // Setting the `pageChanged` and `loading` to fasle
+            // Setting the `pageChangedRef` and `loading` to fasle
             pageChangedRef.current = false;
             setLoading(false);
           });
