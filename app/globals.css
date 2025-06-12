@@ -310,6 +310,22 @@ button {
 .why-me {
   @apply overflow-hidden relative w-screen h-fit;
 
+  /* Mask */
+  &:is(.masked > &) {
+    li {
+      @apply border-black/25;
+      .text-container-masked {
+        @apply bg-transparent;
+        p {
+          @apply bg-transparent max-w-max relative text-wrap;
+          br {
+            @apply hidden lg:block;
+          }
+        }
+      }
+    }
+  }
+
   h2 {
     @apply py-7 text-center 2xl:py-14;
   }
@@ -317,7 +333,7 @@ button {
     @apply w-full;
 
     li {
-      @apply overflow-hidden relative py-10 pl-4 w-full border-t sm:py-7 sm:pl-10 md:pl-20 xl:pl-24 2xl:pl-36 last:border-b h-fit border-t-white/15 last:border-b-white/15;
+      @apply overflow-hidden relative py-10 pl-4 w-full border-t sm:py-7 sm:pl-10 md:pl-20 xl:pl-24 2xl:pl-36 last:border-b h-fit border-white/15;
 
       .text-container {
         @apply relative font-black text-white uppercase select-none w-fit h-fit text-nowrap;

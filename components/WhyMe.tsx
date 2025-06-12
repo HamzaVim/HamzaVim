@@ -8,10 +8,12 @@ const ListItem = ({
   title, // Original title
   maskedTitle, // Highlighted title if the original title is too long
   body, // paragraph text
+  masked, // Masked version
 }: {
   title: string;
   maskedTitle?: string;
   body: string;
+  masked?: boolean;
 }) => {
   gsap.registerPlugin(ScrollTrigger);
 
@@ -34,7 +36,7 @@ const ListItem = ({
   // Animation when scroll
   useGSAP(
     () => {
-      if (!liRef.current || !highlightedTextRef.current) return;
+      if (!liRef.current || !highlightedTextRef.current || masked) return;
       gsap.to(highlightedTextRef.current, {
         scrollTrigger: {
           trigger: highlightedTextRef.current,
@@ -50,7 +52,7 @@ const ListItem = ({
 
   // Adding the svg viewBox to the svgs
   useEffect(() => {
-    if (!liRef.current || !svgRef.current) return;
+    if (!liRef.current || !svgRef.current || masked) return;
 
     // Extracting the width and height of the link
     const width = liRef.current.offsetWidth;
@@ -83,7 +85,7 @@ const ListItem = ({
   // Animation when hovered
   useGSAP(
     () => {
-      if (!svgRef.current) return;
+      if (!svgRef.current || masked) return;
 
       if (hovered) {
         // When hovered we want to show the other text
@@ -105,6 +107,21 @@ const ListItem = ({
     },
     { dependencies: [hovered], scope: liRef },
   );
+
+  // Masked ListItem
+  if (masked)
+    return (
+      <li ref={liRef}>
+        <div className="text-container">
+          <span>{title}</span>
+        </div>
+
+        {/* Masked text */}
+        <div className="text-container-masked">
+          <p dangerouslySetInnerHTML={{ __html: body }} />
+        </div>
+      </li>
+    );
 
   return (
     <li ref={liRef}>
@@ -144,7 +161,47 @@ const ListItem = ({
     </li>
   );
 };
-const WhyMe = () => {
+
+// Masked version
+const WhyMeMasked = () => (
+  <div className="why-me">
+    <h2>why me</h2>
+    <ul>
+      <ListItem
+        title="Custom Solutions"
+        body="The idea of one-size-fits-all does not appeal to me. In every project,<br /> I know exactly what it is and how to implement the right solution just the way you want it."
+        masked
+      />
+      <ListItem
+        title="Full-Stack Expertise"
+        maskedTitle="Full-Stack Exp"
+        body="As both a UX/UI designer and developer, I bridge the gap between design and functionality,<br /> ensuring a seamless user experience."
+        masked
+      />
+      <ListItem
+        title="Modern Tech"
+        body="I specialize in Next.js, React, and Tailwind CSS for fast, responsive, and scalable websites."
+        masked
+      />
+      <ListItem
+        title="Fast & Responsive"
+        body="Your site will look fantastic and work perfectly on any device."
+        masked
+      />
+      <ListItem
+        title="Your Vision, Delivered"
+        maskedTitle="Your Vision, Del"
+        body="Your vision is my priority. I work closely with you to bring your ideas to life."
+        masked
+      />
+    </ul>
+  </div>
+);
+
+const WhyMe = ({ masked }: { masked?: boolean }) => {
+  // Masked Why Me section
+  if (masked) return <WhyMeMasked />;
+
   return (
     <section id="why-me">
       <h2>why me</h2>
