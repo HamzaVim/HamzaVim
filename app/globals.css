@@ -51,7 +51,7 @@
   ); /* max width of the list body 'paragraph' */
 
   /* Animation */
-  --animate-spin: spin 7s linear infinite;
+  --animate-spin: spin 1s linear infinite;
 }
 
 @utility short-screen {
@@ -175,7 +175,7 @@ section {
   &:not(:first-child, [id="projects"], [id="resume"]) {
     @apply pt-34 sm:pt-45 lg:pt-35 short-screen;
 
-    &:last-child {
+    &#contact {
       @apply pb-55 sm:pb-50 lg:pb-14;
     }
   }
@@ -214,9 +214,9 @@ button {
   & > div:not(:first-child) {
     @apply pt-34 sm:pt-45 lg:pt-35 short-screen;
 
-    /* &:last-child { */
-    /*   @apply pb-55 sm:pb-50 lg:pb-14; */
-    /* } */
+    &.contact {
+      @apply pb-55 sm:pb-50 lg:pb-14 items-start;
+    }
   }
 
   h1,
@@ -375,8 +375,43 @@ button {
 }
 
 /* NOTE: Contact: ------------------------------------------------------------------------------------------------- */
-#contact {
+#contact,
+.contact {
   @apply flex flex-col gap-12 justify-center items-start w-screen text-center sm:px-12 md:px-24 lg:px-40 px-[1.3rem] h-fit;
+
+  /* Mask */
+  &:is(.masked > &) {
+    .input-container {
+      label {
+        @apply flex-row-reverse;
+      }
+
+      .form-icon {
+        @apply fill-black/35 peer-[:not(:placeholder-shown)]:fill-black;
+      }
+
+      input {
+        @apply bg-transparent text-black placeholder:text-black/50 border-black/35 not-[:placeholder-shown]:border-black;
+
+        &.userName {
+          @apply lg:w-60 xl:w-80;
+        }
+        &.email {
+          @apply lg:w-80 xl:w-100;
+        }
+        &.message {
+          @apply lg:w-100 xl:w-120;
+        }
+      }
+    }
+    button {
+      @apply text-black bg-transparent;
+
+      .loading {
+        @apply size-16 animate-spin fill-black absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2;
+      }
+    }
+  }
 
   .server-message {
     @apply p-7 absolute gap-2 hidden items-center w-fit min-w-88 justify-center top-0 left-1/2 bg-white overflow-hidden rounded-b-sm;
@@ -455,13 +490,13 @@ button {
       input {
         @apply pb-0.5 w-full font-bold bg-black hover:cursor-pointer focus:outline-none border-b-[1.5px] text-(--input-color) border-(--input-color)/(--input-opacity) placeholder:text-(--input-color)/50 focus-within:placeholder:text-black;
 
-        &[id="userName"] {
+        &#userName {
           @apply lg:w-60 xl:w-80;
         }
-        &[id="email"] {
+        &#email {
           @apply lg:w-80 xl:w-100;
         }
-        &[id="message"] {
+        &#message {
           @apply lg:w-100 xl:w-120;
         }
       }
