@@ -30,7 +30,15 @@ import useSound from "./useSound";
 // 'rect' animate when the link state changed. ✅
 
 // Link item
-const LinkItem = ({ href, text }: { href: string; text: string }) => {
+const LinkItem = ({
+  href,
+  text,
+  masked,
+}: {
+  href: string;
+  text: string;
+  masked?: boolean;
+}) => {
   gsap.registerPlugin(ScrollToPlugin);
 
   // NOTE: States & Refs: ---------------------------------------------------
@@ -178,6 +186,28 @@ const LinkItem = ({ href, text }: { href: string; text: string }) => {
     { dependencies: [linkState] },
   );
 
+  // Animation when the link state changed (for the masked header)
+  useGSAP(
+    () => {
+      const a = gsap.utils.toArray(
+        ".masked .header .right a",
+      ) as unknown as HTMLAnchorElement[];
+      const hrefs = a.map((a) => a.href.split("#")[1]);
+
+      hrefs.forEach((href, index) => {
+        // Add active class to the active link & remove it from the others
+        if (href === linkState) {
+          a[index].classList.add("active");
+        } else {
+          a[index].classList.remove("active");
+        }
+      });
+    },
+    { dependencies: [linkState] },
+  );
+
+  if (masked) return <a href={href}>{text}</a>;
+
   return (
     <a ref={linkRef} href={href} className="relative">
       <span className="text-block">
@@ -197,7 +227,68 @@ const LinkItem = ({ href, text }: { href: string; text: string }) => {
   );
 };
 
-const Header = () => {
+const HeaderMasked = () => {
+  return (
+    <div className="header">
+      <div className="left">
+        <Link href="#home">
+          <Logo className="logo" />
+        </Link>
+        <ul>
+          <li>
+            <a href="https://www.example.com">
+              <SiUpwork className="upwork sm-icon" />
+            </a>
+          </li>
+          <li>
+            <a href="https://www.example.com">
+              <SiGithub className="github sm-icon" />
+            </a>
+          </li>
+          <li>
+            <a href="https://www.example.com">
+              <FaTelegramPlane className="telegram sm-icon" />
+            </a>
+          </li>
+          <li>
+            <a href="https://www.example.com">
+              <MdMail className="email sm-icon" />
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div className="right">
+        <ul>
+          <li>
+            <LinkItem href="#about" text="about" masked />
+          </li>
+          <li>
+            <LinkItem href="#contact" text="contact" masked />
+          </li>
+          <li>
+            <LinkItem href="#projects" text="projects" masked />
+          </li>
+          <li>
+            <LinkItem href="#resume" text="resume" masked />
+          </li>
+        </ul>
+        <button className="sound-btn">
+          sound&nbsp;
+          <span className="on-off">
+            <span className="on">on</span>
+            <span className="off">off</span>
+          </span>
+        </button>
+      </div>
+      <div className="bg-shadow">
+        <div className="top" />
+        <div className="bottom" />
+      </div>
+    </div>
+  );
+};
+
+const Header = ({ masked }: { masked?: boolean }) => {
   // NOTE: States & Refs -------------------------------------------------------
 
   const { playSound, decreaseVolume, increaseVolume } = useSound();
@@ -206,6 +297,9 @@ const Header = () => {
   const [soundState, setSoundState] = useState(true);
 
   const tlSoundBtn = useRef<gsap.core.Timeline>(null);
+
+  // Ref: timeout
+  const timeOut = useRef<NodeJS.Timeout>(null);
 
   const {
     initialLoading,
@@ -225,8 +319,8 @@ const Header = () => {
 
     // Get all links that are connected to this site.
     const allLinks = gsap.utils.toArray(
-      ".right a, .left a[href='#home']",
-    ) as unknown as HTMLAnchorElement[];
+      "header .right a, header .left a[href='#home']",
+    ) as unknown as HTMLAnchorElement[]; // Not including the masked header
 
     const handleClick = (ev: MouseEvent) => {
       // Disable click on links
@@ -282,8 +376,8 @@ const Header = () => {
 
     // Left side --------------------------------------------------------------
     const leftSideLinks = gsap.utils.toArray(
-      ".left a",
-    ) as unknown as HTMLAnchorElement[];
+      "header .left a",
+    ) as unknown as HTMLAnchorElement[]; // Not including the masked header
 
     // Function to handle the mouse move
     // Animation: The icon is tracking the mouse
@@ -300,13 +394,20 @@ const Header = () => {
         // Get the icon svg element
         const logo = link.children[0] as SVGSVGElement;
 
+        // Get the logo svg with the masked logo
+        const logoAll = gsap.utils.toArray(
+          `.${logo.classList.value}`,
+        ) as unknown as SVGSVGElement[];
+
         // Get the coordinates
         const x = ev.clientX - offsetLeft - link.offsetWidth / 2;
-        const y = ev.clientY - offsetTop;
+        const y = ev.clientY - offsetTop - 3;
 
-        gsap.to(logo, {
+        gsap.to(logoAll, {
           x,
           y,
+          duration: 1.25,
+          ease: "expo.out",
         });
         return;
       }
@@ -320,16 +421,22 @@ const Header = () => {
         link.parentElement.parentElement.parentElement.offsetTop +
         link.offsetTop;
 
-      // Get the icon svg element
+      // Get the icon svg element with the masked icon
       const smIcon = link.children[0] as SVGSVGElement;
+      const splitValue = smIcon.classList.value.split(" ");
+      const smIconAll = gsap.utils.toArray(
+        `.${splitValue[0]}.${splitValue[1]}`,
+      ) as unknown as SVGSVGElement[];
 
       // Get the coordinates
       const x = ev.clientX - offsetLeft - link.offsetWidth / 2;
       const y = ev.clientY - offsetTop - link.offsetHeight / 2;
 
-      gsap.to(smIcon, {
+      gsap.to(smIconAll, {
         x,
         y,
+        duration: 1.25,
+        ease: "expo.out",
       });
     };
 
@@ -339,10 +446,27 @@ const Header = () => {
       // Get the link
       const link = ev.target as HTMLAnchorElement;
 
-      // Get the icon svg element
+      // Get the icon svg element with the masked icon
       const icon = link.children[0] as SVGSVGElement;
 
-      gsap.to(icon, {
+      let allIcon: SVGSVGElement[];
+      if (icon.classList.value === "logo") {
+        // If the icon is a logo
+
+        allIcon = gsap.utils.toArray(
+          `.${icon.classList.value}`,
+        ) as unknown as SVGSVGElement[];
+      } else {
+        // If the icon is a social media icon
+
+        const splitValue = icon.classList.value.split(" ");
+        allIcon = gsap.utils.toArray(
+          `.${splitValue[0]}.${splitValue[1]}`,
+        ) as unknown as SVGSVGElement[];
+      }
+
+      gsap.to(allIcon, {
+        overwrite: true,
         x: 0,
         y: 0,
       });
@@ -390,9 +514,17 @@ const Header = () => {
           },
           onComplete: () => {
             if (!soundBtnRef.current) return;
-            const onOrOff = onOffBlock.children[0];
-            onOffBlock.removeChild(onOrOff);
-            onOffBlock.appendChild(onOrOff);
+            // Get all on-off elements from header and .header (masked)
+            const onOrOffs = gsap.utils.toArray(
+              ".on-off",
+            ) as unknown as HTMLSpanElement[];
+
+            onOrOffs.forEach((onOrOff) => {
+              const child = onOrOff.children[0] as HTMLSpanElement;
+
+              onOrOff.removeChild(child);
+              onOrOff.appendChild(child);
+            });
           },
         })
         .set(onOffBlock, { x: "0%" });
@@ -412,6 +544,8 @@ const Header = () => {
     };
   }, [initialLoading, playSound]);
 
+  if (masked) return <HeaderMasked />;
+
   return (
     <header>
       <div className="left">
@@ -421,35 +555,46 @@ const Header = () => {
         <ul>
           <li>
             <a href="https://www.example.com">
-              <SiUpwork className="sm-icon" />
+              <SiUpwork className="upwork sm-icon" />
             </a>
           </li>
           <li>
             <a href="https://www.example.com">
-              <SiGithub className="sm-icon" />
+              <SiGithub className="github sm-icon" />
             </a>
           </li>
           <li>
             <a href="https://www.example.com">
-              <FaTelegramPlane className="sm-icon" />
+              <FaTelegramPlane className="telegram sm-icon" />
             </a>
           </li>
           <li>
             <a href="https://www.example.com">
-              <MdMail className="sm-icon" />
+              <MdMail className="email sm-icon" />
             </a>
           </li>
         </ul>
       </div>
       <button
-        onTouchStart={cursorHoverIn}
+        onTouchStart={() => {
+          if (timeOut.current) clearTimeout(timeOut.current);
+          // Instead of delay in gsap
+          timeOut.current = setTimeout(() => {
+            cursorHoverIn();
+          }, 300);
+        }}
         onTouchEnd={(e) => {
           // There was a bug when the user releases the press button
           // The bug: initMouseEvent() Deprecation
+
+          if (timeOut.current) clearTimeout(timeOut.current);
           cursorHoverVanish();
           e.preventDefault();
         }}
-        onTouchCancel={cursorHoverVanish}
+        onTouchCancel={() => {
+          if (timeOut.current) clearTimeout(timeOut.current);
+          cursorHoverVanish();
+        }}
         onContextMenu={(e) => e.preventDefault()} // 👈 Block browser menu
         className="press"
       >

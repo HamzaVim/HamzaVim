@@ -84,7 +84,6 @@ const useCursortTracker = () => {
           gsap.to(".masked", {
             overwrite: true,
             "--size": "10000px",
-            delay: 0.3,
             duration: 6,
             ease: "power2.out",
           });
@@ -93,7 +92,7 @@ const useCursortTracker = () => {
           gsap.to(".masked", {
             overwrite: true,
             "--size": "0px",
-            duration: 1,
+            duration: 0.5,
             ease: "power3.out",
           });
         }

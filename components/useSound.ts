@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useCallback } from "react";
 
 const useSound = () => {
   // Ref: audio
@@ -25,12 +25,12 @@ const useSound = () => {
     };
   }, []);
 
-  const playSound = () => {
+  const playSound = useCallback(() => {
     if (!soundRef.current) return;
     soundRef.current.play();
-  };
+  }, []);
 
-  const decreaseVolume = () => {
+  const decreaseVolume = useCallback(() => {
     if (!soundRef.current) return;
 
     // If the interval is not null, clear it
@@ -56,9 +56,9 @@ const useSound = () => {
         soundRef.current.volume = Math.max(currentVolume - 0.01, 0.0);
       }
     }, 50);
-  };
+  }, []);
 
-  const increaseVolume = () => {
+  const increaseVolume = useCallback(() => {
     if (!soundRef.current) return;
 
     // If the interval is not null, clear it
@@ -84,7 +84,7 @@ const useSound = () => {
         soundRef.current.volume = Math.min(currentVolume + 0.01, 0.2);
       }
     }, 50);
-  };
+  }, []);
 
   return {
     playSound,

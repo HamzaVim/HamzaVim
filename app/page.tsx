@@ -27,11 +27,41 @@ export default function Page() {
       smoothTouch: 1,
       onUpdate: (self) => {
         // Manually sync the header scroll position
-        gsap.to("header", {
+        gsap.to("header, .header", {
           y: self.scrollTop(),
           duration: 0,
           ease: "none",
         });
+
+        // Add backgroundColor and backdropFilter to the header for mobile
+        if (!hasCursor) {
+          if (
+            self.progress > 0.337978 &&
+            gsap.getProperty("header .right ul", "--set-bg") === 0
+          ) {
+            // If the progress is greater than 0.337978: reached to the About section && the `--set-bg` is set to 0
+            // Set `blur-bg` class to the ul
+
+            const ul = gsap.utils.toArray(
+              "header .right ul",
+            )[0] as HTMLUListElement;
+
+            // TODO: Remove all as unknown as
+            ul.classList.add("blur-bg");
+          } else if (
+            self.progress < 0.337978 &&
+            gsap.getProperty("header .right ul", "--set-bg") === 1
+          ) {
+            // If the progress is less than 0.337978: not reached to the About section && the `--set-bg` is set to 1
+            // Remove `blur-bg` class from the ul
+
+            const ul = gsap.utils.toArray(
+              "header .right ul",
+            )[0] as HTMLUListElement;
+
+            ul.classList.remove("blur-bg");
+          }
+        }
 
         // Manually sync the cursor position
         gsap.to(".masked", {
@@ -65,6 +95,7 @@ export default function Page() {
       </main>
 
       <div className={`masked${!hasCursor ? " mobile" : ""}`}>
+        <Header masked />
         {!pageChangedRef.current ? (
           <>
             {/* Home */}
