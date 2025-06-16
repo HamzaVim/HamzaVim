@@ -1,4 +1,5 @@
 "use client";
+import { useGlobal } from "@/context/GlobalContext";
 import { useGSAP } from "@gsap/react";
 import gsap, { Flip } from "gsap/all";
 import { useRef, useState } from "react";
@@ -183,6 +184,7 @@ const Contact = ({ masked }: { masked?: boolean }) => {
   // Ref: success/fail animation
   const successFailAnimation = useRef<GSAPTimeline>(null);
 
+  const { cursorHoverIn, cursorHoverOut, cursorHoverVanish } = useGlobal();
   // NOTE: Fuctions & Animations -------------------------------------------------------
 
   // Animation for Success/fail message
@@ -705,13 +707,22 @@ const Contact = ({ masked }: { masked?: boolean }) => {
         <div className={`line ${serverResult.error ? "error" : "success"}`} />
       </div>
 
-      <div className="header-container">
+      <div
+        onMouseEnter={cursorHoverIn}
+        onMouseLeave={cursorHoverOut}
+        className="header-container"
+      >
         <h2>Contact</h2>
         <p>
           Want a website that stands out? <br /> Let’s make it happen
         </p>
       </div>
-      <form onSubmit={handleSubmit(submitForm)} noValidate>
+      <form
+        onMouseEnter={cursorHoverVanish}
+        onMouseLeave={cursorHoverOut}
+        onSubmit={handleSubmit(submitForm)}
+        noValidate
+      >
         <div id="initial-state-corners">
           <div
             ref={cornersRef}
@@ -834,7 +845,11 @@ const Contact = ({ masked }: { masked?: boolean }) => {
           </a>
         </div>
         <div className="contact-info">
-          <a href="https://www.instagram.com/hamzasxh/">
+          <a
+            onMouseEnter={cursorHoverVanish}
+            onMouseLeave={cursorHoverOut}
+            href="https://www.instagram.com/hamzasxh/"
+          >
             <h5>Instagram</h5>
             <p>hamzasxh@gmail.com</p>
 
@@ -848,7 +863,11 @@ const Contact = ({ masked }: { masked?: boolean }) => {
               </svg>
             </div>
           </a>
-          <a href="https://t.me/HamzaVim">
+          <a
+            onMouseEnter={cursorHoverVanish}
+            onMouseLeave={cursorHoverOut}
+            href="https://t.me/HamzaVim"
+          >
             <h5>Telegram</h5>
             <p>@HamzaVim</p>
 

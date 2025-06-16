@@ -10,6 +10,12 @@ interface GlobalContextType {
   initialLoading: boolean;
   setInitialLoading: React.Dispatch<React.SetStateAction<boolean>>;
   pageChangedRef: React.RefObject<boolean>;
+  cursorHoverState: boolean | null;
+  setCursorHoverState: React.Dispatch<React.SetStateAction<boolean | null>>;
+  initialCursorHoverState: React.RefObject<true | null>;
+  cursorHoverIn: () => void;
+  cursorHoverOut: () => void;
+  cursorHoverVanish: () => void;
 }
 // Create the context
 const GlobalContext = createContext<GlobalContextType>({} as GlobalContextType);
@@ -29,6 +35,28 @@ export const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
   // State: If the page is changed to projects or resume
   const pageChangedRef = useRef(false);
 
+  // State & Ref: Cursor hover state; null: size=0, false: size=30px, true: size=600~10000,
+  // --------------
+  const [cursorHoverState, setCursorHoverState] = useState<boolean | null>(
+    null,
+  );
+  // Initial cursor hover state
+  const initialCursorHoverState = useRef<true | null>(null);
+
+  // Function: To increase the size of the cursor tracker
+  const cursorHoverIn = () => {
+    setCursorHoverState(true);
+  };
+  // Function: To decrease the size of the cursor tracker
+  const cursorHoverOut = () => {
+    setCursorHoverState(false);
+  };
+  // Function: To vanish the cursor tracker
+  const cursorHoverVanish = () => {
+    setCursorHoverState(null);
+  };
+  // --------------
+
   const value = {
     linkState,
     setLinkState,
@@ -38,6 +66,12 @@ export const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
     initialLoading,
     setInitialLoading,
     pageChangedRef,
+    cursorHoverState,
+    setCursorHoverState,
+    initialCursorHoverState,
+    cursorHoverIn,
+    cursorHoverOut,
+    cursorHoverVanish,
   };
   return (
     <GlobalContext.Provider value={value}>{children}</GlobalContext.Provider>

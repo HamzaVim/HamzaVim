@@ -1,4 +1,5 @@
 "use client";
+import { useGlobal } from "@/context/GlobalContext";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -33,6 +34,8 @@ const Hero = ({ masked }: { masked?: boolean }) => {
   // NOTE: States & Refs: ---------------------------------------------------
 
   const imageContainerRef = useRef<HTMLDivElement>(null);
+
+  const { cursorHoverIn, cursorHoverOut } = useGlobal();
   // NOTE: Functions & Animations: ---------------------------------------------------
 
   // Image animation when scrolling
@@ -95,7 +98,11 @@ const Hero = ({ masked }: { masked?: boolean }) => {
         />
       </div>
       <div className="hero-text-container">
-        <div className="text-container">
+        <div
+          onMouseEnter={cursorHoverIn}
+          onMouseLeave={cursorHoverOut}
+          className="text-container"
+        >
           <p className="my-name">hamza hassen</p>
           <h1>
             creating

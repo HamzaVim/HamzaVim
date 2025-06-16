@@ -1,4 +1,5 @@
 "use client";
+import { useGlobal } from "@/context/GlobalContext";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -37,6 +38,7 @@ const About = ({ masked }: { masked?: boolean }) => {
   // Ref: text
   const aboutTextRef = useRef<HTMLParagraphElement>(null);
 
+  const { cursorHoverIn, cursorHoverOut } = useGlobal();
   // NOTE: Functions & Animations: ---------------------------------------------------
 
   // Text reveal animation
@@ -151,7 +153,11 @@ const About = ({ masked }: { masked?: boolean }) => {
   return (
     <section id="about">
       <div className="about-container">
-        <div className="about-text-container">
+        <div
+          onMouseEnter={cursorHoverIn}
+          onMouseLeave={cursorHoverOut}
+          className="about-text-container"
+        >
           <h2>about me</h2>
           <div className="text-container">
             {/* Overlay */}

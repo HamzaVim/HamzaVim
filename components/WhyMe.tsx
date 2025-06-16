@@ -1,4 +1,5 @@
 "use client";
+import { useGlobal } from "@/context/GlobalContext";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -80,7 +81,7 @@ const ListItem = ({
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, []);
+  }, [masked]);
 
   // Animation when hovered
   useGSAP(
@@ -199,13 +200,14 @@ const WhyMeMasked = () => (
 );
 
 const WhyMe = ({ masked }: { masked?: boolean }) => {
+  const { cursorHoverOut, cursorHoverVanish } = useGlobal();
   // Masked Why Me section
   if (masked) return <WhyMeMasked />;
 
   return (
     <section id="why-me">
       <h2>why me</h2>
-      <ul>
+      <ul onMouseEnter={cursorHoverVanish} onMouseLeave={cursorHoverOut}>
         <ListItem
           title="Custom Solutions"
           body="The idea of one-size-fits-all does not appeal to me.<br class='hidden lg:block' /> In every project,<br class='hidden sm:block md:hidden' /> I know exactly what it is and how<br class='hidden lg:block' /> to implement the right solution just the way you want it."

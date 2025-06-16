@@ -66,7 +66,7 @@ body {
 }
 
 header {
-  @apply flex fixed top-0 left-0 justify-between w-full px-2.5 sm:px-5 xl:px-10 h-full z-100 pointer-events-none py-5 sm:py-7 xl:py-16;
+  @apply flex fixed top-0 left-0 justify-between w-full px-2.5 sm:px-5 xl:px-10 h-dvh z-100 pointer-events-none py-5 sm:py-7 xl:py-16;
 
   .left,
   .right {
@@ -210,7 +210,26 @@ button {
 /* Classes & IDs */
 
 .masked {
-  @apply absolute top-0 left-0 w-full h-full bg-white/50;
+  @apply absolute top-0 left-0 w-full h-full bg-white will-change-[mask-position] translate-z-0 z-100 pointer-events-none;
+
+  /* Cursor tracking  */
+  --mask-position-x: 0px;
+  --mask-position-y: 0px;
+  --scrollTop: 0px;
+  --size: 0px;
+
+  /* Change its position to center it on press button for mobile  */
+  &.mobile {
+    --mask-position-x: 50vw;
+    --mask-position-y: 90.5vh;
+  }
+
+  mask-image: url(/circle.svg);
+  mask-repeat: no-repeat;
+  mask-size: var(--size);
+  mask-position: calc(var(--mask-position-x) - var(--size) / 2)
+    calc(var(--scrollTop) + var(--mask-position-y) - var(--size) / 2);
+
   & > div:not(:first-child) {
     @apply pt-34 sm:pt-45 lg:pt-35 short-screen;
 

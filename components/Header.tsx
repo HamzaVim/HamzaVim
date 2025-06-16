@@ -213,6 +213,9 @@ const Header = () => {
     linkStateRef,
     pageChangedRef,
     setLoading,
+    cursorHoverIn,
+    cursorHoverOut,
+    cursorHoverVanish,
   } = useGlobal();
 
   // NOTE: Fuctions & Animations -------------------------------------------------------
@@ -407,7 +410,7 @@ const Header = () => {
       if (!tlSoundBtn.current) return;
       tlSoundBtn.current.kill();
     };
-  }, [initialLoading]);
+  }, [initialLoading, playSound]);
 
   return (
     <header>
@@ -438,7 +441,18 @@ const Header = () => {
           </li>
         </ul>
       </div>
-      <button className="press">
+      <button
+        onTouchStart={cursorHoverIn}
+        onTouchEnd={(e) => {
+          // There was a bug when the user releases the press button
+          // The bug: initMouseEvent() Deprecation
+          cursorHoverVanish();
+          e.preventDefault();
+        }}
+        onTouchCancel={cursorHoverVanish}
+        onContextMenu={(e) => e.preventDefault()} // 👈 Block browser menu
+        className="press"
+      >
         <div className="press-img">
           <Image
             src="/images/press.png"
@@ -451,7 +465,7 @@ const Header = () => {
         <MdFingerprint className="finger-print" />
       </button>
       <div className="right">
-        <ul>
+        <ul onMouseEnter={cursorHoverVanish} onMouseLeave={cursorHoverOut}>
           <li>
             <LinkItem href="#about" text="about" />
           </li>
@@ -466,6 +480,8 @@ const Header = () => {
           </li>
         </ul>
         <button
+          onMouseEnter={cursorHoverVanish}
+          onMouseLeave={cursorHoverOut}
           onClick={() => {
             if (tlSoundBtn.current && !tlSoundBtn.current.isActive())
               setSoundState(!soundState);

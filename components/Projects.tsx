@@ -295,7 +295,7 @@ const Projects = () => {
         image.removeEventListener("load", handleLoad);
       });
     };
-  }, []);
+  }, [projects.length, setLoading]);
 
   return (
     <section id="projects">
