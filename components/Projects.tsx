@@ -6,7 +6,51 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { useGlobal } from "@/context/GlobalContext";
 
-const Projects = () => {
+// Masked version
+const ProjectsMasked = () => {
+  // Set the projects
+  const projects = projectsData;
+
+  const { cursorHoverVanish, cursorHoverOut } = useGlobal();
+
+  useGSAP(() => {
+    const pinnedHeight = gsap.getProperty("#projects .pin-spacer", "height");
+
+    ScrollTrigger.create({
+      trigger: ".projects .projects-pinned",
+      start: "bottom bottom",
+      end: `+=${pinnedHeight}`,
+      scrub: 0.1,
+      pin: true,
+      pinSpacing: true,
+      fastScrollEnd: true, // For better performance when the user scrolls fast
+    });
+  });
+
+  return (
+    <div className="projects">
+      <div className="projects-pinned">
+        <h2>projects</h2>
+        <div className="projects-container">
+          <p className="project-title">{projects[0].title}</p>
+          <div className="projects-list">
+            <div
+              onMouseEnter={cursorHoverVanish}
+              onMouseLeave={cursorHoverOut}
+              className="pointer-events-auto img-empty"
+            />
+
+            <div className="progress-bar">
+              <div className="progress" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const Projects = ({ masked }: { masked?: boolean }) => {
   gsap.registerPlugin(ScrollTrigger, SplitText);
 
   // NOTE: States & Refs: ---------------------------------------------------
@@ -30,7 +74,7 @@ const Projects = () => {
 
   // Animation: Pinned container
   useGSAP(() => {
-    if (!projectContainerRef.current) return;
+    if (!projectContainerRef.current || masked) return;
 
     // Height of the pinned container * the number of projects
     const pinnedHeight =
@@ -40,7 +84,7 @@ const Projects = () => {
     let lastCycle = 0;
 
     ScrollTrigger.create({
-      trigger: ".projects-pinned",
+      trigger: "#projects .projects-pinned",
       start: "bottom bottom",
       end: `+=${pinnedHeight * 2}`,
       scrub: 0.1,
@@ -57,14 +101,14 @@ const Projects = () => {
         if (currentCycle < projects.length) {
           // Animate the scale
           const scale = 1 - (0.25 * cycleProgress) / 100;
-          gsap.to(projectContainerRef.current[currentCycle], {
+          gsap.to([projectContainerRef.current[currentCycle], ".img-empty"], {
             overwrite: "auto",
             scale,
             duration: 0.1,
           });
 
           // Animate the progress
-          gsap.to("#progress", {
+          gsap.to("#progress, .projects .progress", {
             overwrite: true,
             height: `${cycleProgress}%`,
             duration: 0,
@@ -72,13 +116,13 @@ const Projects = () => {
 
           // If the cycle progress is less than 1 and the direction is backward
           if (cycleProgress < 1 && self.direction > 0) {
-            gsap.set("#progress", {
+            gsap.set("#progress, .projects .progress", {
               height: "0%",
             });
 
             // Else if the cycle progress is greater than 99 and the direction is forward
           } else if (cycleProgress > 99 && self.direction < 0) {
-            gsap.set("#progress", {
+            gsap.set("#progress, .projects .progress", {
               height: "100%",
             });
           }
@@ -124,7 +168,7 @@ const Projects = () => {
 
           // Else if the current cycle is greater than the number of projects or equal to the number of projects
         } else {
-          gsap.to("#progress", {
+          gsap.to("#progress, .projects .progress", {
             overwrite: true,
             height: self.progress > 0 ? "100%" : `${cycleProgress}%`,
             duration: 0.1,
@@ -248,11 +292,17 @@ const Projects = () => {
       stagger: 0.04,
       ease: "power1.inOut",
     });
+
+    const maskedTitle = gsap.utils.toArray(
+      ".projects .project-title",
+    )[0] as HTMLParagraphElement;
+
+    maskedTitle.innerText = data.title;
   });
 
   // Check if the images are loaded
   useEffect(() => {
-    if (!imagesRef.current) return;
+    if (!imagesRef.current || masked) return;
 
     // Get the images
     const images = imagesRef.current;
@@ -296,6 +346,8 @@ const Projects = () => {
       });
     };
   }, [projects.length, setLoading]);
+
+  if (masked) return <ProjectsMasked />;
 
   return (
     <section id="projects">

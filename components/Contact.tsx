@@ -19,7 +19,9 @@ type FormValues = {
 
 // Masked version
 const ContactMasked = () => {
+  // A function to handle input change and add the value to the masked form
   useGSAP(() => {
+    // Getting the form
     const formValues = gsap.utils.toArray(
       "#contact form input",
     ) as HTMLInputElement[];
@@ -33,16 +35,11 @@ const ContactMasked = () => {
       const input = ev.target as HTMLInputElement;
       const value = input.value;
 
-      switch (input.id) {
-        case "userName":
-          maskedFormValues[0].value = value;
-          break;
-        case "email":
-          maskedFormValues[1].value = value;
-          break;
-        case "message":
-          maskedFormValues[2].value = value;
-      }
+      // When the id of the input is included in the className of the masked form
+      maskedFormValues.forEach((maskedInput) => {
+        if (!maskedInput.className.includes(input.id)) return;
+        maskedInput.value = value;
+      });
     };
 
     formValues.forEach((input) => {
@@ -184,7 +181,7 @@ const Contact = ({ masked }: { masked?: boolean }) => {
   // Ref: success/fail animation
   const successFailAnimation = useRef<GSAPTimeline>(null);
 
-  const { cursorHoverIn, cursorHoverOut, cursorHoverVanish } = useGlobal();
+  const { cursorHoverOut, cursorHoverVanish } = useGlobal();
   // NOTE: Fuctions & Animations -------------------------------------------------------
 
   // Animation for Success/fail message
@@ -342,7 +339,7 @@ const Contact = ({ masked }: { masked?: boolean }) => {
             .children[0] as HTMLElement;
 
           gsap.to(rect, {
-            overwrite: "auto",
+            overwrite: true,
             scaleY: state === "open" ? 1 : 0,
             ease: "power2.out",
             duration: 0.4,
@@ -707,11 +704,7 @@ const Contact = ({ masked }: { masked?: boolean }) => {
         <div className={`line ${serverResult.error ? "error" : "success"}`} />
       </div>
 
-      <div
-        onMouseEnter={cursorHoverIn}
-        onMouseLeave={cursorHoverOut}
-        className="header-container"
-      >
+      <div className="header-container">
         <h2>Contact</h2>
         <p>
           Want a website that stands out? <br /> Let’s make it happen

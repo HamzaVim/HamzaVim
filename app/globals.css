@@ -62,7 +62,8 @@
 
 /* Tags */
 body {
-  @apply bg-black font-montserrat overflow-hidden;
+  /* @apply bg-black font-montserrat overflow-hidden; */
+  @apply bg-black font-montserrat;
 }
 
 header,
@@ -236,17 +237,30 @@ header,
 }
 
 section {
-  &:not(:first-child, [id="projects"], [id="resume"]) {
+  &:not(:first-child, #projects, #resume) {
     @apply pt-34 sm:pt-45 lg:pt-35 short-screen;
 
     &#contact {
-      @apply pb-55 sm:pb-50 lg:pb-14;
+      @apply pb-55 sm:pb-50 lg:pb-14 items-start;
     }
   }
 
-  &[id="projects"],
-  &[id="resume"] {
-    @apply pt-34 sm:pt-45 lg:pt-35 short-screen;
+  &#projects {
+    @apply pt-82 sm:pt-84 md:pt-96 lg:pt-52.5;
+  }
+
+  &#resume {
+    @apply pt-45 sm:pt-60 lg:pt-35;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p {
+    @apply select-none;
   }
 }
 
@@ -294,12 +308,25 @@ button {
   mask-position: calc(var(--mask-position-x) - var(--size) / 2)
     calc(var(--scrollTop) + var(--mask-position-y) - var(--size) / 2);
 
-  & > div:not(:first-child, :nth-child(2)) {
+  &
+    > div:not(
+      :first-child,
+      :nth-child(2),
+      [class="projects"],
+      [class="resume"]
+    ) {
     @apply pt-34 sm:pt-45 lg:pt-35 short-screen;
 
     &.contact {
       @apply pb-55 sm:pb-50 lg:pb-14 items-start;
     }
+  }
+
+  & > div[class="projects"] {
+    @apply pt-82 sm:pt-84 md:pt-96 lg:pt-52.5;
+  }
+  & > div[class="resume"] {
+    @apply pt-45 sm:pt-60 lg:pt-35;
   }
 
   h1,
@@ -746,8 +773,28 @@ button {
     }
   }
 }
-#projects {
-  @apply w-screen sm:px-12 md:px-24 lg:px-40 min-h-dvh overflow-x-hidden px-[1.3rem] pt-45;
+#projects,
+.projects {
+  @apply w-screen sm:px-12 md:px-24 lg:px-40 min-h-dvh overflow-x-hidden px-[1.3rem];
+
+  /* Mask */
+  &:is(.masked > &) {
+    .img-empty {
+      @apply absolute block bg-black w-full aspect-video;
+    }
+
+    .project-title {
+      @apply font-bold tracking-[1%] uppercase w-fit text-base sm:text-lg md:text-2xl absolute top-0 -translate-y-[110%] text-white font-fira-code;
+    }
+
+    .progress-bar {
+      @apply bg-black/35;
+
+      .progress {
+        @apply bg-black;
+      }
+    }
+  }
 
   .projects-pinned {
     @apply flex flex-col justify-between items-center w-full h-full lg:pb-14 pb-55 sm:pb-50 xl:pb-23;
@@ -795,8 +842,35 @@ button {
   }
 }
 
-#resume {
+#resume,
+.resume {
   @apply text-white pb-55 sm:pb-50 lg:pb-14 xl:items-start select-none sm:px-12 md:px-24 lg:px-40 h-fit px-[1.3rem];
+
+  /* Mask */
+  &:is(.masked > &) {
+    .image-resuem-container {
+      @apply size-50 sm:size-60 md:size-70;
+
+      a {
+        @apply bg-black;
+
+        svg {
+          @apply fill-white;
+        }
+      }
+      .image-container {
+        @apply w-full h-full;
+        .image-overlay {
+          @apply bg-black;
+        }
+      }
+    }
+    .resume-container {
+      li {
+        @apply text-black;
+      }
+    }
+  }
 
   .image-resuem-container {
     @apply relative mx-auto mb-14 h-fit w-fit;
@@ -808,7 +882,7 @@ button {
         @apply size-50 sm:size-60 md:size-70;
       }
 
-      #image-overlay {
+      .image-overlay {
         @apply absolute top-0 left-0 z-10 w-full h-full bg-white;
       }
     }
@@ -817,7 +891,7 @@ button {
       @apply flex absolute right-0 bottom-0 z-10 justify-center items-center bg-white rounded-full translate-x-1/2 translate-y-1/2 cursor-pointer size-12;
 
       svg {
-        @apply size-10 fill-black;
+        @apply size-9 fill-black;
       }
     }
   }
@@ -826,10 +900,10 @@ button {
     @apply flex flex-col sm:gap-12 gap-8;
 
     & > div {
-      @apply flex flex-col gap-4 xl:w-[70%];
+      @apply flex flex-col xl:w-[70%];
 
       h4 {
-        @apply font-bold tracking-[1%] uppercase w-fit text-center text-2xl text-white after:content-[""] after:translate-y-0.5 after:w-full after:block after:h-0.5 after:bg-primary py-1.5 font-fira-code;
+        @apply font-bold tracking-[1%] pb-5.5 uppercase w-fit text-center text-2xl text-white after:content-[""] after:translate-y-0.5 after:w-full after:block after:h-0.5 after:bg-primary pt-1.5 font-fira-code;
       }
       ul {
         @apply flex flex-col gap-2 pl-[1.1rem];
@@ -837,7 +911,10 @@ button {
 
       p,
       li {
-        @apply list-disc text-sm md:text-base leading-6 tracking-[1%] text-white font-medium text-left;
+        @apply text-sm md:text-base leading-6 tracking-[1%] text-white font-medium text-left w-fit;
+      }
+      li {
+        @apply list-disc;
       }
 
       &.work-experience {

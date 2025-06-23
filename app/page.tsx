@@ -22,7 +22,7 @@ export default function Page() {
 
   useGSAP(() => {
     ScrollSmoother.create({
-      content: "body > div", // Select the wrapper element (first child of body)
+      content: "body div.content", // Select the wrapper element (first child of body)
       smooth: 2,
       smoothTouch: 1,
       onUpdate: (self) => {
@@ -73,7 +73,7 @@ export default function Page() {
     });
   });
   return (
-    <div>
+    <div className="content">
       <Header />
       <main>
         {!pageChangedRef.current ? (
@@ -107,10 +107,10 @@ export default function Page() {
         ) : linkState === "projects" ? (
           <>
             {/* Projects */}
-            <Projects />
+            <Projects masked />
           </>
         ) : (
-          <Resume />
+          <Resume masked />
         )}
       </div>
     </div>
