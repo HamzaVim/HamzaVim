@@ -11,8 +11,13 @@ const LoadingScreen = () => {
   // Status: Loading animation
   const [loadingAnimation, setLoadingAnimation] = useState(true);
 
-  const { loading, setLoading, initialLoading, setInitialLoading } =
-    useGlobal();
+  const {
+    loading,
+    setLoading,
+    initialLoading,
+    setInitialLoading,
+    setCursorHoverState,
+  } = useGlobal();
 
   // Status: Digit animation (counter)
   const digitContainerRef = useRef<HTMLDivElement>(null);
@@ -31,22 +36,16 @@ const LoadingScreen = () => {
     () => {
       // If the site is not loaded
       if (!initialLoading) {
-        gsap.set(
-          "body>*:not(div) button, body>*:not(div) a, body>*:not(div) input",
-          {
-            tabIndex: -1,
-          },
-        );
+        gsap.set("body>* button:not(#start-btn), body>* a, body>* input", {
+          tabIndex: -1,
+        });
         return;
       }
 
       // If the site is loaded
-      gsap.set(
-        "body>*:not(div) button, body>*:not(div) a, body>*:not(div) input",
-        {
-          tabIndex: 0,
-        },
-      );
+      gsap.set("body>* button:not(#start-btn), body>* a, body>* input", {
+        tabIndex: 0,
+      });
       // Set the overflow to auto
       gsap.set("body", {
         overflow: "auto",
@@ -91,7 +90,7 @@ const LoadingScreen = () => {
         .to(digit3Ref.current, {
           overwrite: true,
           yPercent: -91,
-          duration: loading ? 1.1 : 0.1,
+          duration: loading ? 1.1 : 0.07,
           ease: "none",
         })
         .set(digit3Ref.current, {
@@ -109,7 +108,7 @@ const LoadingScreen = () => {
         .to(digit2Ref.current, {
           overwrite: true,
           yPercent: -(digitRepeat + 1) * 10.111111111,
-          duration: loading ? 1.1 : 0.1,
+          duration: loading ? 1.1 : 0.07,
           ease: "none",
           onComplete: () => {
             setDigitRepeat((prev) => prev + 1);
@@ -121,7 +120,7 @@ const LoadingScreen = () => {
       gsap.timeline().to(digit1Ref.current, {
         overwrite: true,
         yPercent: -50,
-        duration: loading ? 1.1 : 0.1,
+        duration: loading ? 1.1 : 0.07,
         ease: "none",
       });
     },
@@ -141,10 +140,10 @@ const LoadingScreen = () => {
         return;
       }
 
-      // Set the timeout to 3 seconds and set the loading state to false
+      // Set the timeout to 1 seconds and set the loading state to false
       timeout = setTimeout(() => {
         setLoading(false);
-      }, 3000);
+      }, 1000);
     };
 
     // Check if the page is already loaded
@@ -262,7 +261,8 @@ const LoadingScreen = () => {
         attr: {
           y: "-55%",
         },
-        duration: 0.5,
+        duration: 0.75,
+        ease: "power2.in",
       })
       .to(
         "#mask-load-black-screen rect:nth-child(2)",
@@ -270,7 +270,8 @@ const LoadingScreen = () => {
           attr: {
             y: "105%",
           },
-          duration: 0.5,
+          duration: 0.75,
+          ease: "power2.in",
         },
         "<",
       )
@@ -280,7 +281,8 @@ const LoadingScreen = () => {
           attr: {
             y: "-55%",
           },
-          duration: 0.5,
+          duration: 0.75,
+          ease: "power2.in",
         },
         "-=50%",
       )
@@ -290,7 +292,8 @@ const LoadingScreen = () => {
           attr: {
             y: "105%",
           },
-          duration: 0.5,
+          duration: 0.75,
+          ease: "power2.in",
         },
         "<",
       )
@@ -299,6 +302,7 @@ const LoadingScreen = () => {
         zIndex: 99, // Set the z-index to 99 behind the header to reuse loading animation
         onComplete: () => {
           setInitialLoading(true);
+          setCursorHoverState(false);
         },
       });
   });
@@ -310,7 +314,11 @@ const LoadingScreen = () => {
 
       if (loading) {
         gsap
-          .timeline()
+          .timeline({
+            defaults: {
+              ease: "power2.out",
+            },
+          })
           // Set the overflow to hidden and display the loading screen
           .set("body", {
             overflow: "hidden",
@@ -323,7 +331,7 @@ const LoadingScreen = () => {
             attr: {
               y: "0%",
             },
-            duration: 0.5,
+            duration: 0.75,
           })
           .to(
             "#mask-load-white-screen rect:nth-child(2)",
@@ -331,7 +339,7 @@ const LoadingScreen = () => {
               attr: {
                 y: "50%",
               },
-              duration: 0.5,
+              duration: 0.75,
             },
             "<",
           )
@@ -342,7 +350,7 @@ const LoadingScreen = () => {
               attr: {
                 y: "0%",
               },
-              duration: 0.5,
+              duration: 0.75,
             },
             "-=50%",
           )
@@ -352,19 +360,23 @@ const LoadingScreen = () => {
               attr: {
                 y: "50%",
               },
-              duration: 0.5,
+              duration: 0.75,
             },
             "<",
           );
       } else {
         gsap
-          .timeline()
+          .timeline({
+            defaults: {
+              ease: "power2.in",
+            },
+          })
           // Animate the loading screen
           .to("#mask-load-black-screen rect:nth-child(1)", {
             attr: {
               y: "-55%",
             },
-            duration: 0.5,
+            duration: 0.75,
           })
           .to(
             "#mask-load-black-screen rect:nth-child(2)",
@@ -372,7 +384,7 @@ const LoadingScreen = () => {
               attr: {
                 y: "105%",
               },
-              duration: 0.5,
+              duration: 0.75,
             },
             "<",
           )
@@ -382,7 +394,7 @@ const LoadingScreen = () => {
               attr: {
                 y: "-55%",
               },
-              duration: 0.5,
+              duration: 0.75,
             },
             "-=50%",
           )
@@ -392,7 +404,7 @@ const LoadingScreen = () => {
               attr: {
                 y: "105%",
               },
-              duration: 0.5,
+              duration: 0.75,
             },
             "<",
           )

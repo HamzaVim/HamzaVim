@@ -7,10 +7,13 @@ import useCursorDetection from "./useCursorDetection";
  * Tracks the cursor position
  */
 const useCursortTracker = () => {
-  const { cursorHoverState, setCursorHoverState, initialCursorHoverState } =
-    useGlobal();
+  // NOTE: States & Refs -------------------------------------------------------
+  const { cursorHoverState } = useGlobal();
 
+  // State: If the device has a cursor
   const hasCursor = useCursorDetection();
+
+  // NOTE: Fuctions & Animations -------------------------------------------------------
 
   useGSAP(() => {
     // Request Animation Frame
@@ -18,9 +21,6 @@ const useCursortTracker = () => {
 
     /**
      * Updates the cursor tracker
-     * If `initialCursorHoverState` is null, it will set the tracker to the cursor position without animation (first time)
-     * Else, it will animate the tracker to the cursor position
-     * @returns
      */
     const updateTracker = (e: PointerEvent) => {
       if (e.pointerType !== "mouse") return; // Only for mouse
@@ -28,20 +28,6 @@ const useCursortTracker = () => {
       // Get the cursor position
       const x = e.clientX;
       const y = e.clientY;
-
-      if (initialCursorHoverState.current === null) {
-        gsap.set(".masked", {
-          "--mask-position-x": `${x}px`,
-          "--mask-position-y": `${y}px`,
-          "--size": "40px",
-          duration: 0.2,
-          onComplete: () => {
-            setCursorHoverState(false); // Set the cursor hover state to false (normal size)
-            initialCursorHoverState.current = true; // Set the initial cursor hover state to true
-          },
-        });
-        return;
-      }
 
       gsap.to(".masked", {
         "--mask-position-x": `${x}px`,

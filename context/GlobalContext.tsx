@@ -13,7 +13,6 @@ interface GlobalContextType {
   setPageChanged: React.Dispatch<React.SetStateAction<boolean>>;
   cursorHoverState: boolean | null;
   setCursorHoverState: React.Dispatch<React.SetStateAction<boolean | null>>;
-  initialCursorHoverState: React.RefObject<true | null>;
   cursorHoverIn: () => void;
   cursorHoverOut: () => void;
   cursorHoverVanish: () => void;
@@ -41,8 +40,6 @@ export const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
   const [cursorHoverState, setCursorHoverState] = useState<boolean | null>(
     null,
   );
-  // Initial cursor hover state
-  const initialCursorHoverState = useRef<true | null>(null);
 
   // Function: To increase the size of the cursor tracker
   const cursorHoverIn = () => {
@@ -70,7 +67,6 @@ export const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
     setPageChanged,
     cursorHoverState,
     setCursorHoverState,
-    initialCursorHoverState,
     cursorHoverIn,
     cursorHoverOut,
     cursorHoverVanish,

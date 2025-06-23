@@ -62,8 +62,7 @@
 
 /* Tags */
 body {
-  /* @apply bg-black font-montserrat overflow-hidden; */
-  @apply bg-black font-montserrat;
+  @apply bg-black font-montserrat overflow-hidden;
 }
 
 header,

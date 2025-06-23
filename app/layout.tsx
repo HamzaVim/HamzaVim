@@ -8,11 +8,13 @@ import LoadingScreen from "@/components/LoadingScreen";
 const montserratFont = Montserrat({
   variable: "--montserrat",
   weight: ["400", "500", "700", "900"],
+  preload: false,
 });
 
 const firaCodeFont = Fira_Code({
   variable: "--fira-code",
   weight: ["600", "700"],
+  preload: false,
 });
 
 // NOTE: Layout: -----------------------------------------------------------------
