@@ -18,7 +18,7 @@ export default function Page() {
   useCursortTracker();
   const hasCursor = useCursorDetection();
 
-  const { pageChangedRef, linkState } = useGlobal();
+  const { pageChanged, linkState } = useGlobal();
 
   useGSAP(() => {
     ScrollSmoother.create({
@@ -76,7 +76,7 @@ export default function Page() {
     <div className="content">
       <Header />
       <main>
-        {!pageChangedRef.current ? (
+        {!pageChanged ? (
           <>
             {/* Home */}
             <Hero />
@@ -96,7 +96,7 @@ export default function Page() {
 
       <div className={`masked${!hasCursor ? " mobile" : ""}`}>
         <Header masked />
-        {!pageChangedRef.current ? (
+        {!pageChanged ? (
           <>
             {/* Home */}
             <Hero masked />

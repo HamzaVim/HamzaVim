@@ -9,7 +9,8 @@ interface GlobalContextType {
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   initialLoading: boolean;
   setInitialLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  pageChangedRef: React.RefObject<boolean>;
+  pageChanged: boolean;
+  setPageChanged: React.Dispatch<React.SetStateAction<boolean>>;
   cursorHoverState: boolean | null;
   setCursorHoverState: React.Dispatch<React.SetStateAction<boolean | null>>;
   initialCursorHoverState: React.RefObject<true | null>;
@@ -33,7 +34,7 @@ export const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
   const [initialLoading, setInitialLoading] = useState(false);
 
   // State: If the page is changed to projects or resume
-  const pageChangedRef = useRef(false);
+  const [pageChanged, setPageChanged] = useState(false);
 
   // State & Ref: Cursor hover state; null: size=0, false: size=30px, true: size=600~10000,
   // --------------
@@ -65,7 +66,8 @@ export const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
     setLoading,
     initialLoading,
     setInitialLoading,
-    pageChangedRef,
+    pageChanged,
+    setPageChanged,
     cursorHoverState,
     setCursorHoverState,
     initialCursorHoverState,

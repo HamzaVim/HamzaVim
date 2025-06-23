@@ -46,10 +46,26 @@ const LinkItem = ({
   // Ref: link
   const linkRef = useRef<HTMLAnchorElement>(null);
 
-  const { linkState, setLinkState, linkStateRef, setLoading, pageChangedRef } =
-    useGlobal();
+  const {
+    linkState,
+    setLinkState,
+    linkStateRef,
+    setLoading,
+    pageChanged,
+    setPageChanged,
+    loading,
+  } = useGlobal();
+
+  const loadingRef = useRef(loading);
+  const pageChangedRef = useRef(pageChanged);
 
   // NOTE: Functions & Animations: ---------------------------------------------------
+
+  // Updating the `loadingRef` and `pageChangedRef`
+  useEffect(() => {
+    loadingRef.current = loading;
+    pageChangedRef.current = pageChanged;
+  }, [loading, pageChanged]);
 
   // Animation for the link: Hover & click
   useGSAP(() => {
@@ -90,6 +106,8 @@ const LinkItem = ({
 
     // Animation: Handle mouse click
     const handleClick = (ev: MouseEvent) => {
+      if (loadingRef.current) return;
+
       // getting the target and getting the href
       const target = ev.target as HTMLAnchorElement;
       const href = target.href.split("#")[1];
@@ -101,11 +119,11 @@ const LinkItem = ({
         if (linkStateRef.current === href) return;
 
         setLoading(true);
-        // changing the link state to `href` and `pageChangedRef` to true
-        gsap.delayedCall(1, () => {
+        // changing the link state to `href` and set `pageChanged` to true
+        gsap.delayedCall(2, () => {
           setLinkState(href);
           linkStateRef.current = href;
-          pageChangedRef.current = true;
+          setPageChanged(true);
         });
         return;
       }
@@ -117,13 +135,17 @@ const LinkItem = ({
 
         // After 1 second
         gsap.delayedCall(1, () => {
-          // Setting the `pageChangedRef` and `loading` to fasle
-          pageChangedRef.current = false;
-          setLoading(false);
+          // Setting the `pageChanged` to fasle
+          setPageChanged(false);
+
+          gsap.delayedCall(0.5, () => {
+            // Setting the `loading` to fasle
+            setLoading(false);
+          });
         });
 
-        // Animate after 1 second delay
-        gsap.delayedCall(1, () => {
+        // Animate after 2 second delay
+        gsap.delayedCall(2, () => {
           gsap.to(window, {
             scrollTo: `#${href}`,
             duration: 1,
@@ -305,14 +327,21 @@ const Header = ({ masked }: { masked?: boolean }) => {
     initialLoading,
     setLinkState,
     linkStateRef,
-    pageChangedRef,
+    pageChanged,
+    setPageChanged,
     setLoading,
     cursorHoverIn,
     cursorHoverOut,
     cursorHoverVanish,
   } = useGlobal();
+  const pageChangedRef = useRef(pageChanged);
 
   // NOTE: Fuctions & Animations -------------------------------------------------------
+
+  // Updating the `pageChangedRef`
+  useEffect(() => {
+    pageChangedRef.current = pageChanged;
+  }, [pageChanged]);
 
   useGSAP(() => {
     // Right side --------------------------------------------------------------
@@ -338,7 +367,7 @@ const Header = ({ masked }: { masked?: boolean }) => {
           // After 1 second
           gsap.delayedCall(1, () => {
             // Setting the `pageChangedRef` and `loading` to fasle
-            pageChangedRef.current = false;
+            setPageChanged(false);
             setLoading(false);
           });
 
