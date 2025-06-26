@@ -11,6 +11,8 @@ interface GlobalContextType {
   setInitialLoading: React.Dispatch<React.SetStateAction<boolean>>;
   pageChanged: boolean;
   setPageChanged: React.Dispatch<React.SetStateAction<boolean>>;
+  screenResizing: boolean;
+  setScreenResizing: React.Dispatch<React.SetStateAction<boolean>>;
   cursorHoverState: boolean | null;
   setCursorHoverState: React.Dispatch<React.SetStateAction<boolean | null>>;
   cursorHoverIn: () => void;
@@ -55,6 +57,9 @@ export const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
   };
   // --------------
 
+  // State: If the screen is resizing set to true
+  const [screenResizing, setScreenResizing] = useState(false);
+
   const value = {
     linkState,
     setLinkState,
@@ -65,6 +70,8 @@ export const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
     setInitialLoading,
     pageChanged,
     setPageChanged,
+    screenResizing,
+    setScreenResizing,
     cursorHoverState,
     setCursorHoverState,
     cursorHoverIn,

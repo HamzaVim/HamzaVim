@@ -5,18 +5,37 @@ import About from "@/components/About";
 import WhyMe from "@/components/WhyMe";
 import Contact from "@/components/Contact";
 import Projects from "@/components/Projects";
-import gsap, { ScrollSmoother, ScrollTrigger } from "gsap/all";
+import gsap, {
+  Flip,
+  ScrollSmoother,
+  ScrollToPlugin,
+  ScrollTrigger,
+  SplitText,
+} from "gsap/all";
 import { useGSAP } from "@gsap/react";
 import { useGlobal } from "@/context/GlobalContext";
 import Resume from "@/components/Resume";
 import useCursortTracker from "@/components/useCursortTracker";
 import useCursorDetection from "@/components/useCursorDetection";
+import useResizeUpdater from "@/components/useResizeUpdater";
+
+gsap.registerPlugin(
+  useGSAP,
+  ScrollTrigger,
+  ScrollSmoother,
+  ScrollToPlugin,
+  SplitText,
+  Flip,
+);
 
 export default function Page() {
-  gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
+  // Cursor
   useCursortTracker();
   const hasCursor = useCursorDetection();
+
+  // Resize
+  useResizeUpdater();
 
   const { pageChanged, linkState } = useGlobal();
 
