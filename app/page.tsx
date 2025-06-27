@@ -14,7 +14,7 @@ import gsap, {
 } from "gsap/all";
 import { useGSAP } from "@gsap/react";
 import { useGlobal } from "@/context/GlobalContext";
-import Resume from "@/components/Resume";
+import Resume from "@/components/Resume/Resume";
 import useCursortTracker from "@/components/useCursortTracker";
 import useCursorDetection from "@/components/useCursorDetection";
 import useResizeUpdater from "@/components/useResizeUpdater";
@@ -23,6 +23,7 @@ import AboutMask from "@/components/About/AboutMask";
 import WhyMeMask from "@/components/WhyMe/WhyMeMask";
 import ContactMask from "@/components/Contact/ContactMask";
 import ProjectsMask from "@/components/Projects/ProjectsMask";
+import ResumeMask from "@/components/Resume/ResumeMask";
 
 gsap.registerPlugin(
   useGSAP,
@@ -114,7 +115,10 @@ export default function Page() {
             <Projects />
           </>
         ) : (
-          <Resume />
+          <>
+            {/* Resume */}
+            <Resume />
+          </>
         )}
       </main>
 
@@ -134,7 +138,10 @@ export default function Page() {
             <ProjectsMask />
           </>
         ) : (
-          <Resume masked />
+          <>
+            {/* Resume */}
+            <ResumeMask />
+          </>
         )}
       </div>
     </div>

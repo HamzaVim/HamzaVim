@@ -12,109 +12,26 @@ const IMAGES_URLS = IMAGES.split(",");
 // Load image api link.
 const LOAD_IMAGE_API = process.env.NEXT_PUBLIC_LOAD_IMAGE_API;
 
-// Masked version
-const ResumeMasked = () => (
-  <div className="resume">
-    <div className="image-resuem-container">
-      <div className="image-container">
-        <div className="image-overlay" />
-      </div>
-      <a
-        target="_blank"
-        rel="noopener noreferrer"
-        href="https://drive.google.com/file/d/1Dkg0nXljt-65HVlZr7m0aDZ4b84mbOJn/view?usp=sharing"
-        download="Hamza's_resume.pdf"
-      >
-        <RiDownloadCloud2Line />
-      </a>
-    </div>
-    <div className="resume-container">
-      <div>
-        <h4>Professional Summary</h4>
-        <p>
-          I am an Ethiopian professional, born and raised in Saudi Arabia,
-          currently residing in Ethiopia. I am fluent in both Arabic and
-          English, offering services in web design, web development,
-          programming, animation, and styling.
-          <br />
-          With over six years of experience as a creative React developer, I
-          specialize in crafting user-friendly and visually appealing
-          interfaces, as well as dynamic web applications. I have a strong
-          command of JavaScript, React, and Next.js, and I possess hands-on
-          expertise in developing solutions that prioritize user satisfaction.
-          My skills in animation and styling further enhance the user experience
-          and engagement of the products I create.
-        </p>
-      </div>
-      <div className="work-experience">
-        <h4>Work Experience</h4>
-        <p>
-          <span className="work-title">
-            Front-End Developer (CSS Specialist)
-            <br />
-            Upwork Freelance Contract | [ Nov 17 / 2024 ] - Present
-          </span>
-          <br />
-          <span className="work-client">Client: Katy (United States)</span>
-          <br />
-        </p>
-        <ul>
-          <li>
-            Provided real-time CSS debugging and styling solutions during live
-            walkthrough sessions.
-          </li>
-          <li>
-            Rapidly implemented client-requested visual enhancements to improve
-            website appearance.
-          </li>
-          <li>
-            Collaborated directly with the client to identify and resolve
-            front-end styling issues.
-          </li>
-          <li>
-            Delivered immediate fixes for responsive design problems and
-            cross-browser inconsistencies.
-          </li>
-          <li>
-            Worked under tight deadlines to complete CSS modifications during
-            active development.
-          </li>
-        </ul>
-      </div>
-      <div>
-        <div>
-          <h4>Expertise</h4>
-          <ul>
-            <li>HTML</li>
-            <li>CSS</li>
-            <li>JavaScript</li>
-            <li>TypeScript</li>
-            <li>React</li>
-            <li>Next.js</li>
-            <li>Tailwind</li>
-            <li>Animation</li>
-          </ul>
-        </div>
-        <div>
-          <h4>Language</h4>
-          <ul>
-            <li>Arabic (Fluent)</li>
-            <li>English (Advanced)</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
-);
-const Resume = ({ masked }: { masked?: boolean }) => {
+// Type: Animate overlay
+type AnimateOverlay = (
+  overlayImg: HTMLDivElement,
+  imgParent: HTMLElement,
+) => void;
+
+const Resume = () => {
   // NOTE: States & Refs: ---------------------------------------------------
+
+  const { contextSafe } = useGSAP();
 
   // State: Initial image reveal.
   const [initialImgReveal, setInitialImgReveal] = useState(false);
+  const initialImgRevealRef = useRef(false);
 
   // Ref: Img elements & images loaded.
   const imagesRef = useRef<HTMLImageElement[]>([]);
   const imagesLoadedRef = useRef<number[]>([]);
+
+  const tlImgOverlay = useRef<gsap.core.Timeline>(null);
 
   // Ref: Img index for animation.
   const imgIndex = useRef(0);
@@ -122,6 +39,7 @@ const Resume = ({ masked }: { masked?: boolean }) => {
   const {
     setLoading,
     loading,
+    screenResizing,
     cursorHoverIn,
     cursorHoverOut,
     cursorHoverVanish,
@@ -129,25 +47,27 @@ const Resume = ({ masked }: { masked?: boolean }) => {
 
   // NOTE: Functions & Animations: ---------------------------------------------------
 
-  // Animation: Handle image change.
+  // Update the `initialImgRevealRef`
+  useEffect(() => {
+    initialImgRevealRef.current = initialImgReveal;
+  }, [initialImgReveal]);
+
   /**
    * Animation: Handle image change
    * - Manage the current image index in `imgIndex`
    */
   useGSAP(
     () => {
-      if (!initialImgReveal || masked) return;
+      if (!initialImgReveal) return;
 
-      const overlayImg = gsap.utils.toArray(".image-overlay")[
-        masked ? 1 : 0
-      ] as HTMLDivElement;
+      const overlayImg = gsap.utils.toArray(
+        "#resume .image-overlay",
+      )[0] as HTMLDivElement;
 
       // Skip if the overlay image is not found
       if (!overlayImg) return;
 
       const imgsParent = imagesRef.current.map((img) => img.parentElement); // Get all parent elements of images
-
-      // Function to change t
 
       /**
        * Handle image change by
@@ -180,62 +100,74 @@ const Resume = ({ masked }: { masked?: boolean }) => {
       };
 
       // Animate the overlay after 3 seconds
-      gsap.delayedCall(3, () => {
-        gsap
-          .timeline({
-            defaults: {
-              repeat: -1,
-              repeatDelay: 3, // Repeat the animation every 3 seconds
-              ease: "power3.out",
-            },
-          })
-          .set(overlayImg, {
-            xPercent: 0,
-          })
-          .to(overlayImg, {
-            xPercent: -100,
-            duration: 0.5,
-          })
-          .to(overlayImg, {
-            xPercent: -200,
-            duration: 0.5,
-            onStart: () => changeImg(), // on animation start call the `changeImg` function.
-            onRepeat: () => changeImg(), // on animation repeat call the `changeImg` function.
-          });
-      });
+      tlImgOverlay.current = gsap
+        .timeline({
+          delay: 3,
+          repeat: -1,
+          repeatDelay: 3, // Repeat the animation every 3 seconds
+          defaults: {
+            ease: "power3.out",
+          },
+        })
+        .set(overlayImg, {
+          xPercent: 100,
+        })
+        .to(overlayImg, {
+          xPercent: 0,
+          duration: 0.5,
+          onComplete: changeImg,
+        })
+        .to(overlayImg, {
+          xPercent: -100,
+          duration: 0.5,
+        });
     },
     { dependencies: [initialImgReveal] }, // Run the animation when the `initialImgReveal` state changes
   );
 
-  /**
-   * Animation: Image reveal when the page is loaded (one time use)
-   * - Manage the `initialImgReveal` state
-   */
-  useGSAP(
-    () => {
-      if (!imagesRef.current || loading || masked) return;
+  // Animation: Animate overlay
+  const animateOverlay: AnimateOverlay = contextSafe(
+    (overlayImg, imgParent) => {
+      if (initialImgRevealRef.current) {
+        // If the function is called when the initial image reveal is true, it means the screen is resizing
 
-      const overlayImg = gsap.utils.toArray(".image-overlay")[
-        masked ? 1 : 0
-      ] as HTMLDivElement;
+        if (tlImgOverlay.current) {
+          // If the `tlImgOverlay` is not null (killed), kill it
+          tlImgOverlay.current.kill();
+          tlImgOverlay.current = null;
+        }
 
-      // Skip if the overlay image is not found
-      if (!overlayImg) return;
+        // Reset everything to initial state
+        gsap.set(".image-holder", {
+          visibility: "hidden",
+        });
+        gsap.set(overlayImg, {
+          clearProps: "transform",
+          visibility: "hidden",
+        });
+        gsap.set(overlayImg, {
+          xPercent: 100,
+        });
 
-      const imgParent = imagesRef.current[0].parentElement; // Get the first image parent.
+        // Reset the `imgIndex`
+        imgIndex.current = 0;
+
+        setInitialImgReveal(false);
+      }
 
       // Animate the overlay to reveal the first image.
-      gsap
+      tlImgOverlay.current = gsap
         .timeline({
           defaults: {
             ease: "power3.out",
           },
         })
-        .from(overlayImg, {
-          xPercent: 0,
+        .set(overlayImg, {
+          xPercent: 100,
+          visibility: "visible",
         })
         .to(overlayImg, {
-          xPercent: -100,
+          xPercent: 0,
           delay: 1.1,
           duration: 0.5,
           onComplete: () => {
@@ -245,12 +177,49 @@ const Resume = ({ masked }: { masked?: boolean }) => {
           },
         })
         .to(overlayImg, {
-          xPercent: -200,
+          xPercent: -100,
           duration: 0.5,
           onComplete: () => {
             setInitialImgReveal(true);
           },
         });
+    },
+  );
+
+  useGSAP(
+    () => {
+      if (loading || screenResizing) return;
+
+      const overlayImg = gsap.utils.toArray(
+        "#resume .image-overlay",
+      )[0] as HTMLDivElement;
+      const imgParent = imagesRef.current[0].parentElement; // Get the first image parent.
+
+      // Skip if the overlay image is not found
+      if (!overlayImg || !imgParent) return;
+
+      animateOverlay(overlayImg, imgParent);
+    },
+    { dependencies: [screenResizing] },
+  );
+
+  /**
+   * Animation: Image reveal when the page is loaded (one time use)
+   * - Manage the `initialImgReveal` state
+   */
+  useGSAP(
+    () => {
+      if (!imagesRef.current || screenResizing || loading) return;
+
+      const overlayImg = gsap.utils.toArray(
+        "#resume .image-overlay",
+      )[0] as HTMLDivElement;
+      const imgParent = imagesRef.current[0].parentElement; // Get the first image parent.
+
+      // Skip if the overlay image is not found
+      if (!overlayImg || !imgParent) return;
+
+      animateOverlay(overlayImg, imgParent);
     },
     { dependencies: [loading] },
   );
@@ -261,7 +230,7 @@ const Resume = ({ masked }: { masked?: boolean }) => {
    * - Scrolls to the top when the `loading` state changed to false
    */
   useEffect(() => {
-    if (!imagesRef.current || masked) return;
+    if (!imagesRef.current) return;
 
     const imageElements = imagesRef.current; // Get the images
     const { current: loadedIndices } = imagesLoadedRef; // Track loaded image indices
@@ -319,9 +288,6 @@ const Resume = ({ masked }: { masked?: boolean }) => {
     };
   });
 
-  // Masked Resume section
-  if (masked) return <ResumeMasked />;
-
   return (
     <section id="resume">
       <div className="image-resuem-container">
@@ -356,12 +322,7 @@ const Resume = ({ masked }: { masked?: boolean }) => {
               />
             </div>
           ))}
-          <div
-            className="image-overlay"
-            style={{
-              transform: "translateX(100%)",
-            }}
-          />
+          <div className="image-overlay" />
         </div>
         <a
           target="_blank"

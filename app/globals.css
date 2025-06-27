@@ -892,7 +892,7 @@ button {
       }
 
       .image-overlay {
-        @apply absolute top-0 left-0 z-10 w-full h-full bg-white;
+        @apply absolute top-0 left-0 z-10 w-full h-full invisible bg-white;
       }
     }
 
