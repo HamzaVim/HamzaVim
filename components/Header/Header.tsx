@@ -1,46 +1,20 @@
 "use client";
 import { useGSAP } from "@gsap/react";
-import gsap, { ScrollToPlugin } from "gsap/all";
+import gsap from "gsap/all";
 import { FaTelegramPlane } from "react-icons/fa";
 import { MdFingerprint, MdMail } from "react-icons/md";
 import { SiUpwork, SiGithub } from "react-icons/si";
-import Logo from "./Logo";
+import Logo from "../Logo";
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { useGlobal } from "@/context/GlobalContext";
-import useSound from "./useSound";
+import useSound from "../useSound";
 
 // TODO: Maybe changing the links' style.
 
-// TODO: When click to resume, another 2 divs (or the same but not hiding the header): black page and white page, both with logo.
-// Hide all the sections and show only the resume section.
-// The animation ends and reveals the resume page and changes the link state to 'resume'.
-// After creating the projects component, it will do the same.
-
-// TODO: Loading page: black with logo and loading progress bar; when finished, click the start button. ✅
-// 2 divs: black page and white page, both with logo. ✅
-// When the user clicks the start button, the black page goes and reveals the white page, and it will go in 0.5s. ✅
-// Music will play in the background when the start button is clicked. ✅
-// State for complete loading page, Hero page 'text' appears.
-
-// TODO: create context global provider for link state. ✅
-// Use 'scrollTo' from GSAP, except resume. ✅
-// Use 'scrollTrigger' from GSAP to change the state of the link; scroll to the about section, and the state changes to 'about' ✅
-// 'rect' animate when the link state changed. ✅
-
 // Link item
-const LinkItem = ({
-  href,
-  text,
-  masked,
-}: {
-  href: string;
-  text: string;
-  masked?: boolean;
-}) => {
-  gsap.registerPlugin(ScrollToPlugin);
-
+const LinkItem = ({ href, text }: { href: string; text: string }) => {
   // NOTE: States & Refs: ---------------------------------------------------
 
   // Ref: link
@@ -208,28 +182,6 @@ const LinkItem = ({
     { dependencies: [linkState] },
   );
 
-  // Animation when the link state changed (for the masked header)
-  useGSAP(
-    () => {
-      const a = gsap.utils.toArray(
-        ".masked .header .right a",
-      ) as unknown as HTMLAnchorElement[];
-      const hrefs = a.map((a) => a.href.split("#")[1]);
-
-      hrefs.forEach((href, index) => {
-        // Add active class to the active link & remove it from the others
-        if (href === linkState) {
-          a[index].classList.add("active");
-        } else {
-          a[index].classList.remove("active");
-        }
-      });
-    },
-    { dependencies: [linkState] },
-  );
-
-  if (masked) return <a href={href}>{text}</a>;
-
   return (
     <a ref={linkRef} href={href} className="relative">
       <span className="text-block">
@@ -249,68 +201,7 @@ const LinkItem = ({
   );
 };
 
-const HeaderMasked = () => {
-  return (
-    <div className="header">
-      <div className="left">
-        <Link href="#home">
-          <Logo className="logo" />
-        </Link>
-        <ul>
-          <li>
-            <a href="https://www.example.com">
-              <SiUpwork className="upwork sm-icon" />
-            </a>
-          </li>
-          <li>
-            <a href="https://www.example.com">
-              <SiGithub className="github sm-icon" />
-            </a>
-          </li>
-          <li>
-            <a href="https://www.example.com">
-              <FaTelegramPlane className="telegram sm-icon" />
-            </a>
-          </li>
-          <li>
-            <a href="https://www.example.com">
-              <MdMail className="email sm-icon" />
-            </a>
-          </li>
-        </ul>
-      </div>
-      <div className="right">
-        <ul>
-          <li>
-            <LinkItem href="#about" text="about" masked />
-          </li>
-          <li>
-            <LinkItem href="#contact" text="contact" masked />
-          </li>
-          <li>
-            <LinkItem href="#projects" text="projects" masked />
-          </li>
-          <li>
-            <LinkItem href="#resume" text="resume" masked />
-          </li>
-        </ul>
-        <button className="sound-btn">
-          sound&nbsp;
-          <span className="on-off">
-            <span className="on">on</span>
-            <span className="off">off</span>
-          </span>
-        </button>
-      </div>
-      <div className="bg-shadow">
-        <div className="top" />
-        <div className="bottom" />
-      </div>
-    </div>
-  );
-};
-
-const Header = ({ masked }: { masked?: boolean }) => {
+const Header = () => {
   // NOTE: States & Refs -------------------------------------------------------
 
   const { playSound, decreaseVolume, increaseVolume } = useSound();
@@ -572,8 +463,6 @@ const Header = ({ masked }: { masked?: boolean }) => {
       tlSoundBtn.current.kill();
     };
   }, [initialLoading, playSound]);
-
-  if (masked) return <HeaderMasked />;
 
   return (
     <header>

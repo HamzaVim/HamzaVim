@@ -1,5 +1,5 @@
 "use client";
-import Header from "@/components/Header";
+import Header from "@/components/Header/Header";
 import Hero from "@/components/Hero/Hero";
 import About from "@/components/About/About";
 import WhyMe from "@/components/WhyMe/WhyMe";
@@ -24,6 +24,7 @@ import WhyMeMask from "@/components/WhyMe/WhyMeMask";
 import ContactMask from "@/components/Contact/ContactMask";
 import ProjectsMask from "@/components/Projects/ProjectsMask";
 import ResumeMask from "@/components/Resume/ResumeMask";
+import HeaderMask from "@/components/Header/HeaderMask";
 
 gsap.registerPlugin(
   useGSAP,
@@ -123,7 +124,7 @@ export default function Page() {
       </main>
 
       <div className={`masked${!hasCursor ? " mobile" : ""}`}>
-        <Header masked />
+        <HeaderMask />
         {!pageChanged ? (
           <>
             {/* Home */}
