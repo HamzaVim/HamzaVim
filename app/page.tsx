@@ -4,7 +4,7 @@ import Hero from "@/components/Hero/Hero";
 import About from "@/components/About/About";
 import WhyMe from "@/components/WhyMe/WhyMe";
 import Contact from "@/components/Contact/Contact";
-import Projects from "@/components/Projects";
+import Projects from "@/components/Projects/Projects";
 import gsap, {
   Flip,
   ScrollSmoother,
@@ -22,6 +22,7 @@ import HeroMask from "@/components/Hero/HeroMask";
 import AboutMask from "@/components/About/AboutMask";
 import WhyMeMask from "@/components/WhyMe/WhyMeMask";
 import ContactMask from "@/components/Contact/ContactMask";
+import ProjectsMask from "@/components/Projects/ProjectsMask";
 
 gsap.registerPlugin(
   useGSAP,
@@ -130,7 +131,7 @@ export default function Page() {
         ) : linkState === "projects" ? (
           <>
             {/* Projects */}
-            <Projects masked />
+            <ProjectsMask />
           </>
         ) : (
           <Resume masked />
