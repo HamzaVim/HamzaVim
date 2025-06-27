@@ -2,40 +2,17 @@
 import { useGlobal } from "@/context/GlobalContext";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import { useRef } from "react";
 
-// Masked version
-const HeroMasked = () => (
-  <div className="home">
-    <div className="hero-text-container">
-      <div className="text-container">
-        <p className="my-name">hamza hassen</p>
-        <h1>
-          designing
-          <br />
-          stunning
-          <br />
-          websites in
-          <br />
-          any style
-          <br />
-          you imagine
-        </h1>
-      </div>
-    </div>
-  </div>
-);
-
-const Hero = ({ masked }: { masked?: boolean }) => {
-  gsap.registerPlugin(ScrollTrigger);
-
+const Hero = () => {
   // NOTE: States & Refs: ---------------------------------------------------
 
+  // Ref: image container
   const imageContainerRef = useRef<HTMLDivElement>(null);
 
   const { cursorHoverIn, cursorHoverOut } = useGlobal();
+
   // NOTE: Functions & Animations: ---------------------------------------------------
 
   // Image animation when scrolling
@@ -59,9 +36,6 @@ const Hero = ({ masked }: { masked?: boolean }) => {
       });
     }
   });
-
-  // Masked Hero section
-  if (masked) return <HeroMasked />;
 
   return (
     <section id="home">
