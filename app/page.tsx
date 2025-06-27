@@ -1,7 +1,7 @@
 "use client";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero/Hero";
-import About from "@/components/About";
+import About from "@/components/About/About";
 import WhyMe from "@/components/WhyMe";
 import Contact from "@/components/Contact";
 import Projects from "@/components/Projects";
@@ -19,6 +19,7 @@ import useCursortTracker from "@/components/useCursortTracker";
 import useCursorDetection from "@/components/useCursorDetection";
 import useResizeUpdater from "@/components/useResizeUpdater";
 import HeroMask from "@/components/Hero/HeroMask";
+import AboutMask from "@/components/About/AboutMask";
 
 gsap.registerPlugin(
   useGSAP,
@@ -120,7 +121,7 @@ export default function Page() {
           <>
             {/* Home */}
             <HeroMask />
-            <About masked />
+            <AboutMask />
             <WhyMe masked />
             <Contact masked />
           </>

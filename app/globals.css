@@ -382,6 +382,16 @@ button {
 .about {
   @apply overflow-hidden w-screen sm:px-12 md:px-24 lg:px-40 2xl:px-0 h-fit px-[1.3rem];
 
+  &:not(.masked > &) {
+    .text-container {
+      p {
+        .line {
+          @apply not-xl:h-full!;
+        }
+      }
+    }
+  }
+
   .about-container {
     @apply flex flex-col justify-center items-start w-full h-full 2xl:items-center text-nowrap;
 
@@ -392,7 +402,7 @@ button {
         @apply relative w-full;
         p {
           .line {
-            @apply max-w-fit not-xl:h-full!;
+            @apply max-w-fit;
             .word {
               @apply overflow-hidden inline-block h-full;
             }
