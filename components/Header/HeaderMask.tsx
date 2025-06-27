@@ -19,7 +19,7 @@ const LinkItem = ({ href, text }: { href: string; text: string }) => {
   useGSAP(() => {
     const a = gsap.utils.toArray(
       ".masked .header .right a",
-    ) as unknown as HTMLAnchorElement[];
+    ) as HTMLAnchorElement[];
     const hrefs = a.map((a) => a.href.split("#")[1]);
 
     hrefs.forEach((href, index) => {

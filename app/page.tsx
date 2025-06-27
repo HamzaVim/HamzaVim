@@ -36,7 +36,6 @@ gsap.registerPlugin(
 );
 
 export default function Page() {
-
   // Cursor
   useCursortTracker();
   const hasCursor = useCursorDetection();
@@ -72,7 +71,6 @@ export default function Page() {
               "header .right ul",
             )[0] as HTMLUListElement;
 
-            // TODO: Remove all as unknown as
             ul.classList.add("blur-bg");
           } else if (
             self.progress < 0.337978 &&
@@ -97,6 +95,7 @@ export default function Page() {
         });
       },
     });
+    ScrollTrigger.normalizeScroll(true); // Helps with touch devices
   });
   return (
     <div className="content">

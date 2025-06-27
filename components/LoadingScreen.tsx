@@ -26,6 +26,8 @@ const LoadingScreen = () => {
   const digit3Ref = useRef<HTMLDivElement>(null);
   const [digitRepeat, setDigitRepeat] = useState(0);
 
+  const timeout = useRef<NodeJS.Timeout>(null);
+
   // GSAP: ContextSafe for functions outside useGSAP
   const { contextSafe } = useGSAP();
 
@@ -361,6 +363,14 @@ const LoadingScreen = () => {
                 y: "50%",
               },
               duration: 0.75,
+              onComplete: () => {
+                timeout.current = setTimeout(() => {
+                  if (!loading) return;
+                  gsap.set(".long-loading", {
+                    display: "block",
+                  });
+                }, 5000);
+              },
             },
             "<",
           );
@@ -377,6 +387,14 @@ const LoadingScreen = () => {
               y: "-55%",
             },
             duration: 0.75,
+            onStart: () => {
+              if (!timeout.current) return;
+
+              clearTimeout(timeout.current);
+              gsap.set(".long-loading", {
+                display: "none",
+              });
+            },
           })
           .to(
             "#mask-load-black-screen rect:nth-child(2)",
@@ -477,6 +495,9 @@ const LoadingScreen = () => {
                 </svg>
               </div>
             </button>
+
+            {/* When the loading takes too long */}
+            <p className="long-loading">It takes a few seconds to load</p>
           </div>
           <div className="loading-circle">
             <div className="black-circle" />

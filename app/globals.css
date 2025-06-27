@@ -758,6 +758,11 @@ button {
             }
           }
         }
+
+        .long-loading {
+          @apply absolute sm:-bottom-12 text-sm -bottom-10 sm:text-base lg:text-lg text-white text-nowrap;
+          display: none;
+        }
       }
 
       .loading-circle {

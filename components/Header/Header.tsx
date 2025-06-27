@@ -240,7 +240,7 @@ const Header = () => {
     // Get all links that are connected to this site.
     const allLinks = gsap.utils.toArray(
       "header .right a, header .left a[href='#home']",
-    ) as unknown as HTMLAnchorElement[]; // Not including the masked header
+    ) as HTMLAnchorElement[]; // Not including the masked header
 
     const handleClick = (ev: MouseEvent) => {
       // Disable click on links
@@ -297,7 +297,7 @@ const Header = () => {
     // Left side --------------------------------------------------------------
     const leftSideLinks = gsap.utils.toArray(
       "header .left a",
-    ) as unknown as HTMLAnchorElement[]; // Not including the masked header
+    ) as HTMLAnchorElement[]; // Not including the masked header
 
     // Function to handle the mouse move
     // Animation: The icon is tracking the mouse
@@ -317,7 +317,7 @@ const Header = () => {
         // Get the logo svg with the masked logo
         const logoAll = gsap.utils.toArray(
           `.${logo.classList.value}`,
-        ) as unknown as SVGSVGElement[];
+        ) as SVGSVGElement[];
 
         // Get the coordinates
         const x = ev.clientX - offsetLeft - link.offsetWidth / 2;
@@ -346,7 +346,7 @@ const Header = () => {
       const splitValue = smIcon.classList.value.split(" ");
       const smIconAll = gsap.utils.toArray(
         `.${splitValue[0]}.${splitValue[1]}`,
-      ) as unknown as SVGSVGElement[];
+      ) as SVGSVGElement[];
 
       // Get the coordinates
       const x = ev.clientX - offsetLeft - link.offsetWidth / 2;
@@ -375,14 +375,14 @@ const Header = () => {
 
         allIcon = gsap.utils.toArray(
           `.${icon.classList.value}`,
-        ) as unknown as SVGSVGElement[];
+        ) as SVGSVGElement[];
       } else {
         // If the icon is a social media icon
 
         const splitValue = icon.classList.value.split(" ");
         allIcon = gsap.utils.toArray(
           `.${splitValue[0]}.${splitValue[1]}`,
-        ) as unknown as SVGSVGElement[];
+        ) as SVGSVGElement[];
       }
 
       gsap.to(allIcon, {
@@ -437,7 +437,7 @@ const Header = () => {
             // Get all on-off elements from header and .header (masked)
             const onOrOffs = gsap.utils.toArray(
               ".on-off",
-            ) as unknown as HTMLSpanElement[];
+            ) as HTMLSpanElement[];
 
             onOrOffs.forEach((onOrOff) => {
               const child = onOrOff.children[0] as HTMLSpanElement;
