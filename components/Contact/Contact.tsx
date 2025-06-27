@@ -17,120 +17,7 @@ type FormValues = {
   message: string;
 };
 
-// Masked version
-const ContactMasked = () => {
-  // A function to handle input change and add the value to the masked form
-  useGSAP(() => {
-    // Getting the form
-    const formValues = gsap.utils.toArray(
-      "#contact form input",
-    ) as HTMLInputElement[];
-    const maskedFormValues = gsap.utils.toArray(
-      ".contact form input",
-    ) as HTMLInputElement[];
-
-    if (!formValues || !maskedFormValues) return;
-
-    const handleInputChange = (ev: Event) => {
-      const input = ev.target as HTMLInputElement;
-      const value = input.value;
-
-      // When the id of the input is included in the className of the masked form
-      maskedFormValues.forEach((maskedInput) => {
-        if (!maskedInput.className.includes(input.id)) return;
-        maskedInput.value = value;
-      });
-    };
-
-    formValues.forEach((input) => {
-      input.addEventListener("input", handleInputChange);
-    });
-
-    return () => {
-      formValues.forEach((input) => {
-        input.removeEventListener("input", handleInputChange);
-      });
-    };
-  });
-
-  return (
-    <div className="contact">
-      <div className="header-container">
-        <h2>Contact</h2>
-        <p>
-          Want a website that stands out? <br /> Let’s make it happen
-        </p>
-      </div>
-      <form>
-        <div className="input-container">
-          <label>
-            <input
-              type="text"
-              className="userName peer"
-              placeholder="Your name"
-              disabled
-            />
-            <FaUser aria-hidden="true" className="form-icon" />
-          </label>
-        </div>
-        <div className="input-container">
-          <label>
-            <input
-              type="email"
-              className="email peer"
-              placeholder="Your email"
-              disabled
-            />
-            <MdEmail aria-hidden="true" className="form-icon" />
-          </label>
-        </div>
-        <div className="input-container">
-          <label>
-            <input
-              className="message peer"
-              placeholder="Your message"
-              disabled
-            />
-            <MdOutlineMessage aria-hidden="true" className="form-icon" />
-          </label>
-        </div>
-        <button type="submit" disabled>
-          send
-        </button>
-      </form>
-      <footer>
-        <div className="sm-container">
-          <a href="" className="group">
-            <SiUpwork className="sm-icon" />
-          </a>
-          <a href="" className="group">
-            <SiGithub className="sm-icon" />
-          </a>
-          <a href="" className="group">
-            <FaTelegramPlane className="sm-icon" />
-          </a>
-          <a href="" className="group">
-            <MdMail className="sm-icon" />
-          </a>
-        </div>
-        <div className="contact-info">
-          <a href="https://www.instagram.com/hamzasxh/">
-            <h5>I’ll read it—100%!</h5>
-            <p>hamzasxh@gmail.com</p>
-          </a>
-          <a href="https://t.me/HamzaVim">
-            <h5>80% chance I’ll respond</h5>
-            <p>@HamzaVim</p>
-          </a>
-        </div>
-      </footer>
-    </div>
-  );
-};
-
-const Contact = ({ masked }: { masked?: boolean }) => {
-  gsap.registerPlugin(Flip);
-
+const Contact = () => {
   // NOTE: States & Refs -------------------------------------------------------
 
   // useForm hook
@@ -688,9 +575,6 @@ const Contact = ({ masked }: { masked?: boolean }) => {
     },
     { dependencies: [submitting] },
   );
-
-  // Masked Contact section
-  if (masked) return <ContactMasked />;
 
   return (
     <section id="contact">
