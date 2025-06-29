@@ -116,13 +116,16 @@ const ContactMask = () => {
           </a>
         </div>
         <div className="contact-info">
-          <a href="https://www.instagram.com/hamzasxh/">
-            <h5>I’ll read it—100%!</h5>
-            <p>hamzasxh@gmail.com</p>
+          <a
+            href="https://www.upwork.com/freelancers/~010048fd21753d8784"
+            target="_blank"
+          >
+            <h5>Hire me professionally</h5>
+            <p>Hamza Hassen</p>
           </a>
-          <a href="https://t.me/HamzaVim">
-            <h5>80% chance I’ll respond</h5>
-            <p>@HamzaVim</p>
+          <a href="https://www.instagram.com/vimhamza/" target="_blank">
+            <h5>I’ll read it—100%!</h5>
+            <p>vimhamza</p>
           </a>
         </div>
       </footer>

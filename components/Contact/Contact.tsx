@@ -741,14 +741,15 @@ const Contact = () => {
           <a
             onMouseEnter={cursorHoverVanish}
             onMouseLeave={cursorHoverOut}
-            href="https://www.instagram.com/hamzasxh/"
+            href="https://www.upwork.com/freelancers/~010048fd21753d8784"
+            target="_blank"
           >
-            <h5>Instagram</h5>
-            <p>hamzasxh@gmail.com</p>
+            <h5>Upwork</h5>
+            <p>Hamza Hassen</p>
 
             <div className="masked-info mask-[url(#mask-1)]">
-              <h5>I’ll read it—100%!</h5>
-              <p>hamzasxh@gmail.com</p>
+              <h5>Hire me professionally</h5>
+              <p>Hamza Hassen</p>
               <svg>
                 <mask id="mask-1">
                   <rect x="0" y="0" width="100%" height="100%" fill="white" />
@@ -759,14 +760,15 @@ const Contact = () => {
           <a
             onMouseEnter={cursorHoverVanish}
             onMouseLeave={cursorHoverOut}
-            href="https://t.me/HamzaVim"
+            href="https://www.instagram.com/vimhamza/"
+            target="_blank"
           >
-            <h5>Telegram</h5>
-            <p>@HamzaVim</p>
+            <h5>Instagram</h5>
+            <p>vimhamza</p>
 
             <div className="masked-info mask-[url(#mask-2)]">
-              <h5>80% chance I’ll respond</h5>
-              <p>@HamzaVim</p>
+              <h5>I’ll read it—100%!</h5>
+              <p>vimhamza</p>
               <svg>
                 <mask id="mask-2">
                   <rect x="0" y="0" width="100%" height="100%" fill="white" />
