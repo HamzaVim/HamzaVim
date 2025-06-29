@@ -1,8 +1,8 @@
 "use client";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap/all";
-import { FaTelegramPlane } from "react-icons/fa";
-import { MdFingerprint, MdMail } from "react-icons/md";
+import { FaInstagram, FaTelegramPlane } from "react-icons/fa";
+import { MdFingerprint } from "react-icons/md";
 import { SiUpwork, SiGithub } from "react-icons/si";
 import Logo from "../Logo";
 import Link from "next/link";
@@ -435,9 +435,7 @@ const Header = () => {
           onComplete: () => {
             if (!soundBtnRef.current) return;
             // Get all on-off elements from header and .header (masked)
-            const onOrOffs = gsap.utils.toArray(
-              ".on-off",
-            ) as HTMLSpanElement[];
+            const onOrOffs = gsap.utils.toArray(".on-off") as HTMLSpanElement[];
 
             onOrOffs.forEach((onOrOff) => {
               const child = onOrOff.children[0] as HTMLSpanElement;
@@ -472,23 +470,26 @@ const Header = () => {
         </Link>
         <ul>
           <li>
-            <a href="https://www.example.com">
+            <a
+              href="https://www.upwork.com/freelancers/~010048fd21753d8784"
+              target="_blank"
+            >
               <SiUpwork className="upwork sm-icon" />
             </a>
           </li>
           <li>
-            <a href="https://www.example.com">
+            <a href="https://github.com/HamzaVim/" target="_blank">
               <SiGithub className="github sm-icon" />
             </a>
           </li>
           <li>
-            <a href="https://www.example.com">
+            <a href="https://web.telegram.org/k/#@HamzaVim" target="_blank">
               <FaTelegramPlane className="telegram sm-icon" />
             </a>
           </li>
           <li>
-            <a href="https://www.example.com">
-              <MdMail className="email sm-icon" />
+            <a href="https://www.instagram.com/vimhamza/" target="_blank">
+              <FaInstagram className="email sm-icon" />
             </a>
           </li>
         </ul>

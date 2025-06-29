@@ -1,7 +1,7 @@
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { FaUser, FaTelegramPlane } from "react-icons/fa";
-import { MdEmail, MdOutlineMessage, MdMail } from "react-icons/md";
+import { FaUser, FaTelegramPlane, FaInstagram } from "react-icons/fa";
+import { MdEmail, MdOutlineMessage } from "react-icons/md";
 import { SiUpwork, SiGithub } from "react-icons/si";
 
 const ContactMask = () => {
@@ -86,17 +86,33 @@ const ContactMask = () => {
       </form>
       <footer>
         <div className="sm-container">
-          <a href="" className="group">
+          <a
+            href="https://www.upwork.com/freelancers/~010048fd21753d8784"
+            target="_blank"
+            className="group"
+          >
             <SiUpwork className="sm-icon" />
           </a>
-          <a href="" className="group">
+          <a
+            href="https://github.com/HamzaVim/"
+            target="_blank"
+            className="group"
+          >
             <SiGithub className="sm-icon" />
           </a>
-          <a href="" className="group">
+          <a
+            href="https://web.telegram.org/k/#@HamzaVim"
+            target="_blank"
+            className="group"
+          >
             <FaTelegramPlane className="sm-icon" />
           </a>
-          <a href="" className="group">
-            <MdMail className="sm-icon" />
+          <a
+            href="https://www.instagram.com/vimhamza/"
+            target="_blank"
+            className="group"
+          >
+            <FaInstagram className="sm-icon" />
           </a>
         </div>
         <div className="contact-info">

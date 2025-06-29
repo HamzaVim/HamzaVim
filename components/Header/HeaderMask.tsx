@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { FaTelegramPlane } from "react-icons/fa";
-import { MdMail } from "react-icons/md";
+import { FaInstagram, FaTelegramPlane } from "react-icons/fa";
 import { SiUpwork, SiGithub } from "react-icons/si";
 import Logo from "../Logo";
 import { useGlobal } from "@/context/GlobalContext";
@@ -44,23 +43,26 @@ const HeaderMask = () => {
         </Link>
         <ul>
           <li>
-            <a href="https://www.example.com">
+            <a
+              href="https://www.upwork.com/freelancers/~010048fd21753d8784"
+              target="_blank"
+            >
               <SiUpwork className="upwork sm-icon" />
             </a>
           </li>
           <li>
-            <a href="https://www.example.com">
+            <a href="https://github.com/HamzaVim/" target="_blank">
               <SiGithub className="github sm-icon" />
             </a>
           </li>
           <li>
-            <a href="https://www.example.com">
+            <a href="https://web.telegram.org/k/#@HamzaVim" target="_blank">
               <FaTelegramPlane className="telegram sm-icon" />
             </a>
           </li>
           <li>
-            <a href="https://www.example.com">
-              <MdMail className="email sm-icon" />
+            <a href="https://www.instagram.com/vimhamza/" target="_blank">
+              <FaInstagram className="email sm-icon" />
             </a>
           </li>
         </ul>
