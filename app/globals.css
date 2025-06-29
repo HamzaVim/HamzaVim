@@ -875,7 +875,7 @@ button {
       .image-container {
         @apply w-full h-full;
         .image-overlay {
-          @apply bg-black;
+          @apply bg-black visible;
         }
       }
     }

@@ -6,11 +6,12 @@ import { useEffect, useRef, useState } from "react";
 import { RiDownloadCloud2Line } from "react-icons/ri";
 
 // Img sources.
-const IMAGES = process.env.NEXT_PUBLIC_IMAGES_URLS as string;
-const IMAGES_URLS = IMAGES.split(",");
-
-// Load image api link.
-const LOAD_IMAGE_API = process.env.NEXT_PUBLIC_LOAD_IMAGE_API;
+const IMAGES_SRC = [
+  "/images/hamza/1.png",
+  "/images/hamza/2.jpg",
+  "/images/hamza/3.jpg",
+  "/images/hamza/4.jpg",
+];
 
 // Type: Animate overlay
 type AnimateOverlay = (
@@ -74,7 +75,7 @@ const Resume = () => {
        * - Manage the current image index in `imgIndex` to make the current image hidden and after incrementing the `imgIndex` (next image) the image will be visible
        */
       const changeImg = () => {
-        if (imgIndex.current === IMAGES_URLS.length - 1) {
+        if (imgIndex.current === IMAGES_SRC.length - 1) {
           // The `imgIndex` has reached the last image
 
           gsap.set(imgsParent[imgIndex.current], {
@@ -248,7 +249,7 @@ const Resume = () => {
      * Checks if all images are loaded and updates the `loading` state
      */
     const checkComplete = () => {
-      if (loadedIndices.length !== IMAGES_URLS.length) return;
+      if (loadedIndices.length !== IMAGES_SRC.length) return;
 
       setLoading(false);
       gsap.to(window, {
@@ -296,12 +297,12 @@ const Resume = () => {
           onMouseLeave={cursorHoverOut}
           className="image-container"
         >
-          {IMAGES_URLS.map((src, index) => (
+          {IMAGES_SRC.map((src, index) => (
             <div
               key={index}
               className="image-holder"
               style={{
-                zIndex: IMAGES_URLS.length - index,
+                zIndex: IMAGES_SRC.length - index,
                 visibility: "hidden",
                 position: index === 0 ? "relative" : "absolute",
                 top: index === 0 ? "" : "0",
@@ -309,7 +310,7 @@ const Resume = () => {
               }}
             >
               <Image
-                src={`${LOAD_IMAGE_API}${src}`}
+                src={src}
                 ref={(el) => {
                   if (!el) return;
                   imagesRef.current.push(el);
