@@ -15,7 +15,7 @@ const Projects = () => {
   // Ref: Projects elements
   const projectContainerRef = useRef<HTMLAnchorElement[]>([]);
 
-  const { setLoading } = useGlobal();
+  const { setLoading, cursorHoverVanish, cursorHoverOut } = useGlobal();
 
   // Ref: Img elements & images loaded
   const imagesRef = useRef<HTMLImageElement[]>([]);
@@ -311,10 +311,7 @@ const Projects = () => {
             {projects.map((project, index) => {
               return (
                 <a
-                  href={`#project-${project.id}`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                  }}
+                  href={project.url}
                   target="_blank"
                   key={index}
                   ref={(el) => {
@@ -323,6 +320,8 @@ const Projects = () => {
                   style={{
                     zIndex: projects.length - index,
                   }}
+                  onMouseEnter={cursorHoverVanish}
+                  onMouseLeave={cursorHoverOut}
                 >
                   <Image
                     ref={(el) => {
