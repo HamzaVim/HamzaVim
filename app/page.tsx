@@ -49,7 +49,7 @@ export default function Page() {
     ScrollSmoother.create({
       content: "body div.content", // Select the wrapper element (first child of body)
       smooth: 2,
-      smoothTouch: 1,
+      smoothTouch: 0.1,
       onUpdate: (self) => {
         // Manually sync the header scroll position
         gsap.to("header, .header", {

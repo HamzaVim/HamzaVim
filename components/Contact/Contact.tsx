@@ -490,6 +490,7 @@ const Contact = () => {
       itemParent.addEventListener("mouseenter", handleEnter);
       itemParent.addEventListener("mouseleave", handleLeave);
       itemParent.addEventListener("touchstart", handleEnter);
+      itemParent.addEventListener("touchend", handleLeave);
       itemParent.addEventListener("focusin", handleEnter);
       itemParent.addEventListener("focusout", handleLeave);
 
