@@ -495,25 +495,26 @@ const Header = () => {
         </ul>
       </div>
       <button
-        onTouchStart={() => {
-          if (timeOut.current) clearTimeout(timeOut.current);
-          // Instead of delay in gsap
-          timeOut.current = setTimeout(() => {
-            cursorHoverIn();
-          }, 300);
-        }}
-        onTouchEnd={(e) => {
-          // There was a bug when the user releases the press button
-          // The bug: initMouseEvent() Deprecation
+        // onTouchStart={() => {
+        //   console.log("onTouchStart");
+        //   if (timeOut.current) clearTimeout(timeOut.current);
+        //   // Instead of delay in gsap
+        //   timeOut.current = setTimeout(() => {
+        //     cursorHoverIn();
+        //   }, 300);
+        // }}
+        // onTouchEnd={(e) => {
+        // There was a bug when the user releases the press button
+        // The bug: initMouseEvent() Deprecation
 
-          if (timeOut.current) clearTimeout(timeOut.current);
-          cursorHoverVanish();
-          e.preventDefault();
-        }}
-        onTouchCancel={() => {
-          if (timeOut.current) clearTimeout(timeOut.current);
-          cursorHoverVanish();
-        }}
+        //   if (timeOut.current) clearTimeout(timeOut.current);
+        //   cursorHoverVanish();
+        //   e.preventDefault();
+        // }}
+        // onTouchCancel={() => {
+        //   if (timeOut.current) clearTimeout(timeOut.current);
+        //   cursorHoverVanish();
+        // }}
         onContextMenu={(e) => e.preventDefault()} // 👈 Block browser menu
         className="press"
       >
