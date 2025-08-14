@@ -224,8 +224,11 @@ const Header = () => {
     cursorHoverIn,
     cursorHoverOut,
     cursorHoverVanish,
+    hasCursor,
   } = useGlobal();
   const pageChangedRef = useRef(pageChanged);
+
+  const hasCursorRef = useRef(hasCursor);
 
   // NOTE: Fuctions & Animations -------------------------------------------------------
 
@@ -233,6 +236,11 @@ const Header = () => {
   useEffect(() => {
     pageChangedRef.current = pageChanged;
   }, [pageChanged]);
+
+  // Updating the `hasCursorRef` when the `hasCursor` changed
+  useEffect(() => {
+    hasCursorRef.current = hasCursor;
+  }, [hasCursor]);
 
   useGSAP(() => {
     // Right side --------------------------------------------------------------
@@ -302,6 +310,9 @@ const Header = () => {
     // Function to handle the mouse move
     // Animation: The icon is tracking the mouse
     const handleMouseMoveLeftSide = (ev: MouseEvent) => {
+      // Disable mouse move for mobile
+      if (!hasCursorRef.current) return;
+
       // Get the link
       const link = ev.target as HTMLAnchorElement;
 
@@ -495,26 +506,17 @@ const Header = () => {
         </ul>
       </div>
       <button
-        // onTouchStart={() => {
-        //   console.log("onTouchStart");
-        //   if (timeOut.current) clearTimeout(timeOut.current);
-        //   // Instead of delay in gsap
-        //   timeOut.current = setTimeout(() => {
-        //     cursorHoverIn();
-        //   }, 300);
-        // }}
-        // onTouchEnd={(e) => {
-        // There was a bug when the user releases the press button
-        // The bug: initMouseEvent() Deprecation
-
-        //   if (timeOut.current) clearTimeout(timeOut.current);
-        //   cursorHoverVanish();
-        //   e.preventDefault();
-        // }}
-        // onTouchCancel={() => {
-        //   if (timeOut.current) clearTimeout(timeOut.current);
-        //   cursorHoverVanish();
-        // }}
+        onPointerDown={() => {
+          if (timeOut.current) clearTimeout(timeOut.current);
+          // Instead of delay in gsap
+          timeOut.current = setTimeout(() => {
+            cursorHoverIn();
+          }, 300);
+        }}
+        onPointerUp={() => {
+          if (timeOut.current) clearTimeout(timeOut.current);
+          cursorHoverVanish();
+        }}
         onContextMenu={(e) => e.preventDefault()} // 👈 Block browser menu
         className="press"
       >

@@ -1,5 +1,6 @@
 "use client";
-import { createContext, useContext, useRef, useState } from "react";
+import useCursorDetection from "@/components/useCursorDetection";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 
 interface GlobalContextType {
   linkState: string;
@@ -18,6 +19,7 @@ interface GlobalContextType {
   cursorHoverIn: () => void;
   cursorHoverOut: () => void;
   cursorHoverVanish: () => void;
+  hasCursor: boolean;
 }
 // Create the context
 const GlobalContext = createContext<GlobalContextType>({} as GlobalContextType);
@@ -60,6 +62,15 @@ export const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
   // State: If the screen is resizing set to true
   const [screenResizing, setScreenResizing] = useState(false);
 
+  // State: If the user has a cursor
+  const hasCursor = useRef(useCursorDetection());
+
+  // Updating the `hasCursor` when the screen is resizing
+  const cursorDetection = useCursorDetection();
+  useEffect(() => {
+    hasCursor.current = cursorDetection;
+  }, [cursorDetection]);
+
   const value = {
     linkState,
     setLinkState,
@@ -77,6 +88,7 @@ export const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
     cursorHoverIn,
     cursorHoverOut,
     cursorHoverVanish,
+    hasCursor: hasCursor.current,
   };
   return (
     <GlobalContext.Provider value={value}>{children}</GlobalContext.Provider>

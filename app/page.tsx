@@ -16,7 +16,6 @@ import { useGSAP } from "@gsap/react";
 import { useGlobal } from "@/context/GlobalContext";
 import Resume from "@/components/Resume/Resume";
 import useCursortTracker from "@/components/useCursortTracker";
-import useCursorDetection from "@/components/useCursorDetection";
 import useResizeUpdater from "@/components/useResizeUpdater";
 import HeroMask from "@/components/Hero/HeroMask";
 import AboutMask from "@/components/About/AboutMask";
@@ -38,12 +37,11 @@ gsap.registerPlugin(
 export default function Page() {
   // Cursor
   useCursortTracker();
-  const hasCursor = useCursorDetection();
 
   // Resize
   useResizeUpdater();
 
-  const { pageChanged, linkState } = useGlobal();
+  const { pageChanged, linkState, hasCursor } = useGlobal();
 
   useGSAP(() => {
     ScrollSmoother.create({

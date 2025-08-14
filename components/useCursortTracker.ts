@@ -78,7 +78,7 @@ const useCursortTracker = () => {
           gsap.to(".masked", {
             overwrite: true,
             "--size": "0px",
-            duration: 0.5,
+            duration: 1.5,
             ease: "power3.out",
           });
         }

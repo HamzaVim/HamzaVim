@@ -12,11 +12,15 @@ const useResizeUpdater = () => {
 
   const screenResizingRef = useRef(screenResizing);
 
+  // window width
+  const prevWidth = useRef(0);
+
   // NOTE: Functions & Animations -------------------------------------------------------
 
   // Update the `screenResizingRef`
   useEffect(() => {
     screenResizingRef.current = screenResizing;
+    prevWidth.current = window.innerWidth;
   }, [screenResizing]);
 
   /**
@@ -42,6 +46,10 @@ const useResizeUpdater = () => {
   const handleResize = useMemo(
     () =>
       contextSafe(() => {
+        const widthChanged = window.innerWidth !== prevWidth.current;
+
+        if (!widthChanged) return;
+
         // Clear any pending resize handlers
         if (timeoutRef.current) clearTimeout(timeoutRef.current);
 
@@ -78,6 +86,7 @@ const useResizeUpdater = () => {
             ease: "power2.in",
           });
         }, 500); // 500ms debounce period
+        prevWidth.current = window.innerWidth;
       }),
     [contextSafe, setScreenResizing],
   );

@@ -11,7 +11,7 @@ const Hero = () => {
   // Ref: image container
   const imageContainerRef = useRef<HTMLDivElement>(null);
 
-  const { cursorHoverIn, cursorHoverOut } = useGlobal();
+  const { cursorHoverIn, cursorHoverOut, hasCursor } = useGlobal();
 
   // NOTE: Functions & Animations: ---------------------------------------------------
 
@@ -73,8 +73,14 @@ const Hero = () => {
       </div>
       <div className="hero-text-container">
         <div
-          onMouseEnter={cursorHoverIn}
-          onMouseLeave={cursorHoverOut}
+          onMouseEnter={() => {
+            if (!hasCursor) return;
+            cursorHoverIn();
+          }}
+          onMouseLeave={() => {
+            if (!hasCursor) return;
+            cursorHoverOut();
+          }}
           className="text-container"
         >
           <p className="my-name">hamza hassen</p>

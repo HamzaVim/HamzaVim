@@ -5,9 +5,15 @@ import projectsData from "../../db/projects.json";
 import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { useGlobal } from "@/context/GlobalContext";
+import useCursorDetection from "../useCursorDetection";
+import useCursortTracker from "../useCursortTracker";
 
 const Projects = () => {
   // NOTE: States & Refs: ---------------------------------------------------
+
+  // Cursor
+  useCursortTracker();
+  const hasCursor = useCursorDetection();
 
   // Set the projects
   const projects = projectsData;
@@ -40,7 +46,7 @@ const Projects = () => {
     ScrollTrigger.create({
       trigger: "#projects .projects-pinned",
       start: "bottom bottom",
-      end: `+=${pinnedHeight * 2}`,
+      end: `+=${hasCursor ? pinnedHeight * 2 : pinnedHeight * 6}`,
       scrub: 0.1,
       pin: true,
       pinSpacing: true,

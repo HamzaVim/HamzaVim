@@ -15,7 +15,8 @@ const About = () => {
   const aboutTextSplitRef = useRef<SplitText>(null);
   const aboutTextOverlaySplitRef = useRef<SplitText>(null);
 
-  const { cursorHoverIn, cursorHoverOut, screenResizing } = useGlobal();
+  const { cursorHoverIn, cursorHoverOut, screenResizing, hasCursor } =
+    useGlobal();
 
   // NOTE: Functions & Animations: ---------------------------------------------------
 
@@ -112,8 +113,14 @@ const About = () => {
     <section id="about">
       <div className="about-container">
         <div
-          onMouseEnter={cursorHoverIn}
-          onMouseLeave={cursorHoverOut}
+          onMouseEnter={() => {
+            if (!hasCursor) return;
+            cursorHoverIn();
+          }}
+          onMouseLeave={() => {
+            if (!hasCursor) return;
+            cursorHoverOut();
+          }}
           className="about-text-container"
         >
           <h2>about me</h2>

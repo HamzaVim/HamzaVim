@@ -13,8 +13,8 @@
   --color-primary: #448b76;
 
   /* Typography */
-  --font-montserrat: "Montserrat", "Montserrat Fallback";
-  --font-fira-code: "Fira Code", monospace;
+  --font-montserrat: var(--montserrat), "Montserrat Fallback";
+  --font-fira-code: var(--fira-code), monospace;
   --text-name: clamp(
     0.875rem,
     0.6404011461318051rem + 0.9551098376313276vw,
@@ -251,16 +251,6 @@ section {
   &#resume {
     @apply pt-45 sm:pt-60 lg:pt-35;
   }
-
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6,
-  p {
-    @apply select-none;
-  }
 }
 
 h1 {
@@ -365,7 +355,7 @@ button {
   }
 
   .hero-text-container {
-    @apply flex justify-center items-center w-full h-full text-center uppercase select-none;
+    @apply flex justify-center items-center w-full h-full text-center uppercase;
 
     .text-container {
       @apply flex flex-col gap-4 lg:gap-7 text-nowrap;

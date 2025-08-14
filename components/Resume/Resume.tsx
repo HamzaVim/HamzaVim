@@ -44,6 +44,7 @@ const Resume = () => {
     cursorHoverIn,
     cursorHoverOut,
     cursorHoverVanish,
+    hasCursor,
   } = useGlobal();
 
   // NOTE: Functions & Animations: ---------------------------------------------------
@@ -293,8 +294,14 @@ const Resume = () => {
     <section id="resume">
       <div className="image-resuem-container">
         <div
-          onMouseEnter={cursorHoverVanish}
-          onMouseLeave={cursorHoverOut}
+          onMouseEnter={() => {
+            if (!hasCursor) return;
+            cursorHoverVanish();
+          }}
+          onMouseLeave={() => {
+            if (!hasCursor) return;
+            cursorHoverOut();
+          }}
           className="image-container"
         >
           {IMAGES_SRC.map((src, index) => (
@@ -336,10 +343,28 @@ const Resume = () => {
       </div>
       <div className="resume-container">
         <div>
-          <h4 onMouseEnter={cursorHoverIn} onMouseLeave={cursorHoverOut}>
+          <h4
+            onMouseEnter={() => {
+              if (!hasCursor) return;
+              cursorHoverIn();
+            }}
+            onMouseLeave={() => {
+              if (!hasCursor) return;
+              cursorHoverOut();
+            }}
+          >
             Professional Summary
           </h4>
-          <p onMouseEnter={cursorHoverIn} onMouseLeave={cursorHoverOut}>
+          <p
+            onMouseEnter={() => {
+              if (!hasCursor) return;
+              cursorHoverIn();
+            }}
+            onMouseLeave={() => {
+              if (!hasCursor) return;
+              cursorHoverOut();
+            }}
+          >
             I am an Ethiopian professional, born and raised in Saudi Arabia,
             currently residing in Ethiopia. I am fluent in both Arabic and
             English, offering services in web design, web development,
@@ -355,10 +380,28 @@ const Resume = () => {
           </p>
         </div>
         <div className="work-experience">
-          <h4 onMouseEnter={cursorHoverIn} onMouseLeave={cursorHoverOut}>
+          <h4
+            onMouseEnter={() => {
+              if (!hasCursor) return;
+              cursorHoverIn();
+            }}
+            onMouseLeave={() => {
+              if (!hasCursor) return;
+              cursorHoverOut();
+            }}
+          >
             Work Experience
           </h4>
-          <p onMouseEnter={cursorHoverIn} onMouseLeave={cursorHoverOut}>
+          <p
+            onMouseEnter={() => {
+              if (!hasCursor) return;
+              cursorHoverIn();
+            }}
+            onMouseLeave={() => {
+              if (!hasCursor) return;
+              cursorHoverOut();
+            }}
+          >
             <span className="work-title">
               Front-End Developer (CSS Specialist)
               <br />
@@ -368,7 +411,16 @@ const Resume = () => {
             <span className="work-client">Client: Katy (United States)</span>
             <br />
           </p>
-          <ul onMouseEnter={cursorHoverIn} onMouseLeave={cursorHoverOut}>
+          <ul
+            onMouseEnter={() => {
+              if (!hasCursor) return;
+              cursorHoverIn();
+            }}
+            onMouseLeave={() => {
+              if (!hasCursor) return;
+              cursorHoverOut();
+            }}
+          >
             <li>
               Provided real-time CSS debugging and styling solutions during live
               walkthrough sessions.
@@ -392,7 +444,16 @@ const Resume = () => {
           </ul>
         </div>
         <div>
-          <div onMouseEnter={cursorHoverIn} onMouseLeave={cursorHoverOut}>
+          <div
+            onMouseEnter={() => {
+              if (!hasCursor) return;
+              cursorHoverIn();
+            }}
+            onMouseLeave={() => {
+              if (!hasCursor) return;
+              cursorHoverOut();
+            }}
+          >
             <h4>Expertise</h4>
             <ul>
               <li>HTML</li>
@@ -405,7 +466,16 @@ const Resume = () => {
               <li>Animation</li>
             </ul>
           </div>
-          <div onMouseEnter={cursorHoverIn} onMouseLeave={cursorHoverOut}>
+          <div
+            onMouseEnter={() => {
+              if (!hasCursor) return;
+              cursorHoverIn();
+            }}
+            onMouseLeave={() => {
+              if (!hasCursor) return;
+              cursorHoverOut();
+            }}
+          >
             <h4>Language</h4>
             <ul>
               <li>Arabic (Fluent)</li>
