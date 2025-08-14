@@ -13,8 +13,8 @@
   --color-primary: #448b76;
 
   /* Typography */
-  --font-montserrat: var(--montserrat), "Montserrat Fallback";
-  --font-fira-code: var(--fira-code), monospace;
+  --font-montserrat: "Montserrat", sans-serif;
+  --font-fira-code: "Fira Code", monospace;
   --text-name: clamp(
     0.875rem,
     0.6404011461318051rem + 0.9551098376313276vw,
